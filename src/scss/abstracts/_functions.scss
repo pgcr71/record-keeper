@@ -1,0 +1,18 @@
+@function strip-unit($value) {
+    @return $value / ($value * 0 + 1);
+}
+
+@function screenType($width){
+    @if($xs <=$width and $width < $md){
+        @return '-xs-';
+    }
+    @if($md <=$width and $width < $xl){
+        @return '-md-';
+    }
+    @if($width >=$xl){
+        @return '-xl-';
+    }
+    @return '-'
+}
+
+
