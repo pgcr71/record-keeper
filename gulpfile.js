@@ -4,7 +4,6 @@ var nodemon = require('gulp-nodemon');
 var browserSync = require('browser-sync').create();
 var paths = require('./paths')
 
-console.log(paths)
 var serve = function () {
     browserSync.init({
 
