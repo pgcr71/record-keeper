@@ -22,6 +22,6 @@
     @return '-'
 }
 
-@function colWidthWithMargin($columns,$var,$margin){
-    @return ((100%-(($columns - 1)*$margin))/$columns)*$var + ($var - 1)*$margin;
+@function colWidthWithMargin($columns, $var, $margin) {
+    @return ((100%-(($columns - 1)*$margin))/$columns)*$var+($var - 1)*$margin;
 }
