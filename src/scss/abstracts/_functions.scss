@@ -2,17 +2,26 @@
     @return $value / ($value * 0 + 1);
 }
 
-@function screenType($width){
-    @if($xs <=$width and $width < $md){
+@function colWidth($columns, $var) {
+    @return (100%/$columns)*$var
+}
+
+@function screenType($width) {
+    @if($xs <=$width and $width < $md) {
         @return '-xs-';
     }
-    @if($md <=$width and $width < $xl){
+
+    @if($md <=$width and $width < $xl) {
         @return '-md-';
     }
-    @if($width >=$xl){
+
+    @if($width >=$xl) {
         @return '-xl-';
     }
+
     @return '-'
 }
 
-
+@function colWidthWithMargin($columns,$var,$margin){
+    @return ((100%-(($columns - 1)*$margin))/$columns)*$var + ($var - 1)*$margin;
+}
