@@ -1,27 +1,53 @@
 var gulp = require('gulp');
 var scss = require('gulp-sass');
-var nodemon = require('gulp-nodemon')
-// scss.compiler = require('node-sass');
-    
-gulp.task('compile-scss', function () {
-    return gulp.src('./src/styles.scss')
-        .pipe(scss())
-        .pipe(gulp.dest('dest'))
-})
+var nodemon = require('gulp-nodemon');
+var browserSync = require('browser-sync').create();
+var paths = require('./paths')
 
-gulp.task('start-server',function(){
-   return nodemon({
+console.log(paths)
+var serve = function () {
+    browserSync.init({
+
+    })
+}
+
+var reload =function (done) {
+    server.reload();
+    done();
+}
+
+var compileScss = function (end) {
+    gulp.src(paths.scss.src)
+        .pipe(scss())
+        .pipe(gulp.dest(paths.scss.dest))
+    end()
+}
+
+var compileJs = function (end) {
+    gulp.src(paths.scripts.src)
+        .pipe(gulp.dest(paths.scripts.dest))
+    end()
+}
+
+//compile files for frontend
+var startFe = gulp.series([compileScss, compileJs])
+
+//task for all watchers
+var watch = function (end) {
+    gulp.watch([paths.watch.scss,paths.watch.js], gulp.series([compileScss,compileJs]));
+    end()
+};
+
+var nm = function (end) {
+    nodemon({
         script: './src/backend/server.js',
-        watch: ["./src/backend/server.js"],
+        watch: ["./src/backend/**/*.js"],
         ext: 'js'
     }).on('restart', () => {
-    gulp.src('./src/backend/server.js');
-  });
-})
 
-gulp.task('scss:watch',function(){
-    return gulp.watch('./src/scss/**/*.scss', gulp.series(['compile-scss']))
-})
+    })
+    end()
+}
 
-gulp.task('watch', gulp.series(['compile-scss','start-server','scss:watch']))
+module.exports.default = gulp.series([startFe, watch, nm])
 

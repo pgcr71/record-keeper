@@ -2,6 +2,11 @@
 @import "../abstracts/variables";
 @import "../abstracts/mixins";
 
+.row{
+    display: flex;
+    width: 100%;
+}
+
 @include grid-columns($no-of-columns, $all);
 @include grid-columns($no-of-columns, $xs);
 @include grid-columns($no-of-columns, $sm);
