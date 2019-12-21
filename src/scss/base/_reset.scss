@@ -1,1 +1,28 @@
+html {
+    font-size: 62.5%;
+    font-family: var(--primary-font);
+}
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+* {
+    padding: 0rem;
+    margin: 0rem;
+    border: 0rem;
+    box-sizing: border-box;
+}
+
+body{
+    font-size: 1.6rem;
+}
+
+ul,
+li {
+    list-style-type: none;
+}
+
+:focus {
+    outline: 0rem;
+}

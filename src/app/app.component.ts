@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { PopUpService } from './pop-up/pop-up.service';
+import { PopUpComponent } from './pop-up/pop-up.component';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +9,8 @@ import { PopUpService } from './pop-up/pop-up.service';
 })
 export class AppComponent {
   title = 'record-keeper';
-  popUpComponent:any = null;
-  constructor(private service:PopUpService){
-    this.service.y.subscribe(com => this.popUpComponent = com);
+  popUp = PopUpComponent;
+  constructor() {
+
   }
 }

@@ -1,0 +1,49 @@
+.display {
+    &-block {
+        display: block;
+    }
+
+    &-none {
+        display: none;
+    }
+
+    &-flex {
+        display: flex;
+    }
+
+    &-inline {
+        display: inline;
+    }
+}
+
+.justify-content {
+    &-center {
+        justify-content: center;
+    }
+}
+
+.align-items {
+    &-center {
+        align-items: center;
+    }
+}
+
+.align-content {
+    &-center {
+        align-content: center;
+    }
+}
+
+.postion {
+    &-absolute {
+        position: absolute;
+    }
+
+    &-relative {
+        position: relative;
+    }
+
+    &-fixed {
+        position: sticky;
+    }
+}

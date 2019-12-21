@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { MatSliderModule } from '@angular/material/slider';
 import { AppComponent } from './app.component';
 import { PopUpComponent } from './pop-up/pop-up.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,9 @@ import { PopUpComponent } from './pop-up/pop-up.component';
     PopUpComponent
   ],
   imports: [
-    BrowserModule
+    MatSliderModule,
+    BrowserModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent],
