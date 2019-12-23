@@ -1,24 +1,18 @@
-<div class='row pop-up pop-up--full-background justify-content-center align-items-center'>
-  <div class='pop-up__dialog row'>
-    <div class='pop-up__header col-xs-12-12'>
-      dfsa dfasasfsa
+<div   *ngIf='show' class='row pop-up pop-up--full-background justify-content-center align-items-center'>
+  <div  class='pop-up__dialog row'>
+    <div class='pop-up__header col-12-12'>
+      {{title}}
     </div>
 
-    <div class='pop-up__body col-xs-12-12'>
-dsfas
+    <div  #body1  class='pop-up__body col-12-12'>
+      <ng-container *ngComponentOutlet='body'>
+
+      </ng-container>
     </div>
 
-    <div class='pop-up__footer col-xs-12-12'>
-dfsa
-    </div>
-
-    <div class="gradient-box col-xs-12-12">
-
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent bibendum, lorem vel tincidunt imperdiet, nibh
-        elit laoreet felis, a bibendum nisl tortor non orci. Donec pretium fermentum felis, quis aliquet est rutrum ut.
-        Integer quis massa ut lacus viverra pharetra in eu lacus. Aliquam tempus odio adipiscing diam pellentesque
-        rhoncus. Curabitur a bibendum est. </p>
-
+    <div  class='pop-up__footer justify-content-flex-end col-xs-12-12'>
+      <button (click)='onSubmit()'>Apply</button>
+      <button (click)='closePopUp()'>Cancel</button>
     </div>
   </div>
 </div>
