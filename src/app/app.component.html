@@ -1,8 +1,4 @@
-<ng-container  *ngComponentOutlet='popUp'>
-
-</ng-container>
-
-<button (click)='openPopUp()'>open pop up</button>
-
-
-<button (click)='openPopUp2()'>open pop up</button>
+<app-header class='header'></app-header>
+<router-outlet class='body'></router-outlet>
+<app-footer class='footer'> </app-footer>
+<ng-container class='' *ngComponentOutlet='popUp'></ng-container> 
