@@ -1,7 +1,9 @@
 html {
     font-size: 62.5%;
     font-family: var(--primary-font);
-    height: 100%;
+    background-color: var(--root-background);
+    padding: 3px 5px;
+    border: 1px solid var(--primary-border-color);
 }
 
 * {
@@ -13,7 +15,7 @@ html {
 
 body{
     font-size: 1.6rem;
-    background-color: var(--root-background);
+
 }
 
 ul,

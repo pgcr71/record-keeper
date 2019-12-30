@@ -1,8 +1,10 @@
-.container{
-    border:1px solid var(--primary-border-color);
-    padding:2px 5px;
-}
-
 .header{
     background-color: white;
+    display: block;
+    border: 1px solid var(--primary-border-color);
+}
+
+.footer{
+    display: block;
+    position: relative;
 }
