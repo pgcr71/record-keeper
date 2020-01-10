@@ -1,0 +1,18 @@
+<div class='row dialog__container justify-content-center align-items-center'>
+
+    <div class='dialog__header col-12-12'>
+        {{title}}
+    </div>
+
+    <div class='dialog__body col-12-12'>
+        <ng-template #vc>
+
+        </ng-template>
+    </div>
+
+    <div class='dialog__footer justify-content-flex-end col-xs-12-12'>
+        <app-button (click)='onOk()'>{{'ok' || okButtonInnerText}}</app-button>
+        <app-button (click)='onClose()'>{{'cancel' || closeButtonInnerText }}</app-button>
+    </div>
+
+</div>

@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, Output } from '@angular/core';
-import { BackGroundColors, textColors } from '../../../environments/environment.prod';
+import { Component, OnInit, Input } from '@angular/core';
+import { BackGroundColors, textColors } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-button',

@@ -1,16 +1,16 @@
-<div   *ngIf='show' class='row pop-up pop-up--full-background justify-content-center align-items-center'>
-  <div  class='pop-up__dialog row'>
+<div [ngClass]="{'hidden':isHidden}" class='row pop-up pop-up--full-background justify-content-center align-items-center'>
+  <div class='pop-up__dialog row'>
     <div class='pop-up__header col-12-12'>
       {{title}}
     </div>
 
-    <div  #body1  class='pop-up__body col-12-12'>
-      <ng-container *ngComponentOutlet='body'>
+    <div class='pop-up__body col-12-12'>
+      <ng-template #vc>
 
-      </ng-container>
+      </ng-template>
     </div>
 
-    <div  class='pop-up__footer justify-content-flex-end col-xs-12-12'>
+    <div class='pop-up__footer justify-content-flex-end col-xs-12-12'>
       <app-button (click)='onSubmit()'>Apply1</app-button>
       <app-button (click)='closePopUp()'>Cancel1</app-button>
     </div>

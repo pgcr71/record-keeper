@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewContainerRef, ComponentFactoryResolver, ComponentRef, AfterViewInit } from '@angular/core';
 import { PopUpService } from './pop-up.service';
 
 @Component({
@@ -6,35 +6,47 @@ import { PopUpService } from './pop-up.service';
   templateUrl: './pop-up.component.html',
   styleUrls: ['./pop-up.component.scss']
 })
-export class PopUpComponent {
-  body = ''
+export class PopUpComponent implements AfterViewInit {
+  body: ComponentRef<any>;
   data
-  show
+  isHidden = true;
   sub
   title
-  @ViewChild('body1', { static: false }) myChildComponent;
-  constructor(private popUpService: PopUpService) {
+  @ViewChild('vc', { static: true, read: ViewContainerRef }) container;
+  isSubmitted: boolean;
+  isCancelled: boolean;
+  constructor(private popUpService: PopUpService, private cfr: ComponentFactoryResolver) {
+  }
 
+  ngAfterViewInit() {
+    let _this = this;
     this.sub = this.popUpService.component.subscribe(data => {
       if (data) {
-        this.title = data.title || 'TITLE';
-        this.show = true
-        this.body = data.bodyComp
+        this.isHidden = !this.isHidden;
+        _this.title = data.title || 'TITLE';
+        if (this.container) {
+          this.container.clear();
+          let factory = this.cfr.resolveComponentFactory(data.bodyComp);
+          this.body = this.container.createComponent(factory);
+        }
       }
     });
   }
 
   closePopUp() {
-    this.show = false;
-    this.popUpService.onApply(false);
+    this.isCancelled = true;
+    this.isHidden = !this.isHidden;
+    this.body.instance.isCancelled = true;
   }
 
   onSubmit() {
-    this.popUpService.onApply(true);
+    this.isSubmitted = true;
+    this.isHidden = !this.isHidden;
+    this.body.instance.isSubmitted = true;
   }
 
   ngOnChanges() {
-    console.log('--I am Changed--')
+    console.log('--I Changed--')
   }
 
   ngOnDestroy() {

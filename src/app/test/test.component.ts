@@ -17,11 +17,7 @@ export class TestComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.sub = this.popUpService.submit.subscribe(isSubmitted => {
-      if (isSubmitted) {
-        console.log('from test1', isSubmitted)
-      }
-    })
+ 
   }
 
   ngOnDestroy() {
