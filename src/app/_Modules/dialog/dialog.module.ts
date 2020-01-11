@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DialogComponent } from './dialog/dialog.component';
+import { DialogComponent } from './dialog.component';
 import { ButtonsModule } from '../buttons/buttons.module';
 
 

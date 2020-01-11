@@ -1,8 +1,4 @@
-import { Component, Inject } from '@angular/core';
-import { PopUpComponent } from './pop-up/pop-up.component';
-import { PopUpService } from './pop-up/pop-up.service';
-import { TestComponent } from './test/test.component';
-import { Test2Component } from './test2/test2.component';
+import { Component } from '@angular/core';
 import { DialogService } from './_Modules/dialog/dialog.service';
 
 @Component({
@@ -13,14 +9,13 @@ import { DialogService } from './_Modules/dialog/dialog.service';
 
 
 export class AppComponent {
-  popUp = PopUpComponent;
-
-  constructor(private popUpService: PopUpService, private _ds: DialogService) {
+ 
+  constructor(private _ds: DialogService) {
 
   }
 
   openPopUp() {
-    this._ds.open(TestComponent)
+    // this._ds.open(TestComponent)
   }
 
   // closeDialog() {
@@ -28,6 +23,6 @@ export class AppComponent {
   // }
 
   openPopUp2() {
-    this.popUpService.open({ title: 'test2', bodyComp: Test2Component })
+
   }
 }
