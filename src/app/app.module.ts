@@ -9,13 +9,19 @@ import { FooterComponent } from './footer/footer.component';
 import { DialogModule } from './_Modules/dialog/dialog.module';
 import { ButtonsModule } from './_Modules/buttons/buttons.module';
 import { TooltipModule } from './_Modules/tooltip/tooltip.module';
+import { FormsModule } from '@angular/forms';
+import { DialogTemplateComponent } from './dialog-template/dialog-template.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Interceptor } from './_Modules/interceptor/interceptor';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    DialogTemplateComponent
   ],
   imports: [
     AppRouterModule,
@@ -23,9 +29,11 @@ import { TooltipModule } from './_Modules/tooltip/tooltip.module';
     BrowserAnimationsModule,
     DialogModule,
     ButtonsModule,
-    TooltipModule
+    TooltipModule,
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [{provide:HTTP_INTERCEPTORS,useClass:Interceptor,multi:true}],
   bootstrap: [AppComponent],
   entryComponents: []
 })

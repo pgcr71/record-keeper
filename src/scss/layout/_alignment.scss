@@ -26,11 +26,23 @@
     &-flex-end{
         justify-content: flex-end;
     }
+    &-space-between{
+        justify-content: space-between;
+    }
 }
 
 .align-items {
     &-center {
         align-items: center;
+    }
+    &-flex-start{
+        align-items: flex-start;
+    }
+    &-flex-end{
+        align-items: flex-end;
+    }
+    &-space-between{
+        align-items: space-between;
     }
 }
 
@@ -50,6 +62,6 @@
     }
 
     &-fixed {
-        position: sticky;
+        position: fixed;
     }
 }

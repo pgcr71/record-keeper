@@ -2,6 +2,10 @@ import { Subject, Observable } from 'rxjs';
 
 
 export class DialogOutput {
-    close: Subject<any> = new Subject();
-    _onClose: Observable<any> = this.close.asObservable();
+    closed: Subject<any> = new Subject();
+    _onClose: Observable<any> = this.closed.asObservable();
+
+    public close(data) {
+        this.closed.next(data);
+    }
 }

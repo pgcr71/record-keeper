@@ -2,17 +2,7 @@ html {
     font-size: 62.5%;
     font-family: var(--primary-font);
     background: var(--root-background);
-    padding: 3px 5px;
-    border: 1px solid var(--primary-border-color);
 }
-
-
-// html {
-//     background: url(src\assets\download.jpeg);
-//     background-repeat: no-repeat;
-//     background-size: cover;
-//     z-index: -1;   
-//   }
 
 * {
     padding: 0rem;
@@ -23,7 +13,6 @@ html {
 
 body{
     font-size: 1.6rem;
-
 }
 
 ul,

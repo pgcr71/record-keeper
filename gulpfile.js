@@ -2,11 +2,14 @@ var gulp = require('gulp');
 var scss = require('gulp-sass');
 var nodemon = require('gulp-nodemon');
 var browserSync = require('browser-sync').create();
-var paths = require('./paths')
+var paths = require('./paths');
+var exec = require('child_process').exec;
 
 var serve = function () {
     browserSync.init({
-
+        // server: {
+        //     baseDir: './dist/record-keeper/'
+        // }
     })
 }
 
@@ -43,7 +46,7 @@ var nm = function (end) {
         watch: ["./src/backend/**/*.js"],
         ext: 'js'
     }).on('restart', () => {
-
+        // server.reload();
     })
     end()
 }

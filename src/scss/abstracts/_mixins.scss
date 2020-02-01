@@ -29,7 +29,7 @@
     @media screen and (min-width:$width) {
         @for $var from 1 to $columns+1 {
             .col#{$screenType}#{$var}-#{$columns} {
-                flex: 0 1 colWidth($columns, $var);
+                flex: 0 0 colWidth($columns, $var);
                 max-width: colWidth($columns, $var);
             }
         }
@@ -42,7 +42,7 @@
     @media screen and (min-width:$width) {
         @for $var from 1 to $columns+1 {
             .col#{$screenType}#{$var}-#{$columns}-with-mrgn-lft {
-                flex: 0 1 colWidthWithMargin($columns, $var, $margin);
+                flex: 0 0 colWidthWithMargin($columns, $var, $margin);
 
                 @if $var !=$columns {
                     margin-left: $margin;
@@ -56,7 +56,7 @@
     @media screen and (min-width:$width) {
         @for $var from 1 to $columns+1 {
             .col#{$screenType}#{$var}-#{$columns}-no-mrgn-lft {
-                flex: 0 1 colWidthWithMargin($columns, $var, $margin);
+                flex: 0 0 colWidthWithMargin($columns, $var, $margin);
                 max-width: colWidthWithMargin($columns, $var, $margin);
             }
         }
