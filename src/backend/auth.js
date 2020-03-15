@@ -1,20 +1,36 @@
- var jwt = require('jsonwebtoken');
- 
- let secretOrPublicKey = 'hello ganesh'
- function auth(req,res,next){
-     if(req.headers['autorization']){
+var jwt = require('jsonwebtoken');
+var userData = require('./dummydatabase');
 
-     }
-    //jwt.verify('', secretOrPublicKey, )
-     //jwt.sign()
-     else{
-         res.statusMessage = 'unautorized';
-         res.status('401').send('unautorized');
-         res.end();
-     }
-     console.log('authentication hapenning');
-    next();
+let secretOrPublicKey = 'hello ganesh'
+function verify(req, res, next) {
+    var bearer = req.headers['authorization'];
+    if (bearer) {
+        var token = bearer.split(' ')[1];
+        verifyJWT(token,res);
+        next();
+    }
+    else {
+        res.status(401).send({});
+        res.end();
+    }
+   
+}
+
+function verifyJWT(token ,res) {
+    try{
+        jwt.verify(token, secretOrPublicKey);
+        return;
+    }
+    catch{
+        res.status(401).send('unAuthorized');
+        res.end();
+    }
 }
 
 
-module.exports = auth;
+function signToken(userInfo){
+    return jwt.sign(userInfo,secretOrPublicKey,{ expiresIn: '1h' })
+}
+ 
+module.exports.verify = verify;
+module.exports.signToken = signToken;

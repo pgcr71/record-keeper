@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { DialogTemplateComponent } from './dialog-template/dialog-template.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './_Modules/interceptor/interceptor';
+import { LoginComponent } from './login/login.component';
+import { IndexComponent } from './index/index.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { Interceptor } from './_Modules/interceptor/interceptor';
     NotFoundComponent,
     HeaderComponent,
     FooterComponent,
-    DialogTemplateComponent
+    DialogTemplateComponent,
+    LoginComponent,
+    IndexComponent
   ],
   imports: [
     AppRouterModule,

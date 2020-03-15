@@ -1,15 +1,15 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
+import { URL } from '../environments/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 
 export class AppService {
 
-    DIR = 'http://localhost:4300'
-    constructor(private http:HttpClient){
+    constructor(private http: HttpClient) {
 
     }
-    getData(){
-        return this.http.get(this.DIR + '/')
+    getData() {
+        return this.http.get(URL + '/')
     }
 }

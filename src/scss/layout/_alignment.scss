@@ -65,3 +65,12 @@
         position: fixed;
     }
 }
+
+.flex-direction{
+    &-row{
+        flex-direction: row;
+    }
+    &-column{
+        flex-direction: column;
+    }
+}
