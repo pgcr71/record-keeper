@@ -3,19 +3,10 @@ var auth = require('./auth');
 var CircularJSON = require('circular-json');
 var app = express();
 var bodyParser = require('body-parser');
-var data = require('./dummydatabase');
 const mysqlx = require('@mysql/xdevapi');
+const configs = require('./configurations');
 
-var config = {
-host:'localhost',
-port:'33060',
-user:'gani7112',
-password:'G@ni7112',
-schema:'recordkeeper',
-debug:true
-};
-
-var database = mysqlx.getSession(config)
+var database = mysqlx.getSession(configs.dataBaseConfig)
   .then(session => {
     return session.getSchema('recordkeeper');
   })
@@ -30,12 +21,24 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/', auth.verify, function (req, res) {
-  res.send({data:'hello there'});
+app.get('/',function (req, res) {
+
+  res.sendFile('index.html',__dirname);
 });
 
 app.post('/validatePhoneNumber', function (req, res) {
-  var body = req.body
+  var phonenumber = req.body.phonenumber;
+  database.then(db => db.getTable('tblusers').select(['phone_number'])
+  .where('phone_number = :phonenumber')
+  .bind('phonenumber', phonenumber)
+  .execute()).then(result => {
+    var row = result.fetchOne();
+    if (row && row.length) {
+      res.status(200).send({ isPhoneNumberValid: true });
+    } else {
+      res.status(200).send({ isPhoneNumberValid: false });
+    }
+  })
 })
 
 

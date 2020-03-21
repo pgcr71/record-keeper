@@ -1,5 +1,6 @@
-:root {
-    --primary-font: 'roboto', Arial, Helvetica, sans-serif;
-}
 
-$primary-font: 'roboto', Arial, Helvetica, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+:root {
+    --primary-font: 'Montserrat','roboto', Arial, Helvetica, sans-serif;
+}
+$primary-font: 'Montserrat','roboto', Arial, Helvetica, sans-serif;

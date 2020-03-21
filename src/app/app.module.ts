@@ -15,6 +15,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './_Modules/interceptor/interceptor';
 import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
+import { SignupComponent } from './signup/signup.component';
+import { DropdownComponent } from './_forms/dropdown/dropdown.component';
+import { InputtextComponent } from './_forms/inputtext/inputtext.component';
 
 
 @NgModule({
@@ -25,7 +28,10 @@ import { IndexComponent } from './index/index.component';
     FooterComponent,
     DialogTemplateComponent,
     LoginComponent,
-    IndexComponent
+    IndexComponent,
+    SignupComponent,
+    DropdownComponent,
+    InputtextComponent
   ],
   imports: [
     AppRouterModule,

@@ -1,5 +1,3 @@
-var data = require('./dummydatabase');
-
 export function verifylogin(req,res) {
     let phonenumber = req.body.phonenumber;
     let password = req.body.password;

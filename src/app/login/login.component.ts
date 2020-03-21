@@ -13,10 +13,11 @@ export class LoginComponent implements OnInit {
 
   phonenumber = null;
   password = '';
+  isPhoneNumberValid = false;
 
   ngOnInit() {
   }
-
+  
   onSubmit(form) {
     if (form.valid) {
       this.ls.login(this.phonenumber, this.password)

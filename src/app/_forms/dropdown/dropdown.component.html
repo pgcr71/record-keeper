@@ -1,0 +1,3 @@
+<select [name]="named" #ds (change) = 'change(ds.value)' [id]="dropdownid">
+    <option *ngFor='let option of options'>{{option}}</option>
+</select>

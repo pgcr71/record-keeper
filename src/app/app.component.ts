@@ -7,9 +7,20 @@ import { Component } from '@angular/core';
 })
 
 
+
 export class AppComponent {
- 
+  options = ['fdsg','dfgs'];
+  dropdownvalue = 'ganesh'
+
   constructor() {
 
+
+  }
+
+  ganesh(value){
+    console.log(value)
+  }
+  onChange(){
+    console.log('fasf')
   }
 }

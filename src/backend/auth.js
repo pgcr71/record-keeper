@@ -1,36 +1,35 @@
 var jwt = require('jsonwebtoken');
-var userData = require('./dummydatabase');
+const configs = require('./configurations');
 
-let secretOrPublicKey = 'hello ganesh'
+let secretOrPublicKey = configs.publicKey;
+
 function verify(req, res, next) {
     var bearer = req.headers['authorization'];
     if (bearer) {
         var token = bearer.split(' ')[1];
-        verifyJWT(token,res);
+        verifyJWT(token, res);
         next();
     }
     else {
-        res.status(401).send({});
-        res.end();
+        res.status(401).send({ authorized: false });
     }
-   
+
 }
 
-function verifyJWT(token ,res) {
-    try{
+function verifyJWT(token, res) {
+    try {
         jwt.verify(token, secretOrPublicKey);
         return;
     }
     catch{
-        res.status(401).send('unAuthorized');
-        res.end();
+        res.status(401).send({ authorized: false });
     }
 }
 
 
-function signToken(userInfo){
-    return jwt.sign(userInfo,secretOrPublicKey,{ expiresIn: '1h' })
+function signToken(userInfo) {
+    return jwt.sign(userInfo, secretOrPublicKey, { expiresIn: '1h' })
 }
- 
+
 module.exports.verify = verify;
 module.exports.signToken = signToken;
