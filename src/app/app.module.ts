@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRouterModule } from './_Modules/app-router/app-router.module';
@@ -18,7 +18,8 @@ import { IndexComponent } from './index/index.component';
 import { SignupComponent } from './signup/signup.component';
 import { DropdownComponent } from './_forms/dropdown/dropdown.component';
 import { InputtextComponent } from './_forms/inputtext/inputtext.component';
-
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { AutoID, AUTOID } from './auto-id.provide';
 
 @NgModule({
   declarations: [
@@ -43,8 +44,13 @@ import { InputtextComponent } from './_forms/inputtext/inputtext.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [{provide:HTTP_INTERCEPTORS,useClass:Interceptor,multi:true}],
+  providers: [
+    {provide:HTTP_INTERCEPTORS,useClass:Interceptor,multi:true},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    {provide:AUTOID,useClass:AutoID}
+  ],
   bootstrap: [AppComponent],
   entryComponents: []
 })
+
 export class AppModule { }

@@ -9,5 +9,8 @@ var dataBaseConfig = {
 
 var publicKey = 'hello ganesh';
 
+var staticFilesLocation = 'dist/record-keeper'
+
 module.exports.dataBaseConfig = dataBaseConfig;
 module.exports.publicKey = publicKey;
+module.exports.staticFilesLocation = staticFilesLocation;

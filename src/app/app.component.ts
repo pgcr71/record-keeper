@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { AutoID, AUTOID } from './auto-id.provide';
 
 @Component({
   selector: 'app-root',
@@ -9,18 +10,10 @@ import { Component } from '@angular/core';
 
 
 export class AppComponent {
-  options = ['fdsg','dfgs'];
-  dropdownvalue = 'ganesh'
 
   constructor() {
-
+    
 
   }
 
-  ganesh(value){
-    console.log(value)
-  }
-  onChange(){
-    console.log('fasf')
-  }
 }

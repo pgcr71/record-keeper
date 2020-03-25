@@ -1,1 +1,2 @@
-<input type="text" name='dsa'>
+<label  *ngIf = 'appLabel' [for] = 'appID'>{{appLabel}}</label>
+<input [attr.id] = 'appID' class='p-primary' type="text" [name]='appName'>

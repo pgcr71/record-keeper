@@ -1,16 +1,31 @@
-import { Component, OnInit, Input, Output, forwardRef } from '@angular/core';
-import { EventEmitter } from 'protractor';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, OnInit,OnChanges, Inject, Input, SimpleChange} from '@angular/core';
+import { AUTOID, AutoID } from 'src/app/auto-id.provide';
 
 @Component({
   selector: 'app-inputtext',
   templateUrl: './inputtext.component.html',
   styleUrls: ['./inputtext.component.scss']
 })
-export class InputtextComponent {
+export class InputtextComponent implements OnInit,OnChanges {
+  id = this.autoID.newID();
+  @Input()
+  appID = 'inputtext' + this.id;
+  @Input()
+  appName = 'inputtext' + this.id;
+  @Input()
+  appLabel
+  
+  constructor(@Inject(AUTOID) private autoID:AutoID) { 
 
-  constructor() { }
+  }
 
+  ngOnInit(){
+
+  }
+
+  ngOnChanges(SimpleChange){
+
+  }
   
 //   private _value: any;
 

@@ -1,22 +1,7 @@
 var gulp = require('gulp');
 var scss = require('gulp-sass');
-var nodemon = require('gulp-nodemon');
-var browserSync = require('browser-sync').create();
 var paths = require('./paths');
-var exec = require('child_process').exec;
 
-var serve = function () {
-    browserSync.init({
-        // server: {
-        //     baseDir: './dist/record-keeper/'
-        // }
-    })
-}
-
-var reload =function (done) {
-    server.reload();
-    done();
-}
 
 var compileScss = function (end) {
     gulp.src(paths.scss.src)
@@ -40,16 +25,5 @@ var watch = function (end) {
     end()
 };
 
-var nm = function (end) {
-    nodemon({
-        script: './src/backend/server.js',
-        watch: ["./src/backend/**/*.js"],
-        ext: 'js'
-    }).on('restart', () => {
-        // server.reload();
-    })
-    end()
-}
-
-module.exports.default = gulp.series([startFe, watch, nm])
+module.exports.default = gulp.series([startFe, watch])
 

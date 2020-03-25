@@ -2,12 +2,12 @@
 <form class='col-6-12' #form='ngForm'>
     <div class='display-flex flex-direction-column'>
         <label for="phone">Phone Number</label>
-        <input name='phone' [(ngModel)]='phonenumber' #pn='ngModel' required id='phone' type="text">
+        <input name='phone' class= 'p-secondary' [(ngModel)]='phonenumber' #pn='ngModel' required id='phone' type="text">
         <div *ngIf='pn.invalid' class='error'>error</div>
     </div>
     <div class='display-flex flex-direction-column'>
         <label for='password'>Password</label>
-        <input name='password' [(ngModel)]='password' required id='password' type="text">
+        <input name='password' class= 'p-secondary' [(ngModel)]='password' required id='password' type="text">
     </div>
 
     <button (click)='onSubmit(form)'>SUBMIT</button>

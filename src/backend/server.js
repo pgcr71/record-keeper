@@ -5,6 +5,10 @@ var app = express();
 var bodyParser = require('body-parser');
 const mysqlx = require('@mysql/xdevapi');
 const configs = require('./configurations');
+var  path = require('path');
+var staticFilesLocation = path.join(__dirname,'..','..','dist/record-keeper')
+
+// var staticFolder =  path.join('../../dist/record-keeper/',__dirname);
 
 var database = mysqlx.getSession(configs.dataBaseConfig)
   .then(session => {
@@ -22,9 +26,10 @@ app.use(function (req, res, next) {
 });
 
 app.get('/',function (req, res) {
-
-  res.sendFile('index.html',__dirname);
+  res.sendFile('index.html',{root:staticFilesLocation});
 });
+
+app.use('/',express.static(staticFilesLocation))
 
 app.post('/validatePhoneNumber', function (req, res) {
   var phonenumber = req.body.phonenumber;
@@ -40,7 +45,6 @@ app.post('/validatePhoneNumber', function (req, res) {
     }
   })
 })
-
 
 app.post('/signup', function (req, res) {
   let phonenumber = req.body.phonenumber;
@@ -81,14 +85,13 @@ app.post('/login', function (req, res) {
 
   let phonenumber = req.body.phonenumber;
   let password = req.body.password;
-
   database.then(db => db.getTable('tblusers').select(['phone_number', 'password'])
     .where('phone_number = :phonenumber && password = :password')
     .bind('phonenumber', phonenumber)
     .bind('password', password)
     .execute()).then(result => {
       var row = result.fetchOne();
-      if (row.length) {
+      if (row && row.length) {
         let token = auth.signToken({ phonenumber });
         res.status(200).send({ isAuthorized: true, token: token });
         res.end();
@@ -97,10 +100,8 @@ app.post('/login', function (req, res) {
         res.end();
       }
     }).catch(error => {
-      if(error){
       res.status(200).send({ isAuthorized: false });
       res.end();
-      }
     })
 })
 
