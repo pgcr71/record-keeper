@@ -20,7 +20,6 @@ import { DropdownComponent } from './_forms/dropdown/dropdown.component';
 import { InputtextComponent } from './_forms/inputtext/inputtext.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AutoID, AUTOID } from './auto-id.provide';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +31,7 @@ import { AutoID, AUTOID } from './auto-id.provide';
     IndexComponent,
     SignupComponent,
     DropdownComponent,
-    InputtextComponent
+    InputtextComponent,
   ],
   imports: [
     AppRouterModule,

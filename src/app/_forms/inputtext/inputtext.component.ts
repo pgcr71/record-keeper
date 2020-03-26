@@ -1,20 +1,32 @@
-import { Component, OnInit,OnChanges, Inject, Input, SimpleChange} from '@angular/core';
+import { Component, OnInit,OnChanges, Inject, Input, SimpleChange, forwardRef} from '@angular/core';
 import { AUTOID, AutoID } from 'src/app/auto-id.provide';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-inputtext',
   templateUrl: './inputtext.component.html',
-  styleUrls: ['./inputtext.component.scss']
+  styleUrls: ['./inputtext.component.scss'],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => InputtextComponent),
+    multi: true
+  }]
 })
-export class InputtextComponent implements OnInit,OnChanges {
-  id = this.autoID.newID();
+
+export class InputtextComponent implements OnInit,ControlValueAccessor {
+  tempid = this.autoID.newID();
   @Input()
-  appID = 'inputtext' + this.id;
+  id = 'inputtext' + this.tempid;
   @Input()
-  appName = 'inputtext' + this.id;
+  name = 'inputtext' + this.tempid;
   @Input()
-  appLabel
-  
+  label
+
+  onChange = (_) => { };
+  onTouched = () => { };
+ 
+  private value
+
   constructor(@Inject(AUTOID) private autoID:AutoID) { 
 
   }
@@ -22,41 +34,16 @@ export class InputtextComponent implements OnInit,OnChanges {
   ngOnInit(){
 
   }
+ 
+  change(item): void {
+    this.onChange(item);
+    this.value = item;
+}
 
-  ngOnChanges(SimpleChange){
-
+  writeValue(value: any) {
+    this.value = value;
   }
   
-//   private _value: any;
-
-//   get value(): any {
-//     return this._value;
-//   }
-
-//   set value(value: any) {
-//     if (this._value !== value) {
-//       this._value = value;
-//       this.onChange(value);
-//     }
-//   }
-
-
-//   writeValue(value: any) {
-//     this.value = value;
-//   }
-  
-
-//   change(item): void {
-//     this.onChange(item);
-//     this._value = item;
-// }
-
-//   onChange = (_) => { };
-//   onTouched = () => { };
-//   registerOnChange(fn) { this.onChange = fn; }
-//   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-//   registerOnd
-//   ngOnInit() {
-//   }
-
+  registerOnChange(fn) { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

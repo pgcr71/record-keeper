@@ -7,17 +7,17 @@
 }
 
 @function screenType($width) {
-    @if($xs <=$width and $width < $sm) {
-        @return '-xs-';
-    }
-
     @if($sm <=$width and $width < $md) {
         @return '-sm-';
     }
 
-
-    @if($md <=$width and $width < $xl) {
+    @if($md <=$width and $width < $lg) {
         @return '-md-';
+    }
+
+
+    @if($lg <=$width and $width < $xl) {
+        @return '-lg-';
     }
 
     @if($width >=$xl) {

@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private ls: LoginService, private router: Router) { }
 
-  phonenumber = null;
+  phonenumber = 7200157236;
   password = '';
   isPhoneNumberValid = false;
 

@@ -30,7 +30,7 @@
         @for $var from 1 to $columns+1 {
             .col#{$screenType}#{$var}-#{$columns} {
                 flex: 0 0 colWidth($columns, $var);
-                max-width: colWidth($columns, $var);
+                width: colWidth($columns, $var);
             }
         }
     }
@@ -48,7 +48,7 @@
                     margin-left: $margin;
                 }
 
-                max-width: colWidthWithMargin($columns, $var, $margin);
+                width: colWidthWithMargin($columns, $var, $margin);
             }
         }
     }
@@ -57,7 +57,7 @@
         @for $var from 1 to $columns+1 {
             .col#{$screenType}#{$var}-#{$columns}-no-mrgn-lft {
                 flex: 0 0 colWidthWithMargin($columns, $var, $margin);
-                max-width: colWidthWithMargin($columns, $var, $margin);
+                width: colWidthWithMargin($columns, $var, $margin);
             }
         }
     }

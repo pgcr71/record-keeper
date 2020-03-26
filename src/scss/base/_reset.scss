@@ -1,7 +1,6 @@
 html {
     font-size: 62.5%;
-    font-family: var(--primary-font);
-    background: var(--root-background);
+    background: var(--primary-background-color);
 }
 
 * {
@@ -13,8 +12,13 @@ html {
 
 body{
     font-size: 1.6rem;
+    font-family: var(--primary-font);
 }
 
+input, textarea, select{
+    font-family: inherit;
+    font-size: inherit;
+}
 ul,
 li {
     list-style-type: none;
