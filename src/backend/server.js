@@ -172,21 +172,24 @@ app.post('/login', function (req, res) {
   })
 })
 
-app.post('/addStock', function (req, res, next) {
+app.post('/addStock',auth.verify, function (req, res, next) {
 
+  var id = uuid.v4();
+  console.log(req.decodedData)
   var inventoryTbl = database
     .then(x => {
       return x.getTable('inventory');
     });
 
-  if (req && req.decodedData && req.decodedData.rolesid !== 1 || req.decodedData.rolesid !== 3) {
+  if (req && req.decodedData && (req.decodedData.rolesid != 1 && req.decodedData.rolesid != 3)) {
     res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
     return
   }
 
+  console.log(req.body)
   inventoryTbl.then(result => {
-    return result.insert("id", "userid", "name", "quatity")
-      .values(id, req.decodedData.userid, req.body.name, req.body.quantity)
+    return result.insert("id", "userid", "name", "quantity")
+      .values(id, req.decodedData.id, req.body.name, req.body.quantity)
       .execute();
   }).then(obj => {
     res.status(200).send({
@@ -194,9 +197,10 @@ app.post('/addStock', function (req, res, next) {
       message: 'Data inserted succesfully'
     });
   }).catch(error => {
+    console.log(error)
     res.status(401).send({
       done: false,
-      message: 'Failed to  insert data'
+      message: 'Failed to insert data'
     });
   })
 })

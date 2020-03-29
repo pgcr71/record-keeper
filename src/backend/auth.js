@@ -8,6 +8,7 @@ function verify(req, res, next) {
     if (bearer) {
         var token = bearer.split(' ')[1];
         var decodedData = verifyJWT(token, res);
+        console.log( verifyJWT(token, res))
         req.decodedData = decodedData;
         next();
     }

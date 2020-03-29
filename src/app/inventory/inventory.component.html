@@ -1,0 +1,13 @@
+<form #frm=ngForm>
+    <div>
+        <app-inputtext [id]='"inventoryname"' [name]='"name"' [(ngModel)]='name' [label]='"Name"'>
+        </app-inputtext>
+    </div>
+
+    <div>
+        <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
+        </app-inputtext>
+    </div>
+
+    <app-button (click) = 'onSubmit(frm)'>Submit</app-button>
+</form>
