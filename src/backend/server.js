@@ -172,6 +172,35 @@ app.post('/login', function (req, res) {
   })
 })
 
+app.post('/addStock', function (req, res, next) {
+
+  var inventoryTbl = database
+    .then(x => {
+      return x.getTable('inventory');
+    });
+
+  if (req && req.decodedData && req.decodedData.rolesid !== 1 || req.decodedData.rolesid !== 3) {
+    res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
+    return
+  }
+
+  inventoryTbl.then(result => {
+    return result.insert("id", "userid", "name", "quatity")
+      .values(id, req.decodedData.userid, req.body.name, req.body.quantity)
+      .execute();
+  }).then(obj => {
+    res.status(200).send({
+      done: true,
+      message: 'Data inserted succesfully'
+    });
+  }).catch(error => {
+    res.status(401).send({
+      done: false,
+      message: 'Failed to  insert data'
+    });
+  })
+})
+
 app.listen(4300, function () {
   console.log('The web server is running. Please open http://localhost:4300/ in your browser.');
 });
