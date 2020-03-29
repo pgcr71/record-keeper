@@ -11,7 +11,7 @@ function verify(req, res, next) {
         next();
     }
     else {
-        res.status(401).send({ authorized: false });
+        res.status(401).send({ token:false,authorized: false,message:'You might have cleared your cookies. Please log in again' });
     }
 
 }
@@ -22,12 +22,13 @@ function verifyJWT(token, res) {
         return;
     }
     catch{
-        res.status(401).send({ authorized: false });
+        res.status(401).send({token:true, authorized: false, message: 'Your session has expired. Please log in again'});
     }
 }
 
 
 function signToken(userInfo) {
+    console.log(userInfo)
     return jwt.sign(userInfo, secretOrPublicKey, { expiresIn: '1h' })
 }
 

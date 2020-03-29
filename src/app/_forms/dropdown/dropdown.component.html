@@ -1,3 +1,8 @@
-<select [name]="named" #ds (change) = 'change(ds.value)' [id]="dropdownid">
-    <option *ngFor='let option of options'>{{option}}</option>
+<label *ngIf='label' class='m-b-ternary display-block' [attr.for]='id'>{{label}}</label>
+
+<select [name]="name" (click) = 'click("button")' class='reset app-dropdown w-100 b-primary background-white' [(ngModel)]='value' #ds
+    (change)='change(ds.value)' [attr.id]="id">
+    <option (change) = 'click("option")' *ngFor='let option of options'>{{option}}</option>
 </select>
+
+<span [ngClass]='{"rotate":rotateIcon}'></span>

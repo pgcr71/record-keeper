@@ -1,0 +1,13 @@
+:host{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    height: 100vh;
+}
+
+.form{
+    margin: auto;
+    background-color: white;
+    border: var(--primary-border-color);
+}

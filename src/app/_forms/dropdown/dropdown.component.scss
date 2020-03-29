@@ -1,0 +1,36 @@
+.app-dropdown{
+    font-family: inherit;
+    font-size: inherit;
+    padding: 1.25rem;
+    border-radius: 0;
+    position: relative;
+   
+  +span{
+    &.rotate{
+        &::after{
+            transform: rotate(180deg);
+        }
+    }
+    &::after{
+        top:35px;
+        right:15px;
+        position: absolute;
+        content:'V';
+        z-index: 100;
+        transition: 5ms all;
+    }
+  }
+  &.reset{
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: none;
+}
+}
+
+
+
+
+:host{
+    position: relative;
+    display: block;
+}

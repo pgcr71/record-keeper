@@ -1,17 +1,21 @@
-<form class='col-12-12 col-sm-10-12 col-md-6-12 form-section background-white p-primary display-flex justify-content-center flex-direction-column'
+    
+
+<form class='col-12-12 col-sm-10-12 col-md-5-12 form-section background-white p-primary'
     #form='ngForm'>
-    <div class='m-b-primary'>
-        <app-inputtext [id]='"phonenumber"' [label]='"Phone Number"' [(ngModel)]='phonenumber' #pn1='ngModel' required
+    <div class='heading display-flex justify-content-center m-b-primary'>LOGIN</div>
+    <div class='m-b-primary phonenumber-section justify-content-space-between row'>
+        <app-dropdown class='m-b-secondary m-r-ternary country-code' [label]='"Country Code"' [(ngModel)]='countryCode'  [name]='"dropdown"' required  [options] = 'countryCodes'></app-dropdown>
+        <app-inputtext [id]='"phonenumber"' class='drop-down' [label]='"Phone Number"' [(ngModel)]='phonenumber' #pn='ngModel' required
             [name]="'phonenumber'"></app-inputtext>
-        <div *ngIf='pn1.invalid' class='error'>error</div>
+        <div *ngIf='pn.errors && pn.errors.required && submitted' class='error-message'>Phone number is required</div>
     </div>
     <div class='m-b-primary'>
-        <app-inputtext [id]='"Password"' [label]='"Password"' [(ngModel)]='password' #pass='ngModel' required
+        <app-inputtext [id]='"Password"' [label]='"Password"' [(ngModel)]='password' #pw='ngModel' required
             [name]="'password'"></app-inputtext>
-        <div *ngIf='pass.invalid' class='error'>error</div>
+        <div *ngIf='pw.errors && pw.errors.required && submitted' class='error-message'>Phone number is required</div>
     </div>
     <div class='button-section'>
-        <app-button class='m-r-ternary m-b-secondary' (click)='onSubmit(form)'>SUBMIT</app-button>
-        <app-cancel-button>Cancel</app-cancel-button>
+        <app-button class='m-r-ternary m-b-secondary' (click)='onSubmit(form,pn,pw)'>Submit</app-button>
+        <app-cancel-button>Go Back</app-cancel-button>
     </div>
 </form>

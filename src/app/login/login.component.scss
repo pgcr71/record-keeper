@@ -16,3 +16,44 @@
     }
 }
 
+.error-message{
+    color: red;
+    font-size: 12px;
+}
+
+.form-section{
+    margin: auto;
+}
+
+.phonenumber-section{
+
+
+    .country-code{
+        width:100%;
+    }
+
+    .drop-down{
+        width:100%;
+    }
+
+    @media screen and (min-width:$sm){
+        .country-code{
+            width:40%;
+        }
+    
+        .drop-down{
+            width:58%;
+        }
+    }
+ 
+}
+
+.heading{
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 10px;
+    background-color: var(--primary-color);
+}
+
+

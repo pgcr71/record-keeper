@@ -10,15 +10,20 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   constructor(private ls: LoginService, private router: Router) { }
-
-  phonenumber = 7200157236;
+  countryCodes = [91,92,93];
+  countryCode = 91;
+  phonenumber = '';
   password = '';
   isPhoneNumberValid = false;
+  submitted = false;
 
   ngOnInit() {
+  
+    
   }
   
   onSubmit(form) {
+    this.submitted = true;
     if (form.valid) {
       this.ls.login(this.phonenumber, this.password)
         .subscribe((value) => {
@@ -28,6 +33,7 @@ export class LoginComponent implements OnInit {
           }
         }, () => {
 
+          
         });
     }
   }

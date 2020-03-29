@@ -1,9 +1,5 @@
-.footer-container{
-    background-color: white;
-    display: block;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+.footer{
     position: absolute;
-    border: 1px solid var(--primary-border-color);
+    bottom: 0px;
+    height: 5vh;
 }

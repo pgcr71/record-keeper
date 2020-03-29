@@ -1,4 +1,4 @@
-import { Component, OnInit,OnChanges, Inject, Input, SimpleChange, forwardRef} from '@angular/core';
+import { Component, OnInit, OnChanges, Inject, Input, SimpleChange, forwardRef } from '@angular/core';
 import { AUTOID, AutoID } from 'src/app/auto-id.provide';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -13,37 +13,49 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   }]
 })
 
-export class InputtextComponent implements OnInit,ControlValueAccessor {
+export class InputtextComponent implements OnInit, ControlValueAccessor, OnChanges {
   tempid = this.autoID.newID();
   @Input()
-  id = 'inputtext' + this.tempid;
+  id;
   @Input()
-  name = 'inputtext' + this.tempid;
+  name
   @Input()
   label
 
   onChange = (_) => { };
   onTouched = () => { };
- 
+
   private value
 
-  constructor(@Inject(AUTOID) private autoID:AutoID) { 
+  constructor(@Inject(AUTOID) private autoID: AutoID) {
 
   }
 
-  ngOnInit(){
-
+  ngOnChanges(SimpleChange) {
+    if(SimpleChange.id)
+    this.id = this.id + '_' + this.tempid;
+    if(SimpleChange.name)
+    this.name = this.name + '_' + this.tempid;
   }
- 
+
+  ngOnInit() {
+    if(!this.id){
+      this.id = 'inputtext' + '_' + this.tempid;
+    }
+    if(!this.name){
+      this.name = 'inputtext' + '_' + this.tempid;
+    }
+  }
+
   change(item): void {
     this.onChange(item);
     this.value = item;
-}
+  }
 
   writeValue(value: any) {
     this.value = value;
   }
-  
+
   registerOnChange(fn) { this.onChange = fn; }
   registerOnTouched(fn: () => void): void { this.onTouched = fn; }
 }

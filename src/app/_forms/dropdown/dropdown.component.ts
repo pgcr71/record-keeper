@@ -1,5 +1,6 @@
-import { Component, OnInit, forwardRef, Input } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { AutoID, AUTOID } from 'src/app/auto-id.provide';
 
 @Component({
   selector: 'app-dropdown',
@@ -15,11 +16,13 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   @Input() options:Array<any>;
-  @Input() named:string;
-  @Input() dropdownid:string;
-  @Input() defaultValue:string;
+  @Input() name:string;
+  @Input() id:string;
+  @Input() label:string;
+  tempid = this.autoID.newID();
+  rotateIcon: boolean =false;
 
-  constructor() { }
+  constructor(@Inject(AUTOID) private autoID:AutoID ) { }
 
   ngOnInit() {
   }
@@ -39,6 +42,11 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   writeValue(value: any) {
     this._value = value;
+  }
+
+  click(value){
+    console.log(value)
+    this.rotateIcon = !this.rotateIcon;
   }
 
   change(item): void {

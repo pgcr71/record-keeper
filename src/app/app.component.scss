@@ -1,10 +1,4 @@
-.header{
-    background-color: white;
-    display: block;
-    border: 1px solid var(--primary-border-color);
-}
-
-.footer{
-    display: block;
-    position: relative;
+:host{
+    display:block;
+    background-color: var(--primary-color);
 }
