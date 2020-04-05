@@ -5,10 +5,9 @@ let secretOrPublicKey = configs.publicKey;
 
 function verify(req, res, next) {
     var bearer = req.headers['authorization'];
-    if (bearer) {
-        var token = bearer.split(' ')[1];
+    var token = bearer.split(' ')[1];
+    if (token) {
         var decodedData = verifyJWT(token, res);
-        console.log( verifyJWT(token, res))
         req.decodedData = decodedData;
         next();
     }

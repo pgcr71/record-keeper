@@ -21,6 +21,8 @@ import { InputtextComponent } from './_forms/inputtext/inputtext.component';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AutoID, AUTOID } from './auto-id.provide';
 import { InventoryComponent } from './inventory/inventory.component';
+import { TableComponent } from './table/table.component';
+import { ToasterComponent } from './toaster/toaster.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +36,8 @@ import { InventoryComponent } from './inventory/inventory.component';
     DropdownComponent,
     InputtextComponent,
     InventoryComponent,
+    TableComponent,
+    ToasterComponent,
   ],
   imports: [
     AppRouterModule,
@@ -51,7 +55,7 @@ import { InventoryComponent } from './inventory/inventory.component';
     {provide:AUTOID,useClass:AutoID}
   ],
   bootstrap: [AppComponent],
-  entryComponents: []
+  entryComponents: [ToasterComponent]
 })
 
 export class AppModule { }

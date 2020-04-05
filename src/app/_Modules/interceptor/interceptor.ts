@@ -11,18 +11,18 @@ export class Interceptor implements HttpInterceptor {
     }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        let token = localStorage.getItem('token')
+        let token = localStorage.getItem('token');
         let headers = req.headers.append('Content-Type', 'application/json');
-        headers = headers.append('Authorization', 'bearer ' + token);
-
+        headers = headers.append('Authorization', 'bearer ' + (token = token?token:''));
         req = req.clone({ headers: headers });
         return next.handle(req).pipe(
             tap((evt) => {
                
             },error=>{
                 if (error instanceof HttpErrorResponse) {
-                    if ((error as HttpErrorResponse).status == 404) {
+                    if ((error as HttpErrorResponse).status == 401) {
                         this.router.navigate(['login']);
+
                     }
                 }
             })

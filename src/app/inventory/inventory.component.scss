@@ -1,0 +1,22 @@
+.table{
+    width: 100%;
+}
+
+.header{
+    text-align: center;
+    vertical-align: middle;
+    background-color: var(--primary-color);
+    padding: 20px;
+    color: white;
+}
+
+.column{
+ border-left: 1px solid white;
+ padding: 10px;
+}
+
+table{
+    outline: 0;
+    vertical-align: baseline;
+    border-collapse:collapse;
+}

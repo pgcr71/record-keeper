@@ -68,6 +68,7 @@ app.post('/validateUsername', function (req, res) {
     })
 })
 
+
 app.post('/signup', function (req, res) {
 
   let id = uuid.v4();
@@ -87,7 +88,7 @@ app.post('/signup', function (req, res) {
   var usersTable = database
     .then(x => {
       return x.getTable('tblusers');
-    });
+    }); 
 
   var userRolesMapTable = database.then(x => {
     return x.getTable('user_roles_map');
@@ -172,21 +173,37 @@ app.post('/login', function (req, res) {
   })
 })
 
-app.post('/addStock',auth.verify, function (req, res, next) {
-
-  var id = uuid.v4();
-  console.log(req.decodedData)
-  var inventoryTbl = database
-    .then(x => {
-      return x.getTable('inventory');
-    });
+app.get('/stock', auth.verify, function (req, res, next) {
 
   if (req && req.decodedData && (req.decodedData.rolesid != 1 && req.decodedData.rolesid != 3)) {
     res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
     return
   }
 
-  console.log(req.body)
+  var inventoryTbl = database
+  .then(x => {
+    return x.getTable('inventory').select('name','quantity','price').execute()
+  }).then(data => {
+    var rows = data.fetchAll();
+    res.status(200).send({ data: rows, message: 'Data fetched succesfully' });
+  }).catch()
+
+})
+
+app.post('/stock',auth.verify, function (req, res, next) {
+
+  if (req && req.decodedData && (req.decodedData.rolesid != 1 && req.decodedData.rolesid != 3)) {
+    res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
+    return
+  }
+
+  var id = uuid.v4();
+
+  var inventoryTbl = database
+    .then(x => {
+      return x.getTable('inventory');
+    });
+
   inventoryTbl.then(result => {
     return result.insert("id", "userid", "name", "quantity")
       .values(id, req.decodedData.id, req.body.name, req.body.quantity)

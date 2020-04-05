@@ -9,5 +9,28 @@
         </app-inputtext>
     </div>
 
-    <app-button (click) = 'onSubmit(frm)'>Submit</app-button>
+    <app-button (click)='onSubmit(frm)'>Submit</app-button>
 </form>
+
+<app-table [headers] = 'headings' [rows] = 'inventory'></app-table>
+
+<!-- <table class='table'>
+    <tr class='header'>
+        <th class='column'>Name</th>
+        <th class='column'>Quantity</th>
+        <th class='column'>Price</th>
+        <th class='column'>Others</th>
+    </tr>
+
+    <tr class='data' *ngFor = 'let row of inventory'>
+        <td class='column'>{{row[0]}}</td>
+        <td class='column'>{{row[1]}}</td>
+        <td class='column'>{{row[2]}}</td>
+        <td class='column'>
+            <app-button>Delete</app-button>
+            <app-button>Edit</app-button>
+        </td>
+
+    </tr>
+    
+</table> -->

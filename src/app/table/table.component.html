@@ -1,0 +1,13 @@
+<table class='table'>
+    <thead class='thead'>
+        <tr>
+            <th *ngFor='let heading of headers'>{{heading}}</th>
+        </tr>
+    </thead>
+    <tbody class='tbody'>
+        <tr class='row' [class]='"row" + i' *ngFor='let columns of rows; let i = index'>
+
+            <td class='column' [class]='headers[j] + column' *ngFor='let column of columns; let j = index'>{{column}}</td>
+        </tr>
+    </tbody>
+</table>
