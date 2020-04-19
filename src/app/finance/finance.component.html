@@ -1,0 +1,28 @@
+<form #frm=ngForm class='m-b-primary'>
+    <div class='m-b-primary'>
+        <app-inputtext [id]='"name"' [name]='"name"' [(ngModel)]='name' [label]='"name"'>
+        </app-inputtext>
+    </div>
+    <div class='m-b-primary'>
+       
+        <app-inputtext [id]='"phonenumber"' [name]='"phonenumber"' [(ngModel)]='phoneNumber' [label]='"phonenumber"'>
+        </app-inputtext>
+    </div>
+
+    <div class='m-b-primary'>
+        <app-inputtext [id]='"email"' [name]='"email"' [(ngModel)]='email' [label]='"email"'>
+        </app-inputtext>
+    </div>
+
+    <div class='m-b-primary'>
+        <app-dropdown [label]='"Product"' [typeAhead] = 'true' [(ngModel)]='selectedProduct' (indexOfSelectedItem) = 'selectedProductIndex'
+        [name]='"productdropdown"' [options] = 'products'></app-dropdown>
+    </div>
+   
+    <div class='m-b-primary'>
+        <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
+        </app-inputtext>
+    </div>
+
+    <app-button (click)='onSubmit(frm)'>Submit</app-button>
+</form>

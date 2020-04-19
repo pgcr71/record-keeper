@@ -51,8 +51,6 @@ app.post('/validatePhoneNumber', function (req, res) {
     })
 })
 
-
-
 app.post('/validateUsername', function (req, res) {
   var username = req.body.username;
   database.then(db => db.getTable('tblusers').select(['user_name'])
@@ -88,7 +86,7 @@ app.post('/signup', function (req, res) {
   var usersTable = database
     .then(x => {
       return x.getTable('tblusers');
-    }); 
+    });
 
   var userRolesMapTable = database.then(x => {
     return x.getTable('user_roles_map');
@@ -147,42 +145,39 @@ app.post('/login', function (req, res) {
   }
 
   let row = [];
-  usersTable.then(tbl => getUserTblData(tbl)).then(result => {
+  usersTable.then(tbl => getUserTblData(tbl)).then((result) => {
     row = result.fetchOne();
     if (row && row.length) {
       return userRolesMapTable.then(tbl => getUserRole(tbl, row[2]));
     } else {
-      res.status(200).send({ isAuthorized: false });
-      res.end();
+      return Promise.reject({ message: 'User Not Found', code: 0, isAuthorized: false })
     }
   }).then(data => {
-    let row1 = data.fetchOne()
-    let token = auth.signToken({
-      'id': row[2],
-      'rolesid': row1[0],
-      'firstname': row[0],
-      'lastname': row[1]
-    })
-    res.status(200).send({ isAuthorized: true, token: token });
+    if (data) {
+      let row1 = data.fetchOne()
+      let token = auth.signToken({
+        'id': row[2],
+        'rolesid': row1[0],
+        'firstname': row[0],
+        'lastname': row[1]
+      })
+      res.status(200).send({ isAuthorized: true, token: token });
+      res.end();
+    }
+    else {
+      Promise.reject({ message: 'User Role Not Found', code: 1, isAuthorized: false })
+    }
+  }).catch((message) => {
+    console.log(message)
+    res.status(404).send(message);
     res.end();
-  }).catch(error => {
-    console.log('error')
-    res.status(200).send({ isAuthorized: false });
-    res.end();
-
   })
 })
 
 app.get('/stock', auth.verify, function (req, res, next) {
 
-  if (req && req.decodedData && (req.decodedData.rolesid != 1 && req.decodedData.rolesid != 3)) {
-    res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
-    return
-  }
-
-  var inventoryTbl = database
-  .then(x => {
-    return x.getTable('inventory').select('name','quantity','price').execute()
+  database.then(x => {
+    return x.getTable('inventory').select('name', 'quantity', 'price','id').execute()
   }).then(data => {
     var rows = data.fetchAll();
     res.status(200).send({ data: rows, message: 'Data fetched succesfully' });
@@ -190,8 +185,7 @@ app.get('/stock', auth.verify, function (req, res, next) {
 
 })
 
-app.post('/stock',auth.verify, function (req, res, next) {
-
+app.post('/stock', auth.verify, function (req, res, next) {
   if (req && req.decodedData && (req.decodedData.rolesid != 1 && req.decodedData.rolesid != 3)) {
     res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
     return
@@ -205,8 +199,8 @@ app.post('/stock',auth.verify, function (req, res, next) {
     });
 
   inventoryTbl.then(result => {
-    return result.insert("id", "userid", "name", "quantity")
-      .values(id, req.decodedData.id, req.body.name, req.body.quantity)
+    return result.insert("id", "userid", "name", "quantity","price")
+      .values(id, req.decodedData.id, req.body.name, req.body.quantity, req.body.price)
       .execute();
   }).then(obj => {
     res.status(200).send({
@@ -214,13 +208,51 @@ app.post('/stock',auth.verify, function (req, res, next) {
       message: 'Data inserted succesfully'
     });
   }).catch(error => {
-    console.log(error)
-    res.status(401).send({
+    res.status(409).send({
       done: false,
-      message: 'Failed to insert data'
+      message: error.info.msg
     });
   })
 })
+
+app.post('/finance', auth.verify, function (req, res, next) {
+  if (req && req.decodedData && (req.decodedData.rolesid != 4 && req.decodedData.rolesid != 3)) {
+    res.status(200).send({ isAuthorized: false, message: 'You do not have permissions to perform this operation' });
+    return
+  }
+
+  var id = uuid.v4();
+  database
+    .then(session => session.getTable('user_finance'))
+    .then(tbl => tbl.insert('id', 'inserted_by', 'product_id', 'product_name', 'quantity', 'price', 'phone_number', 'email', 'product_given_to')
+      .values(id, req.decodedData.id, req.body.productId, req.body.productName, req.body.quantity, req.body.price, req.body.phoneNumber, req.body.email, req.body.productGivenTo)
+      .execute()).then(obj => res.status(200).send({
+        done: true,
+        message: 'Data inserted succesfully'
+      })).catch(error => {
+        res.status(409).send({
+          done: false,
+          message: error.info.msg
+        });
+      })
+})
+
+app.get('/finance', auth.verify, function (req, res, next) {
+  if (req && req.decodedData && (req.decodedData.rolesid != 4 && req.decodedData.rolesid != 3)) {
+    database
+      .then(db => db.getTable('user_finance'))
+      .then(tbl => tbl.select().where('phone_number=:phone_number').bind('phone_number', req.decodedData.phoneNumber).execute())
+      .then(results => res.status(200).send({ data: results.fetchAll(), message: "Data fetched Succesfully" })
+      )
+    return;
+  } else {
+    database
+      .then(db => db.getTable('user_finance'))
+      .then(tbl => tbl.select().execute())
+      .then(results => res.status(200).send({ data: results.fetchAll(), message: "Data fetched Succesfully" }))
+    return;
+  }
+});
 
 app.listen(4300, function () {
   console.log('The web server is running. Please open http://localhost:4300/ in your browser.');

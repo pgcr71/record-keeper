@@ -1,8 +1,36 @@
 <label *ngIf='label' class='m-b-ternary display-block' [attr.for]='id'>{{label}}</label>
 
-<select [name]="name" (click) = 'click("button")' class='reset app-dropdown w-100 b-primary background-white' [(ngModel)]='value' #ds
+<div class='dropdown-container' [id] = 'id'>
+    <input class='dropdown-input' type="text" placeholder = 'Enter search string' *ngIf = 'typeAhead && displayInputInsteadOfButton' #typing (input) = 'onTypeStart(typing.value)' name="typeAhead" id="typeAhead">
+    <button class='dropdown-button' *ngIf = '!(typeAhead && displayInputInsteadOfButton)' (click) = 'onButtonClick()'>
+        <ng-container *ngIf='getTypeOfOption(value) == "string" || getTypeOfOption(value) == "number"'>
+            {{value}}
+        </ng-container>
+        <ng-container *ngIf='value && getTypeOfOption(value) != "string"'>
+            {{value[indexOfItemToShowInDropdown]}}
+        </ng-container>
+        <span [ngClass]='{"rotate":rotateIcon}'>V</span> 
+    </button>
+
+    <ul *ngIf='options.length' [ngClass] = 'displayList?"display-block":"display-none"' class='drowndown-list'>
+        <li class='dropdown-listitem' (click)='onOptionClick(option,o)' *ngFor='let option of options;let o = index'>
+            <input *ngIf='multi' type="checkbox" name="multi{{o}}" id="multi{{o}}">
+            <ng-container *ngIf='getTypeOfOption(option) == "string" || getTypeOfOption(option) == "number"'>
+                {{option}}
+            </ng-container>
+            <ng-container *ngIf='option && getTypeOfOption(option) != "string"'>
+                {{option[indexOfItemToShowInDropdown]}}
+            </ng-container>
+        </li>
+
+        
+    </ul>
+    <div  class='no-data' *ngIf='!options.length'>No Items</div>    
+</div>
+
+<!-- <select [name]="name" (click) = 'click("button")' class='reset app-dropdown w-100 b-primary background-white' [(ngModel)]='value' #ds
     (change)='change(ds.value)' [attr.id]="id">
-    <option (change) = 'click("option")' *ngFor='let option of options'>{{option}}</option>
+    <option *ngFor='let option of options'>{{option}}</option>
 </select>
 
-<span [ngClass]='{"rotate":rotateIcon}'></span>
+<span [ngClass]='{"rotate":rotateIcon}'></span> -->

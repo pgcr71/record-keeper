@@ -1,18 +1,23 @@
-<form #frm=ngForm>
-    <div>
+<form #frm=ngForm class='m-b-primary'>
+    <div  class='m-b-primary'>
         <app-inputtext [id]='"inventoryname"' [name]='"name"' [(ngModel)]='name' [label]='"Name"'>
         </app-inputtext>
     </div>
 
-    <div>
+    <div class='m-b-primary'>
         <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
+        </app-inputtext>
+    </div>
+
+    <div class='m-b-primary'> 
+        <app-inputtext [id]='"Price"' [name]='"price"' [(ngModel)]='price' [label]='"price"'>
         </app-inputtext>
     </div>
 
     <app-button (click)='onSubmit(frm)'>Submit</app-button>
 </form>
 
-<app-table [headers] = 'headings' [rows] = 'inventory'></app-table>
+<app-table class='table' [headers] = 'headings' [rows] = 'inventory'></app-table>
 
 <!-- <table class='table'>
     <tr class='header'>

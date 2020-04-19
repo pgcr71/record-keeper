@@ -1,13 +1,17 @@
+<div></div>
 <table class='table'>
     <thead class='thead'>
+        
         <tr>
-            <th *ngFor='let heading of headers'>{{heading}}</th>
+            <th class='theader'><input type="checkbox" #cb  (change) ='onSelectAll(cb.checked)'  name="clearAll" id="clearAll"></th>
+            <th class='theader' *ngFor='let heading of headers;  let h = index'>{{heading}}</th>
         </tr>
     </thead>
     <tbody class='tbody'>
-        <tr class='row' [class]='"row" + i' *ngFor='let columns of rows; let i = index'>
-
-            <td class='column' [class]='headers[j] + column' *ngFor='let column of columns; let j = index'>{{column}}</td>
+       
+        <tr class='trow' [ngClass]='"trow" + i' *ngFor='let row of rows; let i = index'>
+            <td class='tcolumn'><input type="checkbox" [(ngModel)]='checkBoxes[i]' name="clearAll" id="clearAll"></td>
+            <td class='tcolumn' [attr.data-th] = 'heading' [ngClass]='heading + row[h]' *ngFor='let heading of headers;  let h = index'>{{row[h]}}</td>
         </tr>
     </tbody>
 </table>

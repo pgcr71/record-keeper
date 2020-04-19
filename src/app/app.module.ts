@@ -23,6 +23,7 @@ import { AutoID, AUTOID } from './auto-id.provide';
 import { InventoryComponent } from './inventory/inventory.component';
 import { TableComponent } from './table/table.component';
 import { ToasterComponent } from './toaster/toaster.component';
+import { FinanceComponent } from './finance/finance.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +39,7 @@ import { ToasterComponent } from './toaster/toaster.component';
     InventoryComponent,
     TableComponent,
     ToasterComponent,
+    FinanceComponent,
   ],
   imports: [
     AppRouterModule,

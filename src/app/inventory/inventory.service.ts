@@ -17,4 +17,12 @@ export class InventoryService {
   get(){
     return this.http.get(URL + '/stock');
   }
+
+  delete(){
+    return this.http.delete(URL + '/stock')
+  }
+
+  update(data){
+    return this.http.put(URL  + '/stock',data)
+  }
 }

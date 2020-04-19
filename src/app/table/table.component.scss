@@ -1,11 +1,70 @@
+@import '../../scss/abstracts/variables';
+table{
+    border: 1px solid var(--primary-border-color);
+    outline: 0;
+    vertical-align: baseline;
+    border-collapse:separate;
+    border-spacing: 0 ;   
+}
+
 .table{
     width: 100%;
 }
 
-.thead{
-    border:1px solid var(--primary-color)
+.theader{
+    text-align: start;
+    vertical-align: middle;
+    padding: 20px;
+    border-bottom: 1px solid var(--primary-border-color);
 }
 
-.tbody{
-    height: 320px;
+.tcolumn{
+    padding: 10px 20px 10px 20px;
 }
+
+.trow:not(:last-child)> .tcolumn{
+    border-bottom: 1px solid var(--primary-border-color);
+}
+
+.trow:nth-child(2n){
+    background-color: var(--primary-border-color);
+}
+
+@media only screen and (max-width: $md){
+        .table,.tbody,.trow,.tcolumn{
+            display: block;
+        }
+        .thead{
+            display: none;
+        }
+        .trow{
+            padding:5px;
+            border:none;
+            color: white;
+            margin-bottom: 5px;
+            margin-top: 5px;
+            background-color: var(--primary-color);
+        }
+
+        .trow:not(:last-child)> .tcolumn{
+            border-bottom:0px;
+        }
+        .tcolumn{
+            display: block;
+            width: 100%;
+            padding:0px;
+            display: flex;
+            border: 0px;
+            justify-content: space-between;
+           
+        &:before{
+            content: attr(data-th);
+        }
+    }
+}
+
+:host{
+    display: block;
+}
+
+
