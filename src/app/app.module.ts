@@ -24,6 +24,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { TableComponent } from './table/table.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { FinanceComponent } from './finance/finance.component';
+import { ContentComponent } from './content/content.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +41,7 @@ import { FinanceComponent } from './finance/finance.component';
     TableComponent,
     ToasterComponent,
     FinanceComponent,
+    ContentComponent,
   ],
   imports: [
     AppRouterModule,
@@ -52,12 +54,12 @@ import { FinanceComponent } from './finance/finance.component';
     HttpClientModule
   ],
   providers: [
-    {provide:HTTP_INTERCEPTORS,useClass:Interceptor,multi:true},
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    {provide:AUTOID,useClass:AutoID}
+    { provide: AUTOID, useClass: AutoID }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ToasterComponent]
+  entryComponents: [ToasterComponent, DropdownComponent]
 })
 
 export class AppModule { }

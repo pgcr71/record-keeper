@@ -1,13 +1,19 @@
 {
   "name": "record-keeper",
   "version": "0.0.0",
+  "engines": {
+    "node": ">=8.10.0"
+  },
+  "type": "commonjs",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": " npm run build & npm run server & npm run gulp",
+    "build": "ng build --watch",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "server": "nodemon ./backend/server.js",
+    "gulp": "gulp"
   },
   "private": true,
   "dependencies": {
@@ -44,6 +50,8 @@
     "@types/node": "~8.9.4",
     "browser-sync": "^2.26.7",
     "codelyzer": "^5.0.0",
+    "eslint": "^7.3.1",
+    "eslint-plugin-node": "^11.1.0",
     "gulp": "^4.0.2",
     "gulp-livereload": "^4.0.2",
     "gulp-nodemon": "^2.4.2",

@@ -11,18 +11,18 @@ export class InventoryService {
   constructor(private http:HttpClient) { }
 
   add(data) {
-    return this.http.post(URL + '/stock',data);
+    return this.http.post(URL + '/products/add',data);
   }
 
   get(){
-    return this.http.get(URL + '/stock');
+    return this.http.get(URL + '/products/all');
   }
 
   delete(){
-    return this.http.delete(URL + '/stock')
+    return this.http.delete(URL + '/products')
   }
 
   update(data){
-    return this.http.put(URL  + '/stock',data)
+    return this.http.put(URL  + '/products',data)
   }
 }

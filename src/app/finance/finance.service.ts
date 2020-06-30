@@ -12,11 +12,19 @@ export class FinanceService {
   }
 
   getProducts() {
-    return this.http.get(URL + '/stock');
+    return this.http.get(URL + '/products/all');
   }
 
   postFinanceData(data){
     console.log(data)
-    return this.http.post(URL + '/finance',data).subscribe((data) =>{console.log(data)},() =>{})
+    return this.http.post(URL + '/orders/create',data).subscribe((data) =>{console.log(data)},() =>{})
+  }
+
+  getUserDataByPhoneNumberorFirstName(searchTerm){
+    return this.http.post(URL + '/search', {searchTerm});
+  }
+
+  getAllOders(){
+    return this.http.get(URL + '/orders/all');
   }
 }

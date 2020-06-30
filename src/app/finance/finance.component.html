@@ -1,24 +1,14 @@
 <form #frm=ngForm class='m-b-primary'>
     <div class='m-b-primary'>
-        <app-inputtext [id]='"name"' [name]='"name"' [(ngModel)]='name' [label]='"name"'>
-        </app-inputtext>
-    </div>
-    <div class='m-b-primary'>
-       
-        <app-inputtext [id]='"phonenumber"' [name]='"phonenumber"' [(ngModel)]='phoneNumber' [label]='"phonenumber"'>
-        </app-inputtext>
+      <app-dropdown [label]='"name"' [typeAhead] = 'true' key = '0' (searchTerm) = 'onSearch($event)' [(ngModel)]='selectedName'
+      [name]='"name"' [options] = 'people'></app-dropdown>
     </div>
 
     <div class='m-b-primary'>
-        <app-inputtext [id]='"email"' [name]='"email"' [(ngModel)]='email' [label]='"email"'>
-        </app-inputtext>
-    </div>
-
-    <div class='m-b-primary'>
-        <app-dropdown [label]='"Product"' [typeAhead] = 'true' [(ngModel)]='selectedProduct' (indexOfSelectedItem) = 'selectedProductIndex'
+        <app-dropdown [label]='"Product"' key ='0' [typeAhead] = 'true' [(ngModel)]='selectedProduct'
         [name]='"productdropdown"' [options] = 'products'></app-dropdown>
     </div>
-   
+
     <div class='m-b-primary'>
         <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
         </app-inputtext>
@@ -26,3 +16,5 @@
 
     <app-button (click)='onSubmit(frm)'>Submit</app-button>
 </form>
+
+<app-table class='table' [headers] = 'headings' [rows] = 'rows'></app-table>

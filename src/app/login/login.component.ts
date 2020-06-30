@@ -18,10 +18,10 @@ export class LoginComponent implements OnInit {
   submitted = false;
 
   ngOnInit() {
-  
-    
+
+
   }
-  
+
   onSubmit(form) {
     this.submitted = true;
     if (form.valid) {
@@ -29,11 +29,13 @@ export class LoginComponent implements OnInit {
         .subscribe((value) => {
           if (value['isAuthorized']) {
             localStorage.setItem('token', value['token']);
+            localStorage.setItem('userId', value['data']['id']);
+            localStorage.setItem('rolesId', value['data']['rolesid']);
             this.router.navigate(['index'])
           }
         }, () => {
 
-          
+
         });
     }
   }

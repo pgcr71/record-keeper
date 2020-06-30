@@ -4,7 +4,7 @@ table{
     outline: 0;
     vertical-align: baseline;
     border-collapse:separate;
-    border-spacing: 0 ;   
+    border-spacing: 0 ;
 }
 
 .table{
@@ -14,7 +14,7 @@ table{
 .theader{
     text-align: start;
     vertical-align: middle;
-    padding: 20px;
+    padding: 10px;
     border-bottom: 1px solid var(--primary-border-color);
 }
 
@@ -28,6 +28,10 @@ table{
 
 .trow:nth-child(2n){
     background-color: var(--primary-border-color);
+}
+
+.table-options{
+    border-radius: 1px solid var(--primary-border-color);
 }
 
 @media only screen and (max-width: $md){
@@ -56,7 +60,7 @@ table{
             display: flex;
             border: 0px;
             justify-content: space-between;
-           
+
         &:before{
             content: attr(data-th);
         }

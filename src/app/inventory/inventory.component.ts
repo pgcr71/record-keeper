@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { InventoryService } from './inventory.service';
 import { ToasterService } from '../toaster/toaster.service';
+import { DropdownComponent } from '../_forms/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-inventory',
@@ -14,7 +15,15 @@ export class InventoryComponent implements OnInit {
   quantity = 0;
   price = 0;
   inventory = [];
-  headings = ['Name','Quantity','Price','Others'];
+  headings = ['Name', 'Quantity', 'Price', 'Others'];
+  settings = {
+    Quantity: {
+      contenteditable: 'true',
+      htmlOnContentEdit: 'true',
+      html: `<p> Ganesh</p>`,
+      componentName:DropdownComponent
+    }
+  };
 
   constructor(private is: InventoryService,private ts:ToasterService) { }
 
@@ -27,10 +36,9 @@ export class InventoryComponent implements OnInit {
 
   onSubmit(form) {
     if (form.valid) {
-      this.is.add(form.value).subscribe((res) => {
+      this.is.add(form.value ).subscribe((res) => {
         if(res['done']){
           this.inventory.push([this.name,this.quantity,this.price]);
-          console.log('messges')
           this.ts.success(res['message'])
         }
       },error =>{

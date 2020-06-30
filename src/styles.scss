@@ -1,3 +1,6 @@
 @import './scss/main';
 
 
+app-content > *{
+  min-height: 85vh;;
+}

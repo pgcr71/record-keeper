@@ -14,6 +14,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 })
 
 export class InputtextComponent implements OnInit, ControlValueAccessor, OnChanges {
+
+  constructor(@Inject(AUTOID) private autoID: AutoID) {
+
+  }
   tempid = this.autoID.newID();
   @Input()
   id;
@@ -22,14 +26,10 @@ export class InputtextComponent implements OnInit, ControlValueAccessor, OnChang
   @Input()
   label
 
-  onChange = (_) => { };
-  onTouched = () => { };
-
   private value
 
-  constructor(@Inject(AUTOID) private autoID: AutoID) {
-
-  }
+  onChange = (_) => { };
+  onTouched = () => { };
 
   ngOnChanges(SimpleChange) {
     if(SimpleChange.id)

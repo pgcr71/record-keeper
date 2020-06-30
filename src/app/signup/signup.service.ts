@@ -10,11 +10,11 @@ export class SignupService {
   constructor(private http:HttpClient) { }
 
   validatePhoneNumber(phonenumber){
-    return this.http.post(URL + '/validatePhoneNumber',{phonenumber})
+    return this.http.post(URL + '/validate/phonenumber',{phonenumber})
   }
 
   validateUsername(username){
-    return this.http.post(URL + '/validateUsername',{username})
+    return this.http.post(URL + '/validate/username',{username})
   }
 
   signup(data){

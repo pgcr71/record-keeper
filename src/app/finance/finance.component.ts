@@ -8,38 +8,50 @@ import { FinanceService } from './finance.service';
 })
 export class FinanceComponent implements OnInit {
 products = [];
-phoneNumber = '';
 email = '';
 name = '';
 quantity = '';
 selectedProduct = '';
+people = [];
+selectedName = [];
+rows = [];
 
-  
+headings = ['Name', 'Quantity', 'Price', 'Others'];
+
+set search(value){
+
+}
   constructor(private fs:FinanceService) { }
 
   ngOnInit() {
     this.fs.getProducts().subscribe((res) =>{
       this.products = res['data'];
     })
+
+    this.fs.getAllOders().subscribe((res) => {
+      this.rows = res['data']
+    });
   }
 
   onSubmit(form){
-
+console.log(this.selectedName)
     var data = {
       productId: this.selectedProduct[3],
-      productName: this.selectedProduct[0],
-      quantity: this.quantity,
-      price: +this.quantity * +this.selectedProduct[2],
-      phoneNumber: this.phoneNumber,
-      email: this.email,
-      productGivenTo: this.name
+      userId: this.selectedName[2],
+      quantity: this.quantity
     }
     if(form.valid)
     {
       this.fs.postFinanceData(data)
     }
-     
-    
+
+
+  }
+
+  onSearch(searchTerm){
+    this.fs.getUserDataByPhoneNumberorFirstName(searchTerm).subscribe((result) => {
+      this.people = result['data'];
+    })
   }
 
 }

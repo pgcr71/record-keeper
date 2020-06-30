@@ -1,32 +1,37 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/login/login.service';
 
 @Injectable({ providedIn: 'root' })
 export class Interceptor implements HttpInterceptor {
-    constructor(private router: Router) {
+  constructor(private router: Router, private loginService: LoginService) { }
 
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    let token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `bearer ${token ? token : ''}`,
     }
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-        let token = localStorage.getItem('token');
-        let headers = req.headers.append('Content-Type', 'application/json');
-        headers = headers.append('Authorization', 'bearer ' + (token = token?token:''));
-        req = req.clone({ headers: headers });
-        return next.handle(req).pipe(
-            tap((evt) => {
-               
-            },error=>{
-                if (error instanceof HttpErrorResponse) {
-                    if ((error as HttpErrorResponse).status == 401) {
-                        this.router.navigate(['login']);
-
-                    }
-                }
-            })
-        );
+    const params = {
+      userId: undefined,
+      userRoleId: undefined
     }
+    params.userId = localStorage.getItem('userId');
+    params.userRoleId = localStorage.getItem('rolesId')
 
+    console.log(params.userId)
+    req = req.clone({ setHeaders: headers, body: {...req.body, ...params}});
+
+    return next.handle(req).pipe(tap(evt => evt, error => {
+      if (error instanceof HttpErrorResponse) {
+        if ((error as HttpErrorResponse).status == 401) {
+          this.router.navigate(['login']);
+        }
+      }
+    }))
+  }
 }

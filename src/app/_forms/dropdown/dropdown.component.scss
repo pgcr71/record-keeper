@@ -4,25 +4,13 @@
     padding: 1.25rem;
     border-radius: 0;
     position: relative;
-   
-  +span{
-  
-    &::after{
-        top:35px;
-        right:15px;
-        position: absolute;
-        content:'V';
-        z-index: 100;
-        transition: 5ms all;
-    }
-  }
+
   &.reset{
     -webkit-appearance: none;
     appearance: none;
     -moz-appearance: none;
 }
 }
-
 
 .rotate{
     transform: rotate(180deg);
@@ -32,46 +20,39 @@
     display: block;
 }
 
-button{
-    display: flex;
-    justify-content: space-between;
-    background-color: white;
-    padding:1.25rem;
-    border: 1px solid var(--primary-border-color);
-    font: inherit;
-}
-
 .display-none{
-    display: none;
+    display: none !important;
 }
 
 :host{
     position: relative;
-    display: block;
+    display: inline-block;
 }
 
 .dropdown-container{
     position: relative;
     display: flex;
     flex-direction: column;
-
+    min-width: 200px;
+    border: 1px solid var(--primary-border-color);
 }
 
-.dropdown-input{
-    border: 1px solid var(--primary-border-color);
-    padding: 1.25rem;
+.dropdown-toggle {
+  display: flex;
+  padding:1.25rem;
+  justify-content: space-between;
 }
 
 .drowndown-list{
     max-height: 300px;
     position: absolute;
-    top:47px;   
+    top:47px;
     z-index: 200;
     width: 100%;
     background: white;
     border: 1px solid var(--primary-border-color);
     overflow:scroll;
-    
+
 }
 .no-data{
     background-color:white;
@@ -87,5 +68,5 @@ button{
     &:not(:last-child){
         border-bottom: 1px solid var(--primary-border-color);
     }
-    
+
 }

@@ -3,7 +3,7 @@ const DEST_ROOT_FOLDER = './dist';
 
 module.exports = {
     scripts: {
-        src: SRC_ROOT_FOLDER + '/backend/*.js',
+        src: '/backend/*.js',
         dest: DEST_ROOT_FOLDER
     },
     scss: {
@@ -12,6 +12,6 @@ module.exports = {
     },
     watch: {
         scss: SRC_ROOT_FOLDER + '/scss/**/*.scss',
-        js: SRC_ROOT_FOLDER + '/backend/**/*.js'
+        js: '/backend/**/*.js'
     }
 }
