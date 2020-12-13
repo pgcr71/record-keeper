@@ -6,7 +6,7 @@ var auth = require('./auth');
 loginRouter.post("/", function (req, res) {
   let phonenumber = req.body.phonenumber;
   let password = req.body.password;
-  var usersTable = database.then((db) => db.getTable("user"));
+  var usersTable = database.then((db) => db.getTable("users"));
 
   function getUserData(result) {
     return result

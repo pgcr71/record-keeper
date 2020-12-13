@@ -3,7 +3,7 @@ var orderRouter = app.Router();
 let database = require("./database-connection");
 let auth = require("./auth");
 let uuid = require("uuid");
-let con = require('./sql-connection');
+let con = require('./sql-query-connection');
 
 orderRouter.post("/create", auth.verify, function (req, res) {
   if (
@@ -20,7 +20,7 @@ orderRouter.post("/create", auth.verify, function (req, res) {
   }
 
   database
-    .then((session) => session.getTable("user_orders"))
+    .then((session) => session.getTable("orders"))
     .then((tbl) =>
       tbl
         .insert("id", "user_id", "product_id", "quantity", "created_by")
@@ -48,13 +48,13 @@ orderRouter.post("/create", auth.verify, function (req, res) {
 });
 
 orderRouter.get("/all", auth.verify, function (req, res) {
-  const sqlStatement = `SELECT user_orders.user_id, user.user_name,
-  user_orders.quantity, products.name, products.unit_price
-  FROM user_orders inner join products on user_orders.product_id = products.id
-  inner join user on user_orders.user_id = user.id`;
+  const sqlStatement = `SELECT orders.user_id, user.user_name,
+  orders.quantity, products.name, products.unit_price
+  FROM orders inner join products on orders.product_id = products.id
+  inner join user on orders.user_id = user.id`;
   if (req && req.decodedData && req.decodedData.rolesid === 1) {
     con
-      .then((db) => db.sql(`${sqlStatement} where user_orders.user_id = :id`).bind("id", req.decodedData.id).execute())
+      .then((db) => db.sql(`${sqlStatement} where orders.user_id = :id`).bind("id", req.decodedData.id).execute())
       .then((results) =>
         res.status(200).send({
           data: results.fetchAll(),

@@ -4,7 +4,7 @@ var database = require('./database-connection');
 
 validationRouter.post('/phonenumber', function (req, res) {
   var phonenumber = req.body.phonenumber;
-  database.then(db => db.getTable('user').select(['phone_number'])
+  database.then(db => db.getTable('users').select(['phone_number'])
     .where('phone_number = :phonenumber')
     .bind('phonenumber', phonenumber)
     .execute()).then(result => {
@@ -19,7 +19,7 @@ validationRouter.post('/phonenumber', function (req, res) {
 
 validationRouter.post('/username', function (req, res) {
   var username = req.body.username;
-  database.then(db => db.getTable('user').select(['user_name'])
+  database.then(db => db.getTable('users').select(['user_name'])
     .where('user_name = :username')
     .bind('username', username)
     .execute()).then(result => {

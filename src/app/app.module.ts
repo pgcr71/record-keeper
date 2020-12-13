@@ -25,6 +25,7 @@ import { TableComponent } from './table/table.component';
 import { ToasterComponent } from './toaster/toaster.component';
 import { FinanceComponent } from './finance/finance.component';
 import { ContentComponent } from './content/content.component';
+import { InterestComponent } from './interest/interest.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +43,7 @@ import { ContentComponent } from './content/content.component';
     ToasterComponent,
     FinanceComponent,
     ContentComponent,
+    InterestComponent,
   ],
   imports: [
     AppRouterModule,
