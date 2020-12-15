@@ -1,7 +1,8 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, Injectable } from '@angular/core';
 
 export const AUTOID = new InjectionToken<string>('auto.id');
 
+@Injectable()
 export class AutoID {
     id = 0;
     constructor() {
