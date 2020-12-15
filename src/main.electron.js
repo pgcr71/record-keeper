@@ -10,20 +10,19 @@ function createWindow () {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      devTools: false,
       frame: false
     }
   })
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, `/dist/index.html`),
+      pathname: path.join(__dirname, "../",'/dist/index.html'),
       protocol: "file:",
       slashes: true
     })
   );
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
     mainWindow = null

@@ -26,6 +26,7 @@ import { ToasterComponent } from './toaster/toaster.component';
 import { FinanceComponent } from './finance/finance.component';
 import { ContentComponent } from './content/content.component';
 import { InterestComponent } from './interest/interest.component';
+import { NgxElectronModule } from 'ngx-electron';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,8 +44,9 @@ import { InterestComponent } from './interest/interest.component';
     ToasterComponent,
     FinanceComponent,
     ContentComponent,
-    InterestComponent,
+    InterestComponent
   ],
+
   imports: [
     AppRouterModule,
     BrowserModule,
@@ -53,7 +55,8 @@ import { InterestComponent } from './interest/interest.component';
     ButtonsModule,
     TooltipModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxElectronModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

@@ -1,7 +1,7 @@
 {
   "name": "record-keeper",
   "version": "0.0.0",
-  "main": "main.js",
+  "main": "src/main.electron.js",
   "engines": {
     "node": ">=8.10.0"
   },
@@ -9,7 +9,7 @@
   "scripts": {
     "ng": "ng",
     "start": "electron-forge start",
-    "build": "ng build --watch",
+    "build": "ng build --base-href ./ --watch",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -17,6 +17,7 @@
     "gulp": "gulp",
     "start:electron": "ng build --base-href ./ && electron .",
     "package": "electron-forge package",
+    "postinstall": "electron-builder install-app-deps",
     "make": "electron-forge make"
   },
   "private": true,
@@ -38,6 +39,7 @@
     "json-circular": "0.0.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
+    "ngx-electron": "^2.2.0",
     "nodemon": "^2.0.2",
     "rxjs": "~6.6.3",
     "sqlite3": "^5.0.0",
@@ -62,6 +64,7 @@
     "browser-sync": "^2.26.7",
     "codelyzer": "^6.0.0",
     "electron": "^11.1.0",
+    "electron-prebuilt-compile": "8.2.0",
     "eslint": "^7.3.1",
     "eslint-plugin-node": "^11.1.0",
     "gulp": "^4.0.2",
