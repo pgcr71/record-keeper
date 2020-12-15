@@ -14,8 +14,8 @@ export class TooptipDirective {
     height: '10px',
     border: '5px solid red',
     position: 'absolute',
-    top: this.top,
-    left: this.left
+    top: '',
+    left: ''
   }
 
   @HostListener('mouseover') onmouseover() {
@@ -49,7 +49,7 @@ export class TooptipDirective {
     this.top = rect.top + window.scrollX;
     return {
       top: this.top,
-      left:this.left
+      left: this.left
     }
   }
 }

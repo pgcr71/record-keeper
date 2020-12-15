@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TooptipComponent } from './tooptip.component';
 
@@ -6,7 +6,7 @@ describe('TooptipComponent', () => {
   let component: TooptipComponent;
   let fixture: ComponentFixture<TooptipComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ TooptipComponent ]
     })
