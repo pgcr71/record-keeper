@@ -1,7 +1,10 @@
 {
-  "name": "record-keeper",
+  "name": "rk",
   "version": "0.0.0",
-  "main": "src/electron/main.js",
+  "author": "gaensh" ,
+  "productName": "rk",
+  "description": "My Electron application description",
+  "main": "src/main.js",
   "engines": {
     "node": ">=8.10.0"
   },
@@ -17,11 +20,11 @@
     "gulp": "gulp",
     "start:electron": "ng build --base-href ./ && electron .",
     "package": "electron-forge package",
-    "postinstall": "electron-builder install-app-deps",
     "make": "electron-forge make"
   },
   "private": true,
   "dependencies": {
+    "electron-compile": "^6.4.4",
     "@angular/animations": "~11.0.4",
     "@angular/cdk": "~10.2.7",
     "@angular/common": "~11.0.4",
@@ -84,30 +87,6 @@
     "typescript": "~4.0.5"
   },
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "record_keeper"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+    "forge": "./forge.config.js"
   }
 }
