@@ -2,6 +2,9 @@
 
 # compiled output
 /dist
+/ea/dist
+/ea/node_modules
+/ea/out
 /out
 /tmp
 /out-tsc

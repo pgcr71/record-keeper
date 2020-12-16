@@ -1,30 +1,25 @@
 {
   "name": "rk",
   "version": "0.0.0",
-  "author": "gaensh" ,
+  "author": "gaensh",
   "productName": "rk",
   "description": "My Electron application description",
-  "main": "src/main.js",
   "engines": {
     "node": ">=8.10.0"
   },
   "type": "commonjs",
   "scripts": {
     "ng": "ng",
-    "start": "electron-forge start",
     "build": "ng build --base-href ./ --watch",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "server": "nodemon ./backend/server.js",
     "gulp": "gulp",
-    "start:electron": "ng build --base-href ./ && electron .",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "postinstall": "electron-rebuild -f -w sqlite3"
   },
   "private": true,
   "dependencies": {
-    "electron-compile": "^6.4.4",
     "@angular/animations": "~11.0.4",
     "@angular/cdk": "~10.2.7",
     "@angular/common": "~11.0.4",
@@ -37,9 +32,6 @@
     "@angular/router": "~11.0.4",
     "@mysql/xdevapi": "8.0.19",
     "body-parser": "^1.19.0",
-    "circular-json": "^0.5.9",
-    "electron-squirrel-startup": "^1.0.0",
-    "json-circular": "0.0.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "ngx-electron": "^2.2.0",
@@ -48,26 +40,20 @@
     "sqlite3": "^5.0.0",
     "tslib": "^2.0.0",
     "uuid": "^7.0.2",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "electron": "^11.1.0"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^10.0.1",
     "@angular-devkit/build-angular": "~0.1100.4",
     "@angular/cli": "~11.0.4",
     "@angular/compiler-cli": "~11.0.4",
     "@angular/language-service": "~11.0.4",
-    "@electron-forge/cli": "^6.0.0-beta.54",
-    "@electron-forge/maker-deb": "^6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
-    "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "browser-sync": "^2.26.7",
     "codelyzer": "^6.0.0",
-    "electron": "^11.1.0",
-    "electron-prebuilt-compile": "8.2.0",
+    "electron-rebuild": "^2.3.4",
     "eslint": "^7.3.1",
     "eslint-plugin-node": "^11.1.0",
     "gulp": "^4.0.2",
@@ -85,8 +71,5 @@
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
     "typescript": "~4.0.5"
-  },
-  "config": {
-    "forge": "./forge.config.js"
   }
 }

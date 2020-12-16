@@ -17,7 +17,7 @@ function createWindow () {
     }
   })
 
-  mainWindow.loadURL(`file://${__dirname}/../dist/index.html`
+  mainWindow.loadURL(`file://${__dirname}/dist/index.html`
   );
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
