@@ -16,7 +16,8 @@
     "e2e": "ng e2e",
     "server": "nodemon ./backend/server.js",
     "gulp": "gulp",
-    "postinstall": "electron-rebuild -f -w sqlite3"
+    "install:": "cd ea && npm install",
+    "postinstall": "electron-builder install-app-deps"
   },
   "private": true,
   "dependencies": {
@@ -32,18 +33,21 @@
     "@angular/router": "~11.0.4",
     "@mysql/xdevapi": "8.0.19",
     "body-parser": "^1.19.0",
+    "electron": "^11.1.0",
+    "electron-builder": "^22.9.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "ngx-electron": "^2.2.0",
     "nodemon": "^2.0.2",
+    "postinstall": "^0.7.0",
     "rxjs": "~6.6.3",
     "sqlite3": "^5.0.0",
     "tslib": "^2.0.0",
     "uuid": "^7.0.2",
-    "zone.js": "~0.10.2",
-    "electron": "^11.1.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^10.0.1",
     "@angular-devkit/build-angular": "~0.1100.4",
     "@angular/cli": "~11.0.4",
     "@angular/compiler-cli": "~11.0.4",
