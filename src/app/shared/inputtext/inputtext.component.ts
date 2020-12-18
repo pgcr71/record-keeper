@@ -26,7 +26,7 @@ export class InputtextComponent implements OnInit, ControlValueAccessor, OnChang
   @Input()
   label
 
-  private value
+ value
 
   onChange = (_) => { };
   onTouched = () => { };

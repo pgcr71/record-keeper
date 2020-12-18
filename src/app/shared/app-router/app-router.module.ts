@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   declarations: [],
   imports: [
     CommonModule,
-    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy', useHash: true })
   ],
   exports: [RouterModule]
 })

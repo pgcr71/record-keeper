@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { NotFoundComponent } from 'src/app/not-found/not-found.component';
+import { NotFoundComponent } from 'src/app/shared/not-found/not-found.component';
 import { LoginComponent } from 'src/app/login/login.component';
 import { IndexComponent } from 'src/app/index/index.component';
 import { SignupComponent } from 'src/app/signup/signup.component';
