@@ -16,7 +16,8 @@
     "e2e": "ng e2e",
     "server": "nodemon ./backend/server.js",
     "gulp": "gulp",
-    "install:": "cd ea && npm install",
+    "install-electron-packages:": "cd ea && npm install",
+    "electron-start": "cd ea && npm run start",
     "postinstall": "electron-builder install-app-deps"
   },
   "private": true,

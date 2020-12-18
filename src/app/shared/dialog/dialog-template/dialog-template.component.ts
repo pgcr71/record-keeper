@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogOutput } from '../_Modules/dialog/dialog-output-data';
+import { DialogOutput } from '../dialog-output-data';
 
 @Component({
   selector: 'app-dialog-template',
@@ -7,7 +7,7 @@ import { DialogOutput } from '../_Modules/dialog/dialog-output-data';
   styleUrls: ['./dialog-template.component.scss']
 })
 export class DialogTemplateComponent implements OnInit {
-  
+
 
   okButtonInnerText = 'OK'
   closeButtonInnerText = 'CANCEL'

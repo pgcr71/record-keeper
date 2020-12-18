@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ToasterComponent implements OnInit {
 
   message ='';
-  options ={};
+  options ={color:'red'};
   constructor() { }
 
   ngOnInit() {

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Database } from 'sqlite3';
 import { ElectronService } from 'ngx-electron';
-import {remote} from 'electron'
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,8 +18,7 @@ export class AppComponent {
   }
 
   public playPingPong() {
-    console.log(this._electronService.isElectronApp);
-    const db = new Database(`${remote.app.getAppPath()}/assets/database.db`, (err) => {
+    const db = new Database(`${__dirname}/assets/database.db`, (err) => {
       if (err) {
         console.log(err);
       } else {

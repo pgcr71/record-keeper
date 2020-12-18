@@ -4,15 +4,15 @@ import { DialogComponent } from './dialog.component';
 import { ButtonsModule } from '../buttons/buttons.module';
 import { HeaderComponent } from 'src/app/header/header.component';
 import { FormsModule } from '@angular/forms';
-import { DialogTemplateComponent } from 'src/app/dialog-template/dialog-template.component';
+import { DialogTemplateComponent } from './dialog-template/dialog-template.component';
 
 @NgModule({
-  declarations: [DialogComponent],
+  declarations: [DialogComponent, DialogTemplateComponent],
   imports: [
     CommonModule,
     ButtonsModule,
     FormsModule
   ],
-  entryComponents: [DialogComponent]
+  entryComponents: [DialogComponent, DialogTemplateComponent]
 })
 export class DialogModule { }

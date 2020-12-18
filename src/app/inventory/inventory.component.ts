@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { InventoryService } from './inventory.service';
 import { ToasterService } from '../toaster/toaster.service';
-import { DropdownComponent } from '../_forms/dropdown/dropdown.component';
+import { DropdownComponent } from '../shared/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-inventory',

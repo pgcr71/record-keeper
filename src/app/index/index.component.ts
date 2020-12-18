@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogTemplateComponent } from '../dialog-template/dialog-template.component';
-import { DialogService } from '../_Modules/dialog/dialog.service';
+import { DialogTemplateComponent } from '../shared/dialog/dialog-template/dialog-template.component';
+import { DialogService } from '../shared/dialog/dialog.service';
 import { AppService } from '../app.service';
 
 @Component({
