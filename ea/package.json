@@ -2,10 +2,12 @@
   "name": "ea",
   "version": "1.0.0",
   "description": "ganesh",
-  "main": "index.js",
+  "main": "dist/electronindex.js",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "sqlite3": "^5.0.0"
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.0",
+    "typeorm": "^0.2.29"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
@@ -13,21 +15,35 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "@typescript-eslint/eslint-plugin": "^4.10.0",
+    "@typescript-eslint/parser": "^4.10.0",
     "electron": "11.1.0",
-    "electron-reload": "^1.5.0"
+    "electron-reload": "^1.5.0",
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron-forge start",
+    "start": "electron-forge start --inspect-electron",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "startWithElectron": "electron ."
+    "startWithElectron": "electron .",
+    "lint": "eslint \"{data}/**/*.{js,ts}\"",
+    "lint-fix": "npm run lint -- --fix",
+    "migrations:gen": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:generate -n recordkeeper",
+    "migrations:run": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:run",
+    "tsc-start": "ts-node data/index.ts",
+    "build": "tsc",
+    "lint-build": "tslint data"
   },
   "author": "ganesh",
   "license": "ISC",
   "config": {
     "forge": {
-      "packagerConfig": {},
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

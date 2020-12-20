@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { InventoryService } from './inventory.service';
-import { ToasterService } from '../toaster/toaster.service';
+import { ToasterService } from '../shared/toaster/toaster.service';
 import { DropdownComponent } from '../shared/dropdown/dropdown.component';
 
 @Component({

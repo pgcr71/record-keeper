@@ -15,14 +15,13 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
+          "stylePreprocessorOptions": {
+            "includePaths": [
+              "src/scss"
+            ]
+          },
           "options": {
-            "customWebpackConfig": {
-              "path": "./extra-webpack.config.js",
-              "mergeRules": {
-                "externals": "replace"
-              }
-            },
             "outputPath": "ea/dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -72,6 +71,11 @@
           }
         },
         "serve": {
+          "stylePreprocessorOptions": {
+            "includePaths": [
+              "src/assets/styles"
+            ]
+          },
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "record-keeper:build"
@@ -89,6 +93,11 @@
           }
         },
         "test": {
+          "stylePreprocessorOptions": {
+            "includePaths": [
+              "src/assets/styles"
+            ]
+          },
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
