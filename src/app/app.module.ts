@@ -12,6 +12,7 @@ import { AutoID, AUTOID } from './auto-id.provide';
 import { ToasterComponent } from './shared/toaster/toaster.component';
 import { ContentComponent } from './content/content.component';
 import { NgxElectronModule } from 'ngx-electron';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,8 @@ import { NgxElectronModule } from 'ngx-electron';
     NgxElectronModule,
     BrowserModule,
     CommonModule,
-    AppRouterModule
+    AppRouterModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },

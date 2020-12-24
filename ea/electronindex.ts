@@ -1,14 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import { app, BrowserWindow, globalShortcut } from "electron";
+import path from "path";
 import { createConnection } from "typeorm";
 import { Order, Product } from "./data";
 import { ProductRepository } from "./data/repositories/products.repository";
 
-// // eslint-disable-next-line @typescript-eslint/no-var-requires
-// require("electron-reload")(__dirname, {
-//   electron: path.join(__dirname, "node_modules", ".bin", "electron"),
-//   hardResetMethod: "exit",
-// });
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("electron-reload")(__dirname, {
+  electron: path.join(__dirname, "..", "node_modules", ".bin", "electron"),
+  hardResetMethod: "exit",
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -28,7 +29,6 @@ async function createWindow(): Promise<void> {
     entities: [Order, Product],
   }).then(
     () => {
-      console.log("connected");
       return new ProductRepository().subscribed();
     },
     (error) => {
@@ -48,6 +48,8 @@ async function createWindow(): Promise<void> {
   // Open the DevTools.
 
   mainWindow.webContents.openDevTools();
+  const currentURL = (mainWindow as BrowserWindow).webContents.getURL();
+  console.log(currentURL);
   mainWindow.webContents.on("did-fail-load", () => {
     (mainWindow as BrowserWindow).loadURL(`file://${__dirname}/index.html`);
     // REDIRECT TO FIRST WEBPAGE AGAIN
@@ -55,7 +57,6 @@ async function createWindow(): Promise<void> {
 
   globalShortcut.register("f5", function () {
     (mainWindow as BrowserWindow).reload();
-    console.log("ganesh1");
   });
   mainWindow.on("closed", function () {
     mainWindow = null;
