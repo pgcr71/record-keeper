@@ -1,3 +1,21 @@
-<app-header></app-header>
-<app-content></app-content>
-<app-footer></app-footer>
+<app-header  *ngIf = 'isDesktop' (rkIconClick)='displaySideNav = !displaySideNav'></app-header>
+<mat-sidenav-container [hasBackdrop]='false' class='side-nav-container'>
+  <mat-sidenav *ngIf='isDesktop || displaySideNav' color='primary' #drawer [mode]="isDesktop?'side':'over' " opened position='start'>
+    <button (click) ='displaySideNav = !displaySideNav' *ngIf="!isDesktop" mat-icon-button class="rk-icon" aria-label="rk icon-button with menu icon">
+      <mat-icon >close</mat-icon>
+    </button>
+    <mat-nav-list>
+      <div  class = 'add-icon' fxLayout='row'  fxLayoutAlign='space-between center'>
+        NEW <mat-icon>add</mat-icon>
+      </div>
+      <mat-list-item *ngFor="let link of links">
+         <a matLine [routerLink] ="link.link">{{ link.name }}</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-header *ngIf = '!isDesktop' (rkIconClick)='displaySideNav = !displaySideNav'></app-header>
+    <app-content></app-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<!-- <app-footer></app-footer> -->

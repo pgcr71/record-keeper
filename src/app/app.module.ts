@@ -5,7 +5,7 @@ import { AppRouterModule } from './shared/app-router/app-router.module';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './shared/interceptor/interceptor';
 import { LocationStrategy, HashLocationStrategy, CommonModule } from '@angular/common';
 import { AutoID, AUTOID } from './auto-id.provide';
@@ -13,6 +13,9 @@ import { ToasterComponent } from './shared/toaster/toaster.component';
 import { ContentComponent } from './content/content.component';
 import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './shared/material/material.module';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     CommonModule,
     AppRouterModule,
+    MaterialModule,
+    HttpClientModule,
     BrowserAnimationsModule
   ],
   providers: [

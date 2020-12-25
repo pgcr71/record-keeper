@@ -1,2 +1,11 @@
-<div class='header' [routerLink]='["/"]'>header</div>
+<mat-toolbar color="primary">
+  <button (click) ='onIconClick()' *ngIf="!isDesktop" mat-icon-button class="rk-icon" aria-label="rk icon-button with menu icon">
+    <mat-icon >menu</mat-icon>
+  </button>
+  <span routerLink = '/'>Record Keeper</span>
+  <span class="rk-spacer"></span>
+  <button mat-icon-button class="rk-icon" aria-label="icon-button with settings icon">
+    <mat-icon>settings</mat-icon>
+  </button>
+</mat-toolbar>
 

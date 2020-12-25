@@ -23,6 +23,7 @@ import { Route, RouterModule } from '@angular/router';
 import { ButtonsModule } from './shared/buttons/buttons.module';
 import { DialogModule } from './shared/dialog/dialog.module';
 import { TooltipModule } from './shared/tooltip/tooltip.module';
+import { MaterialModule } from './shared/material/material.module';
 
 const routes: Array<Route> = [
   {path: '', pathMatch:'full', redirectTo:'index'},
@@ -52,7 +53,7 @@ const routes: Array<Route> = [
     ButtonsModule,
     ReactiveFormsModule,
     TooltipModule,
-    HttpClientModule,
+    MaterialModule,
     RouterModule.forChild(routes)
   ],
   providers: [

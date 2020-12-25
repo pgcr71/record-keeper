@@ -15,6 +15,8 @@ import { ButtonsModule } from './shared/buttons/buttons.module';
 import { DialogModule } from './shared/dialog/dialog.module';
 import { TooltipModule } from './shared/tooltip/tooltip.module';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
+import { MaterialModule } from './shared/material/material.module';
+import { InventoryServiceElectron } from './inventory/inventory.service.electron';
 
 const routes: Array<Route> = [
   {path: '', pathMatch:'full', redirectTo:'index'},
@@ -22,7 +24,8 @@ const routes: Array<Route> = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'interest', component: InterestComponent },
-  { path: 'orders', component: FinanceComponent }
+  { path: 'orders', component: FinanceComponent },
+  { path: 'products', component: InventoryComponent }
 ]
 @NgModule({
   declarations: [
@@ -43,9 +46,9 @@ const routes: Array<Route> = [
     DialogModule,
     ButtonsModule,
     ReactiveFormsModule,
+    MaterialModule,
     TooltipModule,
     FormsModule,
-    HttpClientModule,
     RouterModule.forChild(routes)
   ]
 })

@@ -11,7 +11,7 @@ import { AppService } from '../app.service';
 export class IndexComponent implements OnInit {
 
   constructor(private _ds: DialogService, private _as: AppService) { }
-
+  showFiller: true;
   ngOnInit() {
   }
 

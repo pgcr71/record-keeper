@@ -1,9 +1,27 @@
-<form #frm=ngForm class='m-b-primary'>
-    <div  class='m-b-primary'>
-        <app-inputtext [id]='"inventoryname"' [name]='"name"' [(ngModel)]='name' [label]='"Name"'>
-        </app-inputtext>
-    </div>
-
+<div class='form-group' [formGroup]='inventoryCreateForm' >
+      <mat-form-field class='mr-4' appearance="outline">
+        <input matInput [type]="'text'">
+        <mat-label>Enter Name of Product</mat-label>
+      </mat-form-field>
+      <mat-form-field class='mr-4' appearance="outline">
+        <input matInput [type]="'text'">
+        <mat-label>Unit Price</mat-label>
+      </mat-form-field>
+      <mat-form-field class='mr-4' appearance="outline">
+        <input matInput [type]="'number'">
+        <mat-label>Interest Rate</mat-label>
+      </mat-form-field>
+      <mat-form-field class='mr-4' appearance="outline">
+        <input matInput [type]="'text'">
+        <mat-label>Interest Type</mat-label>
+      </mat-form-field>
+      <mat-form-field class='mr-4' appearance="outline">
+        <input matInput [type]="'Quantity'">
+        <mat-label>Quantity</mat-label>
+      </mat-form-field>
+      <button mat-raised-button color="primary">submit</button>
+  </div>
+<!--
     <div class='m-b-primary'>
         <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
         </app-inputtext>
@@ -12,10 +30,9 @@
     <div class='m-b-primary'>
         <app-inputtext [id]='"Price"' [name]='"unit_price"' [(ngModel)]='price' [label]='"price"'>
         </app-inputtext>
-    </div>
+    </div> -->
 
-    <app-button (click)='onSubmit(frm)'>Submit</app-button>
-</form>
+    <!-- <app-button >Submit</app-button> -->
 
 <app-table class='table' [headers] = 'headings' [settings] = 'settings' [rows] = 'inventory'></app-table>
 
