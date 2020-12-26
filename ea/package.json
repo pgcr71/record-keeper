@@ -36,6 +36,7 @@
     "lint-fix": "npm run lint -- --fix",
     "migrations:gen": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:generate -n recordkeeper",
     "migrations:run": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migrations:revert": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:revert",
     "tsc-start": "ts-node data/index.ts",
     "build": "tsc",
     "lint-build": "tslint data"

@@ -1,58 +1,36 @@
-<div class='form-group' [formGroup]='inventoryCreateForm' >
-      <mat-form-field class='mr-4' appearance="outline">
-        <input matInput [type]="'text'">
-        <mat-label>Enter Name of Product</mat-label>
-      </mat-form-field>
-      <mat-form-field class='mr-4' appearance="outline">
-        <input matInput [type]="'text'">
-        <mat-label>Unit Price</mat-label>
-      </mat-form-field>
-      <mat-form-field class='mr-4' appearance="outline">
-        <input matInput [type]="'number'">
-        <mat-label>Interest Rate</mat-label>
-      </mat-form-field>
-      <mat-form-field class='mr-4' appearance="outline">
-        <input matInput [type]="'text'">
-        <mat-label>Interest Type</mat-label>
-      </mat-form-field>
-      <mat-form-field class='mr-4' appearance="outline">
-        <input matInput [type]="'Quantity'">
-        <mat-label>Quantity</mat-label>
-      </mat-form-field>
-      <button mat-raised-button color="primary">submit</button>
-  </div>
-<!--
-    <div class='m-b-primary'>
-        <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
-        </app-inputtext>
-    </div>
+<div class='form-group' [formGroup]='inventoryCreateForm'>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='name' [type]="'text'">
+    <mat-label>Enter Name of Product</mat-label>
+  </mat-form-field>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='unit_price' [type]="'text'">
+    <mat-label>Unit Price</mat-label>
+  </mat-form-field>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='interestRate' [type]="'number'">
+    <mat-label>Interest Rate</mat-label>
+  </mat-form-field>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='interestType' [type]="'text'">
+    <mat-label>Interest Type</mat-label>
+  </mat-form-field>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='quantity' [type]="'Quantity'">
+    <mat-label>Quantity</mat-label>
+  </mat-form-field>
+  <button [disabled]='inventoryCreateForm.invalid' (click) =  'onSubmit()' mat-raised-button color="primary">submit</button>
+</div>
 
-    <div class='m-b-primary'>
-        <app-inputtext [id]='"Price"' [name]='"unit_price"' [(ngModel)]='price' [label]='"price"'>
-        </app-inputtext>
-    </div> -->
+<mat-table [dataSource]="data" class="mat-elevation-z8">
+  <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+    <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
+  </ng-container>
 
-    <!-- <app-button >Submit</app-button> -->
-
-<app-table class='table' [headers] = 'headings' [settings] = 'settings' [rows] = 'inventory'></app-table>
-
-<!-- <table class='table'>
-    <tr class='header'>
-        <th class='column'>Name</th>
-        <th class='column'>Quantity</th>
-        <th class='column'>Price</th>
-        <th class='column'>Others</th>
-    </tr>
-
-    <tr class='data' *ngFor = 'let row of inventory'>
-        <td class='column'>{{row[0]}}</td>
-        <td class='column'>{{row[1]}}</td>
-        <td class='column'>{{row[2]}}</td>
-        <td class='column'>
-            <app-button>Delete</app-button>
-            <app-button>Edit</app-button>
-        </td>
-
-    </tr>
-
-</table> -->
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <!-- <mat-row class="mat-row" *matNoDataRow>
+    <mat-cell class="mat-cell">No data to display</mat-cell>
+  </mat-row > -->
+</mat-table>
