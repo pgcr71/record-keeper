@@ -1,0 +1,11 @@
+{
+  "watch": [
+    "src"
+  ],
+  "ext": "ts, json",
+  "ignore": [
+    "src/**/*.spec.ts",
+    "src/migrations/*.ts"
+  ],
+  "exec": " npm run migrations:gen && npm run migrations:run && ts-node index.ts"
+}

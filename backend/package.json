@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "recordkeeper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node index.ts",
+    "nodemon": "nodemon",
+    "migrations:gen": "ts-node ./node_modules/typeorm/cli.js migration:generate -n recordkeeper",
+    "migrations:seed": "ts-node ./node_modules/typeorm/cli.js migration:create -n seeddata",
+    "migrations:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migrations:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
+  },
+  "author": "pgcr71",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^8.0.29",
+    "nodemon": "^2.0.6",
+    "ts-node": "3.3.0",
+    "typescript": "3.3.3333"
+  },
+  "dependencies": {
+    "typeorm": "0.2.29",
+    "reflect-metadata": "^0.1.10",
+    "mysql": "^2.14.1",
+    "express": "^4.15.4",
+    "body-parser": "^1.18.1"
+  }
+}

@@ -1,5 +1,5 @@
 const mysqlx = require("@mysql/xdevapi");
-const configs = require("./configurations");
+const configs = require("../controller/configurations");
 
 var client = mysqlx.getClient(configs.dataBaseConfig, {
   pooling: configs.poolingSettings,

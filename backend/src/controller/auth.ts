@@ -1,11 +1,11 @@
-var jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const configs = require('./configurations');
 
 let secretOrPublicKey = configs.publicKey;
 
-function verify(req, res, next) {
+export function verify(req, res, next) {
     var bearer = req.headers['authorization'];
-    var token = bearer.split(' ')[1];
+    var token = bearer && bearer.split(' ')[1];
     if (token) {
         var decodedData = verifyJWT(token, res);
         req.decodedData = decodedData;
@@ -17,7 +17,7 @@ function verify(req, res, next) {
 
 }
 
-function verifyJWT(token, res) {
+export function verifyJWT(token, res) {
     try {
         return jwt.verify(token, secretOrPublicKey);
     }
@@ -27,9 +27,7 @@ function verifyJWT(token, res) {
 }
 
 
-function signToken(userInfo) {
+export function signToken(userInfo) {
     return jwt.sign(userInfo, secretOrPublicKey, { expiresIn: '1h' })
 }
 
-module.exports.verify = verify;
-module.exports.signToken = signToken;
