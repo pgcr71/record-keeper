@@ -1,18 +1,16 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { BaseEntity } from "./base.entity";
-import { InterestTypes } from "./interest_types";
-import { User } from "./user.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { InterestTypes } from "./interest_types.entity";
 
 @Entity()
 export class InterestDefaults {
   @PrimaryGeneratedColumn()
   "id": number;
 
-  @ManyToOne(() => InterestTypes, (interestType) => interestType.DefaultInterest)
-  InterestType: InterestTypes
+  @ManyToOne(() => InterestTypes, (interestType) => interestType.id)
+  InterestType: InterestTypes;
 
   @Column({ type: "int", nullable: false })
-  interest_rate: number
+  interest_rate: number;
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
@@ -25,4 +23,4 @@ export class InterestDefaults {
 
   @CreateDateColumn()
   "updated_on": string;
- }
+}

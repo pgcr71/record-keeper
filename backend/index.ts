@@ -28,7 +28,9 @@ app.use(function (req, res, next) {
       const func = (req: Request, res: Response, next: Function) => {
         const result = (new (route.controller as any))[route.action](req, res, next);
         if (result instanceof Promise) {
-            result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+            result
+            .then(result => result !== null && result !== undefined ? (console.log(result),res.send(result)) : undefined)
+            .catch(err => {res.status(400).send(err); throw err});
 
         } else if (result !== null && result !== undefined) {
             res.json(result);

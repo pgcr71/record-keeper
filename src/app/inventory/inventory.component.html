@@ -8,12 +8,20 @@
     <mat-label>Unit Price</mat-label>
   </mat-form-field>
   <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='interestRate' [type]="'number'">
+    <input matInput formControlName='rate_of_interest' [type]="'number'">
     <mat-label>Interest Rate</mat-label>
   </mat-form-field>
   <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='interestType' [type]="'text'">
     <mat-label>Interest Type</mat-label>
+    <mat-select formControlName='InterestType'>
+      <mat-option *ngFor="let interestType of interestTypes" [value]="interestType">
+        {{interestType.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='lot_number' [type]="'text'">
+    <mat-label>Lot Number</mat-label>
   </mat-form-field>
   <mat-form-field class='mr-4' appearance="outline">
     <input matInput formControlName='quantity' [type]="'Quantity'">
@@ -22,10 +30,25 @@
   <button [disabled]='inventoryCreateForm.invalid' (click) =  'onSubmit()' mat-raised-button color="primary">submit</button>
 </div>
 
-<mat-table [dataSource]="data" class="mat-elevation-z8">
-  <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
-    <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
+<mat-table [dataSource]="inventory" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['name']}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef>Quantity </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['quantity']}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="unit_price" >
+    <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['unit_price']}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="rate_of_interest">
+    <mat-header-cell *matHeaderCellDef>Rate Of Interest </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element["rate_of_interest"]}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -34,3 +57,4 @@
     <mat-cell class="mat-cell">No data to display</mat-cell>
   </mat-row > -->
 </mat-table>
+<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="inventory && !inventory.length">No Records Found</mat-toolbar>

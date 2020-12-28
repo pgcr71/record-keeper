@@ -4,6 +4,7 @@
   "description": "ganesh",
   "main": "dist/electronindex.js",
   "dependencies": {
+    "electron-is-dev": "^1.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.0",
@@ -35,8 +36,8 @@
     "lint": "eslint \"{data}/**/*.{js,ts}\"",
     "lint-fix": "npm run lint -- --fix",
     "migrations:gen": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:generate -n recordkeeper",
-    "migrations:run": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:run",
-    "migrations:revert": "npm run build && ts-node ./node_modules/typeorm/cli.js migration:revert",
+    "migrations:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migrations:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
     "tsc-start": "ts-node data/index.ts",
     "build": "tsc",
     "lint-build": "tslint data"

@@ -6,6 +6,7 @@ import {NextFunction, Request, Response} from "express";
 export class OrderController implements IRepository<Order> {
   repository: Repository<Order> = getRepository(Order);
   public async all(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
+    console.log('invoked')
     return this.repository.find();
   }
 

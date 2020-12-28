@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableComponent } from './shared/table/table.component';
 import { Route, RouterModule } from '@angular/router';
 import { FinanceComponent } from './finance/finance.component';
-import { IndexComponent } from './index/index.component';
 import { InterestComponent } from './interest/interest.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
@@ -16,11 +15,10 @@ import { DialogModule } from './shared/dialog/dialog.module';
 import { TooltipModule } from './shared/tooltip/tooltip.module';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { MaterialModule } from './shared/material/material.module';
-import { InventoryServiceElectron } from './inventory/inventory.service.electron';
+import { AddUserComponent } from './finance/modals/add-user/add-user.component';
 
 const routes: Array<Route> = [
-  {path: '', pathMatch:'full', redirectTo:'index'},
-  { path: 'index', component: IndexComponent },
+  {path: '', pathMatch:'full', redirectTo:'products'},
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'interest', component: InterestComponent },
@@ -29,10 +27,10 @@ const routes: Array<Route> = [
 ]
 @NgModule({
   declarations: [
+    AddUserComponent,
     InventoryComponent,
     TableComponent,
     LoginComponent,
-    IndexComponent,
     SignupComponent,
     InputtextComponent,
     TableComponent,

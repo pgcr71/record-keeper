@@ -4,8 +4,7 @@
   ],
   "ext": "ts, json",
   "ignore": [
-    "src/**/*.spec.ts",
-    "src/migrations/*.ts"
+    "src/**/*.spec.ts"
   ],
-  "exec": " npm run migrations:gen && npm run migrations:run && ts-node index.ts"
+  "exec": "ts-node index.ts"
 }

@@ -1,4 +1,28 @@
+@import '../../scss/abstracts/variables';
+
 :host{
     display: block;
-    padding:20px;
+    margin:0px 20px 0px 20px;
 }
+
+.form-group {
+  padding: 10px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 40px;
+}
+
+.mr-4 {
+   padding-right: 16px;
+}
+
+.no-data-color {
+  display: flex;
+  justify-content: center;
+  background-color:  white;
+}
+
+.waring-snackbar {
+   background-color:  red;
+}
+

@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, OneToMany, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { InterestTypes } from "./interest_types.entity";
 import { Order } from "./order.entity";
 
 @Entity()
@@ -14,13 +15,13 @@ export class Product extends BaseEntity {
   "unit_price": string;
 
   @Column({ type: "int", nullable: true, default: 0 })
-  "rate_of_interest": string;
+  "rate_of_interest": number;
 
   @Column({ type: "bigint", nullable: true, default: 0 })
   "lot_number": string;
 
-  @Column({ type: "int", nullable: true, default: 0 })
-  "interest_type_id": string;
+  @ManyToOne(() => InterestTypes, (interestType) => interestType.id)
+  "InterestType": InterestTypes;
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;

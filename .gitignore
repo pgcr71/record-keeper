@@ -9,6 +9,12 @@
 /out
 /tmp
 /out-tsc
+/backend/.idea/
+/backend/.vscode/
+/backend/node_modules/
+/backend/build/
+/backend/tmp/
+/backend/temp/
 # Only exists if Bazel was run
 /bazel-out
 

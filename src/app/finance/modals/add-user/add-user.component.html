@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Add User</h2>
+
+<mat-dialog-content class="mat-typography">
+  <div [formGroup] = 'addUserForm'>
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" formControlName='first_name' name="first_name" id="firstName">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" formControlName='last_name' name="first_name" id="firstName">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Phone Number</mat-label>
+      <input matInput type="text" formControlName='phone_number' name="first_name" id="firstName">
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button  color='primary' [disabled] = 'addUserForm.invalid' (click) ='addUser()' cdkFocusInitial>submit</button>
+  </mat-dialog-actions>
+

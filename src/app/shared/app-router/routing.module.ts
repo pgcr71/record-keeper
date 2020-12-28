@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryComponentElectron } from 'src/app/inventory/inventory.component.electron';
 import { RouterModule, ROUTES } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 

@@ -5,7 +5,7 @@
       <mat-icon >close</mat-icon>
     </button>
     <mat-nav-list>
-      <div  class = 'add-icon' fxLayout='row'  fxLayoutAlign='space-between center'>
+      <div  [routerLink] ="['/orders']" class = 'add-icon' fxLayout='row'  fxLayoutAlign='space-between center'>
         NEW <mat-icon>add</mat-icon>
       </div>
       <mat-list-item *ngFor="let link of links">

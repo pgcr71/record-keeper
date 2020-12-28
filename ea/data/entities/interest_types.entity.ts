@@ -1,22 +1,23 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
+import { InterestDefaults } from "./interest_defaults.entity";
+import { Product } from "./product.entity";
 
 @Entity()
-export class UserRoles {
+export class InterestTypes {
   @PrimaryGeneratedColumn()
   "id": number;
 
-  @Column({ type: "varchar", length: 36, nullable: false })
+  @Column({ type: "varchar", length: 255, nullable: false })
   "name": string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
-  "description": string;
+  @OneToMany(() => InterestDefaults, (interestDefault) => interestDefault.InterestType)
+  "DefaultInterest": InterestDefaults[];
+
+  @OneToMany(() => Product, (product) => product.InterestType)
+  "ProductDefaultInterest": Product[];
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
-
-  @OneToMany(() => User, (user) => user.role)
-  userRole: User[];
 
   @CreateDateColumn()
   "created_on": string;

@@ -1,20 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryComponentElectron } from './inventory/inventory.component.electron';
-import { InventoryServiceElectron } from './inventory/inventory.service.electron';
-import { LoginServiceElectron } from './login/login.service.electron';
 import { ButtonComponent } from './shared/buttons/button/button.component';
 import { TableComponent } from './shared/table/table.component';
-import { LoginComponentElectron } from './login/login.component.electron';
-import { IndexComponentElectron } from './index/index.component.electron';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { InputtextComponent } from './shared/inputtext/inputtext.component';
 import { ToasterComponent } from './shared/toaster/toaster.component';
-import { SignupComponentElectron } from './signup/signup.component.electron';
-import { SignupServiceElectron } from './signup/signup.service.electron';
-import { FinanceComponentElectron } from './finance/finance.component.electron';
-import { FinanceServiceElectron } from './finance/finance.service.electron';
-import { InterestComponentElectron } from './interest/interest.component.electron';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,27 +14,36 @@ import { ButtonsModule } from './shared/buttons/buttons.module';
 import { DialogModule } from './shared/dialog/dialog.module';
 import { TooltipModule } from './shared/tooltip/tooltip.module';
 import { MaterialModule } from './shared/material/material.module';
+import { FinanceComponent } from './finance/finance.component';
+import { FinanceService } from './finance/finance.service';
+import { InterestComponent } from './interest/interest.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { InventoryService } from './inventory/inventory.service';
+import { LoginComponent } from './login/login.component';
+import { LoginService } from './login/login.service';
+import { SignupComponent } from './signup/signup.component';
+import { SignupService } from './signup/signup.service';
+import { AddUserComponent } from './finance/modals/add-user/add-user.component';
 
 const routes: Array<Route> = [
-  {path: '', pathMatch:'full', redirectTo:'index'},
-  { path: 'index', component: IndexComponentElectron },
-  { path: 'login', component: LoginComponentElectron },
-  { path: 'signup', component: SignupComponentElectron },
-  { path: 'interest', component: InterestComponentElectron },
-  { path: 'orders', component: FinanceComponentElectron },
-  {path: 'products', component: InventoryComponentElectron}
+  {path: '', pathMatch:'full', redirectTo:'products'},
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'interest', component: InterestComponent },
+  { path: 'orders', component: FinanceComponent },
+  {path: 'products', component: InventoryComponent}
 ]
 @NgModule({
   declarations: [
-    InventoryComponentElectron,
+    InventoryComponent,
     TableComponent,
-    LoginComponentElectron,
-    IndexComponentElectron,
+    LoginComponent,
     DropdownComponent,
-    SignupComponentElectron,
+    SignupComponent,
     InputtextComponent,
-    FinanceComponentElectron,
-    InterestComponentElectron
+    FinanceComponent,
+    InterestComponent,
+    AddUserComponent
   ],
   imports: [
     CommonModule,
@@ -55,12 +54,6 @@ const routes: Array<Route> = [
     TooltipModule,
     MaterialModule,
     RouterModule.forChild(routes)
-  ],
-  providers: [
-    InventoryServiceElectron,
-    LoginServiceElectron,
-    SignupServiceElectron,
-    FinanceServiceElectron
   ]
 })
 export class ElectronModule { }

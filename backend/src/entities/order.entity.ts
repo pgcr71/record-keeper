@@ -1,11 +1,12 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { Product } from "./product.entity";
+import { User } from "./user.entity";
 
 @Entity()
 export class Order extends BaseEntity {
-  @Column({ type: "varchar", length: 36, nullable: false })
-  "user_id": string;
+  @ManyToOne(() => User, (user) => user.orders)
+  "user": User;
 
   @ManyToOne(() => Product, (product) => product.orders)
   "product": Product;

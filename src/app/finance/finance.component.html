@@ -1,20 +1,61 @@
-<form #frm=ngForm class='m-b-primary'>
-    <div class='m-b-primary'>
-      <app-dropdown [label]='"name"' [typeAhead] = 'true' key = '0' (searchTerm) = 'onSearch($event)' [(ngModel)]='selectedName'
-      [name]='"name"' [options] = 'people'></app-dropdown>
-    </div>
+<div class='form-group' [formGroup]='orderCreateForm'>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='product' [matAutocomplete]="productAuto" [type]="'text'">
+    <mat-label>Name of Product Taken</mat-label>
+    <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="productDisplayFn">
+      <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
+        {{option.name }}({{ option.created_on | date:'dd/MM/yy hh:mm'}})
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
 
-    <div class='m-b-primary'>
-        <app-dropdown [label]='"Product"' key ='0' [typeAhead] = 'true' [(ngModel)]='selectedProduct'
-        [name]='"productdropdown"' [options] = 'products'></app-dropdown>
-    </div>
+  <mat-form-field class='mr-4' class="example-full-width">
+    <mat-label>Name of the Person</mat-label>
+    <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="userDisplayFn">
+      <ng-container *ngIf="userSearch | async as us">
+        <mat-option *ngFor="let option of us"  [value]="option">
+          {{option.name}}
+        </mat-option>
+        <mat-option (click) ='addUser()' *ngIf = '!us.length'>
+          ADD USER
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </mat-form-field>
 
-    <div class='m-b-primary'>
-        <app-inputtext [id]='"quanity"' [name]='"quantity"' [(ngModel)]='quantity' [label]='"Quantity"'>
-        </app-inputtext>
-    </div>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='quantity' [type]="'Quantity'">
+    <mat-label>Quantity</mat-label>
+  </mat-form-field>
+  <button [disabled]='orderCreateForm.invalid' (click) =  'onSubmit()' mat-raised-button color="primary">submit</button>
+</div>
 
-    <app-button (click)='onSubmit(frm)'>Submit</app-button>
-</form>
+<mat-table [dataSource]="order" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['name']}} </mat-cell>
+  </ng-container>
 
-<app-table class='table' [headers] = 'headings' [rows] = 'rows'></app-table>
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef>Quantity </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['quantity']}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="unit_price" >
+    <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['unit_price']}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="rate_of_interest">
+    <mat-header-cell *matHeaderCellDef>Rate Of Interest </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element["rate_of_interest"]}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <!-- <mat-row class="mat-row" *matNoDataRow>
+    <mat-cell class="mat-cell">No data to display</mat-cell>
+  </mat-row > -->
+</mat-table>
+<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="order && !order.length">No Records Found</mat-toolbar>

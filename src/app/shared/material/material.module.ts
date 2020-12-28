@@ -10,6 +10,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { CdkColumnDef } from '@angular/cdk/table';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
@@ -25,7 +30,11 @@ import {MatTableModule} from '@angular/material/table';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatAutocompleteModule,
+    MatDialogModule
   ],
   exports: [
     MatSidenavModule,
@@ -38,7 +47,11 @@ import {MatTableModule} from '@angular/material/table';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatAutocompleteModule,
+    MatDialogModule
   ]
 })
 export class MaterialModule { }

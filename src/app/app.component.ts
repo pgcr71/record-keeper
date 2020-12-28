@@ -21,10 +21,16 @@ export class AppComponent implements OnInit {
     name: 'Inventory',
     link: 'products'
   }]
-  constructor(private readonly appService: AppService, private readonly bps: BreakpointService ) {
+  constructor(
+    private readonly bps: BreakpointService
+    ) {
   }
 
   ngOnInit() {
     this.bps.isDesktop$.subscribe(bool => this.isDesktop = bool);
   }
+
+  // redirectToOrders() {
+  //   this.route
+  // }
 }

@@ -13,13 +13,13 @@ export class Order extends BaseEntity {
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;
 
-  @Column({ type: "varchar", length: 36, nullable: false })
+  @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
 
   @CreateDateColumn()
   "created_on": Date;
 
-  @Column({ type: "varchar", length: 36, nullable: false })
+  @Column({ type: "varchar", length: 36, nullable: true })
   "updated_by": string;
 
   @UpdateDateColumn()

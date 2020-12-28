@@ -5,10 +5,10 @@
    "username": "root",
    "password": "G@ni7112",
    "database": "recordkeeper",
-   "synchronize": true,
-   "logging": false,
+   "synchronize": false,
+   "logging": true,
    "entities": [
-      "src/entities/**/*.ts"
+      "src/entities/*.ts"
    ],
    "migrations": [
       "src/migrations/**/*.ts"

@@ -5,6 +5,7 @@ import { ToasterService } from '../shared/toaster/toaster.service';
 import { DropdownComponent } from '../shared/dropdown/dropdown.component';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { validateBasis } from '@angular/flex-layout';
+import { MatSnackBar } from '@angular/material/snack-bar';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -12,18 +13,7 @@ export interface PeriodicElement {
   price: string;
 }
 
-export const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', quantity: 1.0079, price: 'H' },
-  { position: 2, name: 'Helium', quantity: 4.0026, price: 'He' },
-  { position: 3, name: 'Lithium', quantity: 6.941, price: 'Li' },
-  { position: 4, name: 'Beryllium', quantity: 9.0122, price: 'Be' },
-  { position: 5, name: 'Boron', quantity: 10.811, price: 'B' },
-  { position: 6, name: 'Carbon', quantity: 12.0107, price: 'C' },
-  { position: 7, name: 'Nitrogen', quantity: 14.0067, price: 'N' },
-  { position: 8, name: 'Oxygen', quantity: 15.9994, price: 'O' },
-  { position: 9, name: 'Fluorine', quantity: 18.9984, price: 'F' },
-  { position: 10, name: 'Neon', quantity: 20.1797, price: 'Ne' },
-];
+export const ELEMENT_DATA: PeriodicElement[] = [];
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -32,49 +22,55 @@ export const ELEMENT_DATA: PeriodicElement[] = [
 
 export class InventoryComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'quantity', 'price'];
-  columnsToDisplay: string[] = this.displayedColumns.slice();
-  data: PeriodicElement[] = ELEMENT_DATA;
+  displayedColumns: string[] = ['name', 'quantity','unit_price','rate_of_interest'];
   name = '';
   quantity = 0;
   price = 0;
   inventory = [];
-  headings = ['Name', 'Quantity', 'Price'];
-
+  interestTypes = [];
 
   inventoryCreateForm: FormGroup;
 
   constructor(
     private is: InventoryService,
     private ts: ToasterService,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
     this.inventoryCreateForm = this.fb.group({
       name: ['', Validators.required],
       quantity: [0, Validators.required],
-      interestRate: [2, Validators.required],
-      interestType: ['simple', Validators.required],
-      unit_price: ['', Validators.required]
+      rate_of_interest: [0, Validators.required],
+      InterestType: [null, Validators.required],
+      unit_price: ['', Validators.required],
+      lot_number: [null, Validators.required]
     });
     this.is.get().subscribe(result => {
-      this.inventory = [...result['data']];
-      this.ts.success(result['message'])
+      console.log(result);
+      this.inventory = result || [];
+    })
+    this.is.getInterestTypes().subscribe(result => {
+      this.interestTypes = result;
+      this.inventoryCreateForm.get('InterestType').setValue(this.interestTypes && this.interestTypes[1]);
     })
   }
 
   onSubmit() {
     if (this.inventoryCreateForm.valid) {
       console.log(this.inventoryCreateForm)
-      this.data.push(this.inventoryCreateForm.value);
       this.is.add(this.inventoryCreateForm.value).subscribe((res) => {
-        if (res['done']) {
-          this.data.push(this.inventoryCreateForm.value);
-          this.ts.success(res['message'])
-        }
+          this.inventory = [...this.inventory, this.inventoryCreateForm.value];
+          this.inventoryCreateForm.reset();
+          this.snackBar.open('Data Saved Succesfully', "Close", {
+            duration: 2000
+          } )
       }, error => {
-        this.ts.danger(error.error.message)
+        this.snackBar.open(error.error.sqlMessage, "Close", {
+          duration: 2000,
+          panelClass: ['waring-snackbar']
+        } )
       })
     }
   }

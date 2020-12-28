@@ -5,7 +5,6 @@ export const ProductRoutes = [
     method: "get",
     route: "/products",
     controller: ProductController,
-    auth: true,
     action: "all"
   },
   {
@@ -18,7 +17,6 @@ export const ProductRoutes = [
   {
     method: "post",
     route: "/products",
-    auth: true,
     controller: ProductController,
     action: "save"
   },
