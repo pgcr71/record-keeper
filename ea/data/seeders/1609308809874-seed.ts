@@ -1,7 +1,10 @@
-import { RegistrationStatus, UserRoles, User, InterestTypes, InterestDefaults } from "../";
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
+import { InterestDefaults, InterestTypes, RegistrationStatus, UserRoles } from "..";
 
-export class seed1609080652228 implements MigrationInterface {
+export class seed1609308809874 implements MigrationInterface {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<void> {
     const registrationStatuses1 = getRepository(RegistrationStatus).create({
       name: "PHONE_AND_EMAIL",
@@ -47,22 +50,11 @@ export class seed1609080652228 implements MigrationInterface {
     await getRepository(UserRoles).save(userRoles3);
     await getRepository(UserRoles).save(userRoles4);
 
-    const user1 = getRepository(User).create({
-      user_name: "gani7112",
-      password: "G@ni7112",
-      last_name: "reddy",
-      phone_number: "7200157236",
-      status: registrationStatuses1,
-      role: userRoles1,
-      first_name: "ganesh",
-    });
-    await getRepository(User).save(user1);
-
     const interestType1 = getRepository(InterestTypes).create({
-      name: "compound",
+      name: "simple",
     });
     const interestType2 = getRepository(InterestTypes).create({
-      name: "simple",
+      name: "compound",
     });
 
     await getRepository(InterestTypes).save(interestType1);
@@ -70,12 +62,11 @@ export class seed1609080652228 implements MigrationInterface {
 
     const interestDefaults = getRepository(InterestDefaults).create({
       interest_rate: 2,
-      InterestType: interestType1,
+      interest_type: interestType1,
     });
 
     await getRepository(InterestDefaults).save(interestDefaults);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async down(queryRunner: QueryRunner): Promise<void> {}
 }

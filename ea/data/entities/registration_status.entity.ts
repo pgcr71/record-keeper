@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "./user.entity";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class RegistrationStatus {
@@ -8,9 +7,6 @@ export class RegistrationStatus {
 
   @Column({ type: "varchar", length: 36, nullable: false })
   "name": string;
-
-  @OneToMany(() => User, (user) => user.status)
-  userStatus: User[];
 
   @Column({ type: "varchar", length: 255, nullable: false })
   "description": string;

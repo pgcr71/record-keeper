@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "../ea/dist",
+    "outDir": "../ea/build",
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
@@ -24,6 +24,8 @@
     "electronindex.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "data/migrations",
+    "data/seeders"
   ]
 }

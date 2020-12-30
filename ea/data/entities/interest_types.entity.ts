@@ -1,6 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { InterestDefaults } from "./interest_defaults.entity";
-import { Product } from "./product.entity";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class InterestTypes {
@@ -9,12 +7,6 @@ export class InterestTypes {
 
   @Column({ type: "varchar", length: 255, nullable: false })
   "name": string;
-
-  @OneToMany(() => InterestDefaults, (interestDefault) => interestDefault.InterestType)
-  "DefaultInterest": InterestDefaults[];
-
-  @OneToMany(() => Product, (product) => product.InterestType)
-  "ProductDefaultInterest": Product[];
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;

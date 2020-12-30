@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class UserRoles {
@@ -14,9 +13,6 @@ export class UserRoles {
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
-
-  @OneToMany(() => User, (user) => user.role)
-  userRole: User[];
 
   @CreateDateColumn()
   "created_on": string;

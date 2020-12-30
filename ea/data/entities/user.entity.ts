@@ -1,29 +1,37 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { RegistrationStatus } from "./registration_status.entity";
 import { UserRoles } from "./roles.entity";
 
 @Entity()
 export class User extends BaseEntity {
-  @Column()
+  @Column({ nullable: true })
   "user_name": string;
 
-  @Column()
+  @Column({ nullable: true })
   "password": string;
 
-  @Column()
+  @Column({ nullable: false })
   "phone_number": string;
 
-  @Column()
+  @Column({ nullable: false })
   "first_name": string;
 
   @Column()
   "last_name": string;
 
-  @ManyToOne(() => RegistrationStatus, (statuses) => statuses.id)
+  @ManyToOne(() => RegistrationStatus)
+  @JoinColumn({
+    name: "registration_status_id",
+    referencedColumnName: "id",
+  })
   status: RegistrationStatus;
 
-  @ManyToOne(() => UserRoles, (userRoles) => userRoles.id)
+  @ManyToOne(() => UserRoles)
+  @JoinColumn({
+    name: "user_roles_id",
+    referencedColumnName: "id",
+  })
   role: UserRoles;
 
   @Column({ type: "varchar", length: 36, nullable: true })
