@@ -60,7 +60,6 @@ export class InventoryComponent implements OnInit {
   onSubmit(event: Event) {
     event.preventDefault();
     if (this.inventoryCreateForm.valid) {
-      console.log(this.inventoryCreateForm)
       this.is.add(this.inventoryCreateForm.value).subscribe((res) => {
           this.inventory = [...this.inventory, this.inventoryCreateForm.value];
           this.inventoryCreateForm.reset();

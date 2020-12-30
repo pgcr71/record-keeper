@@ -1,0 +1,66 @@
+<div class='form-group' [formGroup]='repaymentForm'>
+  <mat-form-field  appearance="outline" class='mr-4'>
+    <mat-label>Name of the Person</mat-label>
+    <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="userDisplayFn">
+      <ng-container *ngIf="userSearch | async as us">
+        <mat-option class='mat-option' *ngFor="let option of us"  [value]="option">
+          <div>
+            <div>{{option.first_name}} {{option.last_name}}</div>
+            <div>{{option.phone_number}}</div>
+          </div>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='price' [type]="'number'">
+    <mat-label>Amount</mat-label>
+  </mat-form-field>
+
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='paid_on' [max]="maxDate" [matDatepicker]="picker1" [type]="'text'">
+    <mat-label>Payment Date</mat-label>
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class='mr-4' appearance="outline">
+    <textarea matInput formControlName='comments'> </textarea>
+    <mat-label>Commments</mat-label>
+  </mat-form-field>
+
+  <button [disabled]='repaymentForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
+
+</div>
+
+
+<!-- <mat-table [dataSource]="order" class="mat-elevation-z8">
+  <ng-container matColumnDef="user">
+    <mat-header-cell *matHeaderCellDef>Name of User</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>{{element['user'] && (element['user'].first_name + " " + element['user'].last_name)}}</div>
+        <div>{{element['user'] && element['user'].phone_number}}</div>
+      </div>
+     </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <mat-header-cell *matHeaderCellDef>Quantity </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['quantity']}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="product" >
+    <mat-header-cell *matHeaderCellDef> Name of Product </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['product'].name}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-row class="mat-row" *matNoDataRow>
+    <mat-cell class="mat-cell">No data to display</mat-cell>
+  </mat-row > -->
+<!-- </mat-table>
+<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="order && !order.length">No Records Found</mat-toolbar> -->
