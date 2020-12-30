@@ -9,6 +9,7 @@ import { InterestComponent } from "src/app/interest/interest.component";
 import { InventoryComponent } from "src/app/inventory/inventory.component";
 import { LoginComponent } from "src/app/login/login.component";
 import { RepaymentsComponent } from "src/app/repayments/repayments.component";
+import { ReturnsComponent } from "src/app/returns/returns.component";
 import { SignupComponent } from "src/app/signup/signup.component";
 import { ButtonsModule } from "../buttons/buttons.module";
 import { DialogModule } from "../dialog/dialog.module";
@@ -42,7 +43,8 @@ const routes: Array<Route> = [
     FinanceComponent,
     InterestComponent,
     BillingComponent,
-    RepaymentsComponent
+    RepaymentsComponent,
+    ReturnsComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +69,8 @@ const routes: Array<Route> = [
     FinanceComponent,
     InterestComponent,
     BillingComponent,
-    RepaymentsComponent
+    RepaymentsComponent,
+    ReturnsComponent
   ]
 })
 export class AppCommonModule { }

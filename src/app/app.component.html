@@ -7,11 +7,11 @@
     </button>
   </mat-nav-list>
     <mat-nav-list>
-      <div  [routerLink] ="['/orders']" class = 'add-icon' fxLayout='row'  fxLayoutAlign='space-between center'>
+      <div   [routerLink] ="['/orders']" class = 'add-icon' fxLayout='row'  fxLayoutAlign='space-between center'>
         NEW <mat-icon>add</mat-icon>
       </div>
-      <mat-list-item *ngFor="let link of links">
-         <a matLine [routerLink] ="link.link">{{ link.name }}</a>
+      <mat-list-item [routerLink] ="link.link" *ngFor="let link of links">
+         <a matLine >{{ link.name }}</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
