@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
+import { join } from "path";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { Order } from "./order.entity";
 import { RegistrationStatus } from "./registration_status.entity";
@@ -22,13 +23,18 @@ export class User extends BaseEntity {
   @Column()
   "last_name": string;
 
-  @OneToMany(() => Order, ord => ord.user)
-  orders: Order[];
-
-  @ManyToOne(() => RegistrationStatus, (statuses) => statuses.id)
+  @ManyToOne(type => RegistrationStatus)
+  @JoinColumn({
+    name: 'registration_status_id',
+    referencedColumnName: 'id'
+  })
   status: RegistrationStatus
 
-  @ManyToOne(() => UserRoles, (userRoles) => userRoles.id)
+  @ManyToOne(type => UserRoles)
+  @JoinColumn({
+    name: 'user_roles_id',
+    referencedColumnName: 'id'
+  })
   role: UserRoles
 
   @Column({ type: "varchar", length: 36, nullable: true })

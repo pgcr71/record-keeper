@@ -11,10 +11,11 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
-import { CdkColumnDef } from '@angular/cdk/table';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatDatepickerModule } from '@angular/material/datepicker';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [],
@@ -34,7 +35,9 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
     MatSelectModule,
     MatSnackBarModule,
     MatAutocompleteModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   exports: [
     MatSidenavModule,
@@ -51,7 +54,9 @@ import {MatDialog, MatDialogModule} from '@angular/material/dialog';
     MatSelectModule,
     MatSnackBarModule,
     MatAutocompleteModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ]
 })
 export class MaterialModule { }

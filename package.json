@@ -16,9 +16,10 @@
     "e2e": "ng e2e",
     "server": "nodemon ./backend/server.js",
     "gulp": "gulp",
-    "build-typeorm-start-electron": "cd ea && npm run build && npm run start",
+    "build-typeorm-start-electron": "cd ea && npm run start",
     "install-electron-packages:": "cd ea && npm install",
-    "electron-start": "npm-run-all --parallel build-for-electron build-typeorm-start-electron"
+    "electron-make": "ng build --prod --base-href ./ && cd ea && npm run migrations:gen && tsc && npm run migrations:run && npm run make",
+    "electron-start": "npm-run-all --parallel build-typeorm-start-electron build-for-electron"
   },
   "private": true,
   "dependencies": {
@@ -30,6 +31,7 @@
     "@angular/flex-layout": "^11.0.0-beta.33",
     "@angular/forms": "~11.0.4",
     "@angular/material": "^10.2.7",
+    "@angular/material-moment-adapter": "^11.0.3",
     "@angular/platform-browser": "~11.0.4",
     "@angular/platform-browser-dynamic": "~11.0.4",
     "@angular/router": "~11.0.4",
@@ -37,6 +39,8 @@
     "body-parser": "^1.19.0",
     "electron": "^11.1.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "ngx-electron": "^2.2.0",
     "postinstall": "^0.7.0",
@@ -52,6 +56,7 @@
     "@angular/language-service": "~11.0.4",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/lodash": "^4.14.166",
     "@types/node": "^12.11.1",
     "browser-sync": "^2.26.7",
     "codelyzer": "^6.0.0",

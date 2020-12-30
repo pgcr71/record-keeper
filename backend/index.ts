@@ -6,6 +6,7 @@ import {Request, Response} from "express";
 import {Routes} from "./src/routes/routes";
 import * as path from 'path';
 import {verify} from './src/controller/auth';
+import { rest } from "lodash";
 
 createConnection().then(async connection => {
     // create express app
@@ -29,8 +30,8 @@ app.use(function (req, res, next) {
         const result = (new (route.controller as any))[route.action](req, res, next);
         if (result instanceof Promise) {
             result
-            .then(result => result !== null && result !== undefined ? (console.log(result),res.send(result)) : undefined)
-            .catch(err => {res.status(400).send(err); throw err});
+            .then(result => result !== null && result !== undefined ? (res.send(result)) : undefined)
+            .catch(err => {res.sendStatus(400)});
 
         } else if (result !== null && result !== undefined) {
             res.json(result);

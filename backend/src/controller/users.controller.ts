@@ -1,7 +1,7 @@
 import { getRepository, InsertResult, Repository, SelectQueryBuilder } from "typeorm";
 import { IRepository } from "./repository.interface";
 import {NextFunction, Request, Response} from "express";
-import { InterestTypes } from "../entities/interest_types";
+import { InterestTypes } from "../entities/interest_types.entity";
 import { User } from "../entities/user.entity";
 
 export class UserController implements IRepository<User> {
@@ -9,7 +9,7 @@ export class UserController implements IRepository<User> {
 
   public async all(request: Request, response: Response, next: NextFunction): Promise<any> {
     return this.repository.createQueryBuilder('user')
-    .select(['user.first_name', 'user.last_name', 'user.phone_number'])
+    .select(['user.id', 'user.first_name', 'user.last_name', 'user.phone_number'])
     .getMany();
   }
 

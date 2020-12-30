@@ -1,21 +1,26 @@
 <div class='form-group' [formGroup]='orderCreateForm'>
   <mat-form-field class='mr-4' appearance="outline">
     <input matInput formControlName='product' [matAutocomplete]="productAuto" [type]="'text'">
-    <mat-label>Name of Product Taken</mat-label>
-    <mat-autocomplete #productAuto="matAutocomplete" [displayWith]="productDisplayFn">
+    <mat-label>Name of Product</mat-label>
+    <mat-autocomplete (optionSelected) = 'onOptionSelect($event.option.value)' #productAuto="matAutocomplete" [displayWith]="productDisplayFn">
       <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
-        {{option.name }}({{ option.created_on | date:'dd/MM/yy hh:mm'}})
+        <div class='product-name'> {{option.name }}</div>
+        <div class='product-date'>{{ option.created_on | date:'dd/MM/yy hh:mm'}}</div>
+
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field class='mr-4' class="example-full-width">
+  <mat-form-field  appearance="outline" class='mr-4'>
     <mat-label>Name of the Person</mat-label>
     <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="userDisplayFn">
       <ng-container *ngIf="userSearch | async as us">
-        <mat-option *ngFor="let option of us"  [value]="option">
-          {{option.name}}
+        <mat-option class='mat-option' *ngFor="let option of us"  [value]="option">
+          <div>
+            <div>{{option.first_name}} {{option.last_name}}</div>
+            <div>{{option.phone_number}}</div>
+          </div>
         </mat-option>
         <mat-option (click) ='addUser()' *ngIf = '!us.length'>
           ADD USER
@@ -25,16 +30,32 @@
   </mat-form-field>
 
   <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='quantity' [type]="'Quantity'">
+    <input matInput formControlName='quantity' [max]='remainingStock' [type]="'number'">
     <mat-label>Quantity</mat-label>
   </mat-form-field>
-  <button [disabled]='orderCreateForm.invalid' (click) =  'onSubmit()' mat-raised-button color="primary">submit</button>
+
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='ordered_on' [max]="maxDate" [matDatepicker]="picker1" [type]="'text'">
+    <mat-label>Issue Date</mat-label>
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <button [disabled]='orderCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
+
+  <div *ngIf =' remainingStock'>Only {{remainingStock}} products available out of {{stockInfo.quantity}}</div>
 </div>
 
+
 <mat-table [dataSource]="order" class="mat-elevation-z8">
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element['name']}} </mat-cell>
+  <ng-container matColumnDef="user">
+    <mat-header-cell *matHeaderCellDef>Name of User</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>{{element['user'] && (element['user'].first_name + " " + element['user'].last_name)}}</div>
+        <div>{{element['user'] && element['user'].phone_number}}</div>
+      </div>
+     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="quantity">
@@ -42,14 +63,9 @@
     <mat-cell *matCellDef="let element"> {{element['quantity']}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="unit_price" >
-    <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element['unit_price']}} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="rate_of_interest">
-    <mat-header-cell *matHeaderCellDef>Rate Of Interest </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element["rate_of_interest"]}} </mat-cell>
+  <ng-container matColumnDef="product" >
+    <mat-header-cell *matHeaderCellDef> Name of Product </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['product'].name}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

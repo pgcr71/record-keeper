@@ -26,3 +26,18 @@
    background-color:  red;
 }
 
+.mat-option {
+  line-height: normal;
+}
+
+.product {
+  &-name {
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  &-date {
+    font-size: 14px;
+  }
+}
+

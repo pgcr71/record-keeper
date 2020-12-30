@@ -17,10 +17,20 @@ export class AppComponent implements OnInit {
   showFiller = 'false';
   isDesktop: boolean;
   displaySideNav: boolean;
-  links: Array<{name: string, link: string}> = [{
+  links: Array<{name: string, link: string}> = [
+    {
     name: 'Inventory',
     link: 'products'
-  }]
+  },
+  {
+    name: "Repayments",
+    link: "repayment"
+  },
+   {
+     name: "Billing",
+     link: "billing"
+   }
+]
   constructor(
     private readonly bps: BreakpointService
     ) {

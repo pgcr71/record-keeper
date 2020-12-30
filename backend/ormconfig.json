@@ -7,6 +7,7 @@
    "database": "recordkeeper",
    "synchronize": false,
    "logging": true,
+    "logger": "advanced-console",
    "entities": [
       "src/entities/*.ts"
    ],

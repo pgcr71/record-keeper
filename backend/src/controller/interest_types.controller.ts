@@ -1,7 +1,7 @@
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
 import {NextFunction, Request, Response} from "express";
-import { InterestTypes } from "../entities/interest_types";
+import { InterestTypes } from "../entities/interest_types.entity";
 
 export class InterestTypesController implements IRepository<InterestTypes> {
   repository: Repository<InterestTypes> = getRepository(InterestTypes);

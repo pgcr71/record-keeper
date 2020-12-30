@@ -27,8 +27,8 @@ export class AddUserComponent implements OnInit {
 
   addUser() {
     if(this.addUserForm.valid) {
-      this.userSevice.addUser(this.addUserForm.value).subscribe(() => {
-        this.dialogRef.close(this.addUserForm.value);
+      this.userSevice.addUser(this.addUserForm.value).subscribe((data) => {
+        this.dialogRef.close({...this.addUserForm.value, ...(data && data['generatedMaps'][0])});
       })
     }
   }

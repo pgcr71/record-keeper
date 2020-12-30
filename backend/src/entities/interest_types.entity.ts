@@ -12,12 +12,6 @@ export class InterestTypes {
   @Column({ type: "varchar", length: 255, nullable: false })
   "name": string;
 
-  @OneToMany(() => InterestDefaults, interestDefault => interestDefault.InterestType)
-  DefaultInterest: InterestDefaults[]
-
-  @OneToMany(() => Product, product => product.InterestType)
-  ProductDefaultInterest: Product[]
-
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
 

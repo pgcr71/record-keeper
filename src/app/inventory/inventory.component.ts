@@ -43,7 +43,7 @@ export class InventoryComponent implements OnInit {
       name: ['', Validators.required],
       quantity: [0, Validators.required],
       rate_of_interest: [0, Validators.required],
-      InterestType: [null, Validators.required],
+      interest_type: [null, Validators.required],
       unit_price: ['', Validators.required],
       lot_number: [null, Validators.required]
     });
@@ -53,11 +53,12 @@ export class InventoryComponent implements OnInit {
     })
     this.is.getInterestTypes().subscribe(result => {
       this.interestTypes = result;
-      this.inventoryCreateForm.get('InterestType').setValue(this.interestTypes && this.interestTypes[1]);
+      this.inventoryCreateForm.get('interest_type').setValue(this.interestTypes && this.interestTypes[0]);
     })
   }
 
-  onSubmit() {
+  onSubmit(event: Event) {
+    event.preventDefault();
     if (this.inventoryCreateForm.valid) {
       console.log(this.inventoryCreateForm)
       this.is.add(this.inventoryCreateForm.value).subscribe((res) => {
@@ -67,6 +68,7 @@ export class InventoryComponent implements OnInit {
             duration: 2000
           } )
       }, error => {
+        console.log(error)
         this.snackBar.open(error.error.sqlMessage, "Close", {
           duration: 2000,
           panelClass: ['waring-snackbar']

@@ -1,11 +1,11 @@
 import {getRepository, MigrationInterface, QueryRunner} from "typeorm";
 import { InterestDefaults } from "../entities/interest_defaults.entity";
-import { InterestTypes } from "../entities/interest_types";
+import { InterestTypes } from "../entities/interest_types.entity";
 import { RegistrationStatus } from "../entities/registration_status.entity";
 import { UserRoles } from "../entities/roles.entity";
 import { User } from "../entities/user.entity";
 
-export class seeddata1608986781726 implements MigrationInterface {
+export class recordkeeper1609224949559 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const registrationStatuses1 = getRepository(RegistrationStatus).create({
@@ -64,10 +64,10 @@ export class seeddata1608986781726 implements MigrationInterface {
     await getRepository(User).save(user1);
 
     const interestType1 = getRepository(InterestTypes).create({
-      name: "compound"
+      name: "simple"
     });
     const interestType2 = getRepository(InterestTypes).create({
-      name: "simple"
+      name: "compound"
     });
 
     await getRepository(InterestTypes).save(interestType1);
@@ -75,11 +75,12 @@ export class seeddata1608986781726 implements MigrationInterface {
 
     const interestDefaults = getRepository(InterestDefaults).create({
       interest_rate: 2,
-      InterestType:  interestType1
+      interest_type:  interestType1
     });
 
     await getRepository(InterestDefaults).save(interestDefaults);
   }
+
 
     public async down(queryRunner: QueryRunner): Promise<void> {
     }

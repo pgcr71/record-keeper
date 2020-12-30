@@ -13,7 +13,7 @@
   </mat-form-field>
   <mat-form-field class='mr-4' appearance="outline">
     <mat-label>Interest Type</mat-label>
-    <mat-select formControlName='InterestType'>
+    <mat-select formControlName='interest_type'>
       <mat-option *ngFor="let interestType of interestTypes" [value]="interestType">
         {{interestType.name}}
       </mat-option>
@@ -27,7 +27,7 @@
     <input matInput formControlName='quantity' [type]="'Quantity'">
     <mat-label>Quantity</mat-label>
   </mat-form-field>
-  <button [disabled]='inventoryCreateForm.invalid' (click) =  'onSubmit()' mat-raised-button color="primary">submit</button>
+  <button [disabled]='inventoryCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
 </div>
 
 <mat-table [dataSource]="inventory" class="mat-elevation-z8">

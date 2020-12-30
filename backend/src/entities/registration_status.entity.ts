@@ -10,9 +10,6 @@ export class RegistrationStatus {
   @Column({ type: "varchar", length: 36, nullable: false })
   "name": string;
 
-  @OneToMany(() => User, (user) => user.status)
-  userStatus: User[]
-
   @Column({ type: "varchar", length: 255, nullable: false })
   "description": string;
 
