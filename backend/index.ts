@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
         if (result instanceof Promise) {
             result
             .then(result => result !== null && result !== undefined ? (res.send(result)) : undefined)
-            .catch(err => {res.sendStatus(400)});
+            .catch(err => {console.log(err),res.sendStatus(400)});
 
         } else if (result !== null && result !== undefined) {
             res.json(result);

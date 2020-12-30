@@ -32,6 +32,26 @@ export class UserController implements IRepository<User> {
     return await this.repository.remove(UserToRemove);
   }
 
+  public async getOrdersByUserId(request: Request, response: Response, next: NextFunction): Promise<User[]> {
+    console.log(request.params)
+    return this.repository
+      .createQueryBuilder('usr')
+      .select(['usr.first_name', 'usr.last_name', 'usr.phone_number', 'order', 'prdt', 'it', 'repayment'])
+      .leftJoin('usr.orders', 'order')
+      .leftJoin('usr.repayments', 'repayment')
+      .leftJoin('order.product', 'prdt')
+      .leftJoin('prdt.interest_type', 'it')
+      .where('usr.id=:userId', { userId: request.params.id })
+      .orderBy('order.ordered_on', "ASC")
+      .getMany()
+      // .then((results) =>
+      //   results.map((result) =>
+      //     result.product.interest_type.name === "compound"
+      //       ? this.calculateCompoundInterest(result)
+      //       : this.calculateSimpleInterest(result),
+      //   ),
+      // );
+  }
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
   //  let interest_type =  new InterestTypes();
   //   interest_type = request.body.interestTypeId;

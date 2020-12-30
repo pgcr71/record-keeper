@@ -1,8 +1,11 @@
 import { join } from "path";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { InterestTypes } from "./interest_types.entity";
 import { Order } from "./order.entity";
+import { Product } from "./product.entity";
 import { RegistrationStatus } from "./registration_status.entity";
+import { Repayment } from "./repayment.entity";
 import { UserRoles } from "./roles.entity";
 
 @Entity()
@@ -16,6 +19,12 @@ export class User extends BaseEntity {
 
   @Column({nullable: false})
   "phone_number": string;
+
+  @OneToMany((type) => Order, (order) => order.user)
+  "orders": Order[];
+
+  @OneToMany((type) => Repayment, (repayment) => repayment.user)
+  "repayments": Repayment[];
 
   @Column({nullable: false})
   "first_name": string;

@@ -26,6 +26,12 @@ export const UserRoutes = [
     action: "getMatchedUsers"
   },
   {
+    method: "get",
+    route: "/getOrderUserId/:id",
+    controller: UserController,
+    action: "getOrdersByUserId"
+  },
+  {
     method: "delete",
     route: "/users/:id",
     auth: true,
