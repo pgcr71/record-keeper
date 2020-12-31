@@ -49,14 +49,14 @@ export class FinanceService {
 
   getAllUserOrders(userId: string, date: Date) {
     if (this.isElectron) {
-      return this.appService.electronEmit('getUserOrdersAndRepayments', {userId, date});
+      return this.appService.electronEmit('getUserOrdersAndRepayments', {id, date});
     }
     return this.http.get(`${URL}/getUserOrdersAndRepayments/${userId}/${date}`)  as Observable<Array<object>>;
   }
 
   getRemainingStock(productId: string) {
     if (this.isElectron) {
-      return this.appService.electronEmit('getRemainingStock');
+      return this.appService.electronEmit('getRemainingStock', {productId});
     }
     return this.http.get(`${URL}/products/remainingStock/${productId}`)  as Observable<Array<object>>;
   }

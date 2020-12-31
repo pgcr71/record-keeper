@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
 import { InterestDefaults, InterestTypes, RegistrationStatus, UserRoles } from "..";
 
-export class seed1609308809874 implements MigrationInterface {
+export class seed1609428169394 implements MigrationInterface {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<void> {
     const registrationStatuses1 = getRepository(RegistrationStatus).create({

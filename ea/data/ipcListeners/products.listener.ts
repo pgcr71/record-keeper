@@ -38,5 +38,13 @@ export class ProductListener {
         event.returnValue = err;
       }
     });
+
+    ipcMain.on("getRemainingStock", async (event: IpcMainEvent, product: Product) => {
+      try {
+        event.returnValue = await this.pr.save({ params: product } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
+    });
   }
 }
