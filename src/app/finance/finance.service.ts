@@ -49,7 +49,7 @@ export class FinanceService {
 
   getAllUserOrders(userId: string, date: Date) {
     if (this.isElectron) {
-      return this.appService.electronEmit('getUserOrdersAndRepayments', {id, date});
+      return this.appService.electronEmit('getUserOrdersAndRepayments', {id: userId, date});
     }
     return this.http.get(`${URL}/getUserOrdersAndRepayments/${userId}/${date}`)  as Observable<Array<object>>;
   }
