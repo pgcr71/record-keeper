@@ -16,18 +16,25 @@ export class ProductListener {
     });
 
     ipcMain.on("oneProducts", async (event: IpcMainEvent, product: Product) => {
-      event.returnValue = await this.pr.one({ params: product.id } as never, {} as never, {} as never);
+      try {
+        event.returnValue = await this.pr.one({ params: product.id } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("removeProducts", async (event: IpcMainEvent, product: Product) => {
-      event.returnValue = await this.pr.remove({ params: product.id } as never, {} as never, {} as never);
+      try {
+        event.returnValue = await this.pr.remove({ params: product.id } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("saveProducts", async (event: IpcMainEvent, product: Product) => {
       try {
         event.returnValue = await this.pr.save({ body: product } as never, {} as never, {} as never);
       } catch (err) {
-        console.log(err);
         event.returnValue = err;
       }
     });

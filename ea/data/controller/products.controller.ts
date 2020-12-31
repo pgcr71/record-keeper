@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getRepository, InsertResult, Repository, SelectQueryBuilder } from "typeorm";
 import { IRepository } from "./repository.interface";
 import { Product } from "../entities/product.entity";

@@ -22,5 +22,17 @@ export class UserListener {
     ipcMain.on("saveUsers", async (event: IpcMainEvent, user: User) => {
       event.returnValue = await this.pr.save({ body: user } as never, {} as never, {} as never);
     });
+
+    ipcMain.on("getUserOrdersAndRepayments", async (event: IpcMainEvent, data: any) => {
+      try {
+        event.returnValue = await this.pr.getUserOrdersAndRepayments(
+          { params: data } as never,
+          {} as never,
+          {} as never,
+        );
+      } catch (err) {
+        event.returnValue = err;
+      }
+    });
   }
 }

@@ -16,11 +16,19 @@ export class OrderListener {
     });
 
     ipcMain.on("oneOrders", async (event: IpcMainEvent, order: Order) => {
-      event.returnValue = await this.pr.one({ params: order.id } as never, {} as never, {} as never);
+      try {
+        event.returnValue = await this.pr.one({ params: order.id } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("removeOrders", async (event: IpcMainEvent, order: Order) => {
-      event.returnValue = await this.pr.remove({ params: order.id } as never, {} as never, {} as never);
+      try {
+        event.returnValue = await this.pr.remove({ params: order.id } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("saveOrders", async (event: IpcMainEvent, order: Order) => {
@@ -35,7 +43,6 @@ export class OrderListener {
       try {
         event.returnValue = await this.pr.getOrdersByUserId({ params: { userId } } as never, {} as never, {} as never);
       } catch (err) {
-        console.log(err);
         event.returnValue = err;
       }
     });

@@ -8,19 +8,35 @@ export class InterestTypesListener {
 
   public async listen(): Promise<void> {
     ipcMain.on("allInterestTypes", async (event: IpcMainEvent) => {
-      event.returnValue = await this.pr.all();
+      try {
+        event.returnValue = await this.pr.all({} as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("oneInterestTypes", async (event: IpcMainEvent, InterestType: InterestTypes) => {
-      event.returnValue = await this.pr.one({ params: InterestType.id } as never);
+      try {
+        event.returnValue = await this.pr.one({ params: InterestType.id } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("removeInterestTypes", async (event: IpcMainEvent, InterestType: InterestTypes) => {
-      event.returnValue = await this.pr.remove({ params: InterestType.id } as never);
+      try {
+        event.returnValue = await this.pr.remove({ params: InterestType.id } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
 
     ipcMain.on("saveInterestTypes", async (event: IpcMainEvent, InterestType: InterestTypes) => {
-      event.returnValue = await this.pr.save({ body: InterestType } as never);
+      try {
+        event.returnValue = await this.pr.save({ body: InterestType } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
     });
   }
 }

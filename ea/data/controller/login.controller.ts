@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Order } from "..";
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";

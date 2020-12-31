@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Order } from "..";
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
@@ -35,10 +34,10 @@ export class OrderController implements IRepository<Order> {
       );
   }
 
-  calculateSimpleInterest(result: Order): Order {
+  calculateSimpleInterest(result: Order, date?: Date | string): Order {
     const oneDay = 24 * 60 * 60 * 1000;
     const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-    const date2 = new Date().setHours(23, 59, 59, 999);
+    const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
     result.initial_cost = result.product.unit_price * result.quantity;
     const interestRate = result.product.rate_of_interest;
@@ -47,7 +46,7 @@ export class OrderController implements IRepository<Order> {
     return result;
   }
 
-  private calculateCompoundInterest(result: Order): Order {
+  calculateCompoundInterest(result: Order, date?: Date | string): Order {
     const oneDay = 24 * 60 * 60 * 1000;
     const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
     const date2 = new Date().setHours(23, 59, 59, 999);

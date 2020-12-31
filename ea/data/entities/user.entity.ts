@@ -1,6 +1,9 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { Order } from "./order.entity";
+import { Product } from "./product.entity";
 import { RegistrationStatus } from "./registration_status.entity";
+import { Repayment } from "./repayment.entity";
 import { UserRoles } from "./roles.entity";
 
 @Entity()
@@ -13,6 +16,12 @@ export class User extends BaseEntity {
 
   @Column({ nullable: false })
   "phone_number": string;
+
+  @OneToMany(() => Order, (order) => order.user)
+  "orders": Order[];
+
+  @OneToMany(() => Repayment, (repayment) => repayment.user)
+  "repayments": Repayment[];
 
   @Column({ nullable: false })
   "first_name": string;
@@ -45,4 +54,7 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   "updated_on": string;
+
+  "product"?: Product;
+  "order"?: Order;
 }
