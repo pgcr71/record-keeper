@@ -177,7 +177,7 @@ export class BillingComponent implements OnInit {
       "product_name": get(results, 'product.name', 0),
       'unit_price':  Number(get(results, 'product.unit_price', 0)),
       'rate_of_interest': Number(get(results, 'product.rate_of_interest', 0)),
-      'interest_type': Number(get(results, 'product.interest_type.name', 0)),
+      'interest_type': get(results, 'product.interest_type.name', 0),
       'lot_number': get(results, 'product.lot_number', 0),
       "initial_cost": Number(get(results, 'initial_cost', 0)),
       "days_since_purchase": Number(get(results, 'days_since_purchase', 0)),

@@ -2,6 +2,7 @@ import { Order } from "..";
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
 import { NextFunction, Request, Response } from "express";
+import { PaymentStatus } from "../entities/payment_statuses.entity";
 
 export class OrderController implements IRepository<Order> {
   repository: Repository<Order> = getRepository(Order);
@@ -77,7 +78,9 @@ export class OrderController implements IRepository<Order> {
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
-    return this.repository.insert(request.body);
+    const paymentStatus = new PaymentStatus();
+    paymentStatus.id = 1;
+    return this.repository.insert({ ...request.body, ...{ payment_status: paymentStatus } });
   }
 
   public async getTotalOrdersByProductId(
