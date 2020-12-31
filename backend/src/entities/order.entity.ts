@@ -1,23 +1,27 @@
-import { AfterLoad, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { PaymentStatus } from "./payment_statuses.entity";
 import { Product } from "./product.entity";
 import { User } from "./user.entity";
 
 @Entity()
 export class Order extends BaseEntity {
-  @ManyToOne(type => User)
+  @ManyToOne(() => User)
   @JoinColumn({
-    name: 'user_id',
-    referencedColumnName: 'id'
+    name: "user_id",
+    referencedColumnName: "id",
   })
   "user": User;
 
-  @ManyToOne(type => Product)
+  @ManyToOne(() => Product)
   @JoinColumn({
-    name: 'product_id',
-    referencedColumnName: 'id'
+    name: "product_id",
+    referencedColumnName: "id",
   })
   "product": Product;
+
+  @Column({ type: "bigint", nullable: true })
+  "remaining_amount_tobe_paid": number;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;
@@ -36,6 +40,13 @@ export class Order extends BaseEntity {
 
   @Column({ type: "datetime", nullable: true })
   "ordered_on": Date;
+
+  @ManyToOne(() => PaymentStatus)
+  @JoinColumn({
+    name: "payment_status_id",
+    referencedColumnName: "id",
+  })
+  "payment_status": PaymentStatus;
 
   "principal_amount": string;
   "compounding_period_in_days": number;

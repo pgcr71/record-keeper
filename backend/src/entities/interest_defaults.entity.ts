@@ -1,24 +1,22 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { BaseEntity } from "./base.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { InterestTypes } from "./interest_types.entity";
-import { User } from "./user.entity";
 
 @Entity()
 export class InterestDefaults {
   @PrimaryGeneratedColumn()
   "id": number;
 
-  @ManyToOne(type => InterestTypes)
+  @ManyToOne(() => InterestTypes)
   @JoinColumn({
     name: "interest_type_id",
-    referencedColumnName: "id"
-})
-  "interest_type": InterestTypes
+    referencedColumnName: "id",
+  })
+  "interest_type": InterestTypes;
 
   @Column({ type: "int", nullable: false, default: 2 })
-  "interest_rate": number
+  "interest_rate": number;
 
-  @Column({type: 'int', nullable: false, default: 365})
+  @Column({ type: "int", nullable: false, default: 365 })
   compounding_period_in_days: number;
 
   @Column({ type: "varchar", length: 36, nullable: true })
@@ -32,4 +30,4 @@ export class InterestDefaults {
 
   @CreateDateColumn()
   "updated_on": string;
- }
+}

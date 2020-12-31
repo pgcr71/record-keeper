@@ -19,12 +19,12 @@ export class RepaymentService {
     this.isElectron = this.electronService.isElectronApp;
   }
 
-  add(data) {
+  add(totalPayments, orderRepayments) {
     if (this.isElectron) {
-      return this.appService.electronEmit('saveRepayments', data);
+      return this.appService.electronEmit('saveRepayments', {totalAmount: totalPayments, orderPaidFor: orderRepayments});
     }
 
-    return this.http.post(URL + '/repayments', data);
+    return this.http.post(URL + '/repayments', {totalAmount: totalPayments, orderPaidFor: orderRepayments});
   }
 
   get(): Observable<Array<object>> {

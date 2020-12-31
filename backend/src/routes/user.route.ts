@@ -27,9 +27,9 @@ export const UserRoutes = [
   },
   {
     method: "get",
-    route: "/getOrderUserId/:id",
+    route: "/getUserOrdersAndRepayments/:id/:date",
     controller: UserController,
-    action: "getOrdersByUserId"
+    action: "getUserOrdersAndRepayments"
   },
   {
     method: "delete",

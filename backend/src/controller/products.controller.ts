@@ -9,16 +9,19 @@ export class ProductController implements IRepository<Product> {
   repository: Repository<Product> = getRepository(Product);
 
   public async all(request: Request, response: Response, next: NextFunction): Promise<any> {
-    return this.repository.createQueryBuilder('product').leftJoinAndSelect('product.interest_type', 'interest_type').getMany()
+    return this.repository
+      .createQueryBuilder("product")
+      .leftJoinAndSelect("product.interest_type", "interest_type")
+      .getMany();
   }
 
-  public async one(request: Request, response: Response, next: NextFunction): Promise<Product> {
+  public async one(request: Request, response: Response, next: NextFunction): Promise<Product | undefined> {
     return this.repository.findOne(request.params.id);
   }
 
   public async remove(request: Request, response: Response, next: NextFunction): Promise<Product> {
-    let productToRemove = await this.repository.findOne(request.params.id);
-    return await this.repository.remove(productToRemove);
+    const productToRemove = await this.repository.findOne(request.params.id);
+    return await this.repository.remove(productToRemove as Product);
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
@@ -28,7 +31,6 @@ export class ProductController implements IRepository<Product> {
     //   console.log(product)
     return this.repository.insert(request.body);
   }
-
 
   public async getStockDetails(
     request: Request,

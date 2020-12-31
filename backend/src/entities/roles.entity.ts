@@ -1,6 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { BaseEntity } from "./base.entity";
-import { User } from "./user.entity";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class UserRoles {
@@ -24,4 +22,4 @@ export class UserRoles {
 
   @CreateDateColumn()
   "updated_on": string;
- }
+}

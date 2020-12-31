@@ -1,10 +1,6 @@
-<!-- <mat-table>
-  <ng-container matColumnDef=''>
 
-  </ng-container>
-</mat-table> -->
-<div [formGroup] = 'billingCreateForm'>
-  <mat-form-field appearance="outline">
+<div [formGroup] = 'billingCreateForm' class='form-group'>
+  <mat-form-field  class='mr-4'  appearance="outline">
     <mat-label>User Name or Phone Number</mat-label>
     <input matInput [matAutocomplete]='auto' formControlName='user' type="text" name="search" id="search">
     <mat-autocomplete [displayWith]='userDisplayFn' #auto>
@@ -18,9 +14,48 @@
       </ng-container>
     </mat-autocomplete>
   </mat-form-field>
+
+  <mat-form-field  class='mr-4' appearance="outline">
+    <input matInput formControlName='price' [type]="'number'">
+    <mat-label>Amount</mat-label>
+  </mat-form-field>
+
+  <mat-form-field class='mr-4 ' appearance="outline">
+    <input matInput formControlName='paid_on' [max]="maxDate" [matDatepicker]="picker1" [type]="'text'">
+    <mat-label>Payment Date</mat-label>
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class='mr-4' appearance="outline">
+    <textarea matInput formControlName='comments'> </textarea>
+    <mat-label>Commments</mat-label>
+  </mat-form-field>
+
+  <button [disabled]='billingCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
 </div>
 
-<mat-table [dataSource]="billingDetails" class="mat-elevation-z8">
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </mat-cell>
+      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+    </ng-container>
+
 
   <ng-container matColumnDef="period">
     <mat-header-cell *matHeaderCellDef> Period</mat-header-cell>
@@ -60,13 +95,23 @@
     <mat-footer-cell *matFooterCellDef>{{totalInterest | currency:'inr':'₹': '1.0-2'}}</mat-footer-cell>
   </ng-container>
 
-
-
   <ng-container matColumnDef="totalDebt" >
     <mat-header-cell *matHeaderCellDef> Total Debt</mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element['total_debt'] | currency:'inr':'₹': '1.0-2'}} </mat-cell>
     <mat-footer-cell *matFooterCellDef>{{totalDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
   </ng-container>
+
+  <ng-container matColumnDef="remainingAmount" >
+    <mat-header-cell *matHeaderCellDef>Remaining Amount To Be Paid</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['remaining_amount'] | currency:'inr':'₹': '1.0-2'}} </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{totalDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
+  </ng-container>
+
+  <!-- <ng-container matColumnDef="paymentStatus" >
+    <mat-header-cell *matHeaderCellDef>Payment Status</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element['payment_status'].name }} </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{totalDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
+  </ng-container> -->
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

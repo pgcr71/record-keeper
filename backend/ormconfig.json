@@ -12,7 +12,8 @@
       "src/entities/*.ts"
    ],
    "migrations": [
-      "src/migrations/**/*.ts"
+      "src/migrations/**/*.ts",
+      "src/seeders/**/*.ts"
    ],
    "subscribers": [
       "src/subscribers/**/*.ts"

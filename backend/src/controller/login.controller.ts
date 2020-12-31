@@ -1,7 +1,7 @@
 import { Order } from "..";
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 
 export class LoginController implements IRepository<Order> {
   repository: Repository<Order> = getRepository(Order);
@@ -9,13 +9,13 @@ export class LoginController implements IRepository<Order> {
     return this.repository.find();
   }
 
-  public async one(request: Request, response: Response, next: NextFunction): Promise<Order> {
+  public async one(request: Request, response: Response, next: NextFunction): Promise<Order | undefined> {
     return this.repository.findOne(request.params.id);
   }
 
   public async remove(request: Request, response: Response, next: NextFunction): Promise<Order> {
-    let orderToRemove = await this.repository.findOne(request.params.id);
-    return await this.repository.remove(orderToRemove);
+    const orderToRemove = await this.repository.findOne(request.params.id);
+    return await this.repository.remove(orderToRemove as Order);
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {

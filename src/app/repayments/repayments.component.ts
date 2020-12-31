@@ -49,7 +49,6 @@ export class RepaymentsComponent implements OnInit {
 
   private _userFilter(name: string) {
     const filterValue = name.toLowerCase();
-
     return this.users.filter(option =>
       (option['first_name'].toLowerCase()).includes(filterValue) ||
        (option['last_name'].toLowerCase()).includes(filterValue) ||
@@ -66,7 +65,7 @@ export class RepaymentsComponent implements OnInit {
   onSubmit() {
     console.log(this.repaymentForm.value)
     if (this.repaymentForm.valid) {
-      this.rs.add(this.repaymentForm.value).subscribe((res) => {
+      this.rs.add(this.repaymentForm.value, {}).subscribe((res) => {
           this.repayments = [...this.repayments, this.repaymentForm.value];
           this.repaymentForm.reset();
           this.snackBar.open('Data Saved Succesfully', "Close", {

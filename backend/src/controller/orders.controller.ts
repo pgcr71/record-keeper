@@ -7,23 +7,23 @@ export class OrderController implements IRepository<Order> {
   repository: Repository<Order> = getRepository(Order);
   public async all(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
     return this.repository
-      .createQueryBuilder('order')
-      .select(['usr.first_name', 'usr.last_name', 'usr.phone_number', 'order', 'prdt', 'it'])
-      .leftJoin('order.user', 'usr')
-      .leftJoin('order.product', 'prdt')
-      .leftJoin('prdt.interest_type', 'it')
+      .createQueryBuilder("order")
+      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
+      .leftJoin("order.user", "usr")
+      .leftJoin("order.product", "prdt")
+      .leftJoin("prdt.interest_type", "it")
       .getMany();
   }
 
   public async getOrdersByUserId(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
     return this.repository
-      .createQueryBuilder('order')
-      .select(['usr.first_name', 'usr.last_name', 'usr.phone_number', 'order', 'prdt', 'it'])
-      .leftJoin('order.user', 'usr')
-      .leftJoin('order.product', 'prdt')
-      .leftJoin('prdt.interest_type', 'it')
-      .where('usr.id=:userId', { userId: request.params.userId })
-      .orderBy('order.ordered_on', "ASC")
+      .createQueryBuilder("order")
+      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
+      .leftJoin("order.user", "usr")
+      .leftJoin("order.product", "prdt")
+      .leftJoin("prdt.interest_type", "it")
+      .where("usr.id=:userId", { userId: request.params.userId })
+      .orderBy("order.ordered_on", "ASC")
       .getMany()
       .then((results) =>
         results.map((result) =>
@@ -34,10 +34,10 @@ export class OrderController implements IRepository<Order> {
       );
   }
 
-  calculateSimpleInterest(result: Order): Order {
+  calculateSimpleInterest(result: Order, date?: Date | string): Order {
     const oneDay = 24 * 60 * 60 * 1000;
     const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-    const date2 = new Date().setHours(23, 59, 59, 999);
+    const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
     result.initial_cost = result.product.unit_price * result.quantity;
     const interestRate = result.product.rate_of_interest;
@@ -46,7 +46,7 @@ export class OrderController implements IRepository<Order> {
     return result;
   }
 
-  private calculateCompoundInterest(result: Order): Order {
+  calculateCompoundInterest(result: Order, date?: Date | string): Order {
     const oneDay = 24 * 60 * 60 * 1000;
     const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
     const date2 = new Date().setHours(23, 59, 59, 999);
@@ -67,13 +67,13 @@ export class OrderController implements IRepository<Order> {
     return result;
   }
 
-  public async one(request: Request, response: Response, next: NextFunction): Promise<Order> {
+  public async one(request: Request, response: Response, next: NextFunction): Promise<Order | undefined> {
     return this.repository.findOne(request.params.id);
   }
 
   public async remove(request: Request, response: Response, next: NextFunction): Promise<Order> {
-    let orderToRemove = await this.repository.findOne(request.params.id);
-    return await this.repository.remove(orderToRemove);
+    const orderToRemove = await this.repository.findOne(request.params.id);
+    return await this.repository.remove(orderToRemove as Order);
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {

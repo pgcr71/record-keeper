@@ -1,6 +1,6 @@
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import { InterestTypes } from "../entities/interest_types.entity";
 
 export class InterestTypesController implements IRepository<InterestTypes> {
@@ -10,13 +10,13 @@ export class InterestTypesController implements IRepository<InterestTypes> {
     return this.repository.find();
   }
 
-  public async one(request: Request, response: Response, next: NextFunction): Promise<InterestTypes> {
+  public async one(request: Request, response: Response, next: NextFunction): Promise<InterestTypes | undefined> {
     return this.repository.findOne(request.params.id);
   }
 
-  public async remove(request: Request, response: Response, next: NextFunction): Promise<InterestTypes> {
-    let InterestTypesToRemove = await this.repository.findOne(request.params.id);
-    return await this.repository.remove(InterestTypesToRemove);
+  public async remove(request: Request, response: Response, next: NextFunction): Promise<InterestTypes | undefined> {
+    const InterestTypesToRemove = await this.repository.findOne(request.params.id);
+    return await this.repository.remove(InterestTypesToRemove as InterestTypes);
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {

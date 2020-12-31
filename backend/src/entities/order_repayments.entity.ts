@@ -1,24 +1,26 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { User } from "./user.entity";
+import { Order } from "./order.entity";
+import { Repayment } from "./repayment.entity";
 
 @Entity()
-export class Repayment extends BaseEntity {
-  @ManyToOne(() => User)
+export class OrderRepayment extends BaseEntity {
+  @ManyToOne(() => Order)
   @JoinColumn({
-    name: "user_id",
+    name: "order_id",
     referencedColumnName: "id",
   })
-  "user": User;
+  "order": Order;
+
+  @ManyToOne(() => Repayment)
+  @JoinColumn({
+    name: "payment_id",
+    referencedColumnName: "id",
+  })
+  "payment": Repayment;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
-  "price": string;
-
-  @Column({ type: "varchar", length: 255, nullable: true })
-  "comments": string;
-
-  @Column({ type: "datetime", nullable: true })
-  "paid_on": Date;
+  "amount": number;
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
