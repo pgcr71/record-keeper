@@ -5,6 +5,7 @@ import { createConnection } from "typeorm";
 import { InterestTypesListener } from "./data/ipcListeners/interestTypes.listener";
 import { OrderListener } from "./data/ipcListeners/orders.listener";
 import { UserListener } from "./data/ipcListeners/users.listener";
+import { RepaymentsListener } from "./data/ipcListeners/repayments.listener";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const isDev = require("electron-is-dev");
@@ -31,6 +32,7 @@ async function createWindow(): Promise<void> {
       new InterestTypesListener().listen();
       new OrderListener().listen();
       new UserListener().listen();
+      new RepaymentsListener().listen();
     },
     (error) => {
       return error;
