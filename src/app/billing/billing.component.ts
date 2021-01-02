@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RepaymentService } from '../repayments/repayment.service';
+import { Order } from 'backend/src/entities/order.entity';
 
 @Component({
   selector: 'app-billing',
@@ -33,8 +34,10 @@ export class BillingComponent implements OnInit {
     today: Date;
     interest_accrued: any;
     remaining_amount: number;
+    remaining_amount_copy: number;
     paid_amount: number;
-    total_debt
+    total_debt: number;
+
    }> = [];
   displayedColumns = ['select', 'period', 'productInfo',  'interestDetails',  'totalDebt', 'remainingAmount']
   totalPrincipal: number;
@@ -44,6 +47,8 @@ export class BillingComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   maxDate = new Date();
   userInfo: any;
+  totalRemainingDebt: any;
+  cantBeNegetive: boolean;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -95,25 +100,51 @@ export class BillingComponent implements OnInit {
         let sumOfFiltered = 0;
         let filteredResults = this.billingDetails.filter((row) => {
           let include = false;
-          row.remaining_amount = row.total_debt;
-          if(sum < Number(amount)) {
-            include =  true;
+          row.remaining_amount= row.remaining_amount_copy;
+          const diff = sum - Number(amount)
+          if (diff <= 0) {
+            include = true;
             row.remaining_amount = 0;
-            row.paid_amount = row.total_debt;
-            sumOfFiltered = sumOfFiltered + Number(row.total_debt)
+
+            row.paid_amount = row.remaining_amount_copy;
+            sumOfFiltered = sumOfFiltered + Number(row.remaining_amount_copy)
           }
 
-          sum = row.total_debt + sum;
+          sum = row.remaining_amount_copy + sum;
           return include;
         })
 
         const last = filteredResults.length - 1;
       if (last > -1) {
-        filteredResults[last].remaining_amount = sumOfFiltered - amount;
-        filteredResults[last].paid_amount = filteredResults[last].total_debt - filteredResults[last].remaining_amount ;
+        const remainingAmount = sumOfFiltered - amount;
+        if(filteredResults[last].interest_type === 'compound') {
+          this.calculateCompoundInterest(filteredResults[last], new Date(), Number(amount));
+        }
+
+        filteredResults[last].remaining_amount = remainingAmount;
+
+        filteredResults[last].paid_amount = filteredResults[last].remaining_amount_copy - filteredResults[last].remaining_amount ;
       };
+      this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + next.remaining_amount, 0);
         this.selection.deselect(...this.billingDetails)
         this.selection.select(...filteredResults);
+    }
+
+    calculateCompoundInterest(result: any, date?: Date | string | number, amount?: number): Order {
+      const oneDay = 24 * 60 * 60 * 1000;
+      const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+      const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+      const days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
+      const interestRate = result.rate_of_interest;
+      const compoundingPeriodInDays = 365;
+      const timesToCompound = Math.floor(days_since_purchase / compoundingPeriodInDays);
+      const compoundingMonthsPerYear = Math.floor(365 / compoundingPeriodInDays);
+      const remaining_days = days_since_purchase - timesToCompound * compoundingPeriodInDays;
+      result['principalToBeDebited'] =
+        amount / (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) + (remaining_days*interestRate*12/36500));
+      result['interestToBeDebited'] =  amount - result['principalToBeDebited'];
+
+      return result;
     }
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
@@ -156,11 +187,11 @@ export class BillingComponent implements OnInit {
 
   onOptionClick(userInfo) {
     this.userInfo = userInfo;
-    this.getUserOrders(userInfo, new Date());
+    this.getUserOrders(userInfo, null, new Date());
   }
 
-  getUserOrders(userInfo, date: Date) {
-    this.is.getAllUserOrders(userInfo.id, date).subscribe((data: Array<object>) => {
+  getUserOrders(userInfo, date: Date, endDate?: Date) {
+    this.is.getAllUserOrders(userInfo.id, date, endDate).subscribe((data: Array<object>) => {
      this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
      this.dataSource =  new MatTableDataSource<any>(this.billingDetails);
       this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
@@ -174,6 +205,7 @@ export class BillingComponent implements OnInit {
     return {
       'id': get(results, 'id', ''),
       'quantity': get(results, 'quantity', 0),
+      'comments': get(results, 'comments', ''),
       "product_name": get(results, 'product.name', 0),
       'unit_price':  Number(get(results, 'product.unit_price', 0)),
       'rate_of_interest': Number(get(results, 'product.rate_of_interest', 0)),
@@ -184,19 +216,32 @@ export class BillingComponent implements OnInit {
       "created_on": get(results, 'created_on', 0),
       "ordered_on": get(results, 'ordered_on', 0),
       "today": new Date(),
-      "remaining_amount":  Number(get(results, 'remaining_amount_tobe_paid', 0) || get(results, 'total_debt', 0)),
+      "remaining_amount":  Number(get(results, 'payment_status.id', null)) === 1 ?
+       Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
+      "remaining_amount_copy":  Number(get(results, 'payment_status.id', null)) === 1 ?
+       Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
       "paid_amount" : 0,
       "payment_status": get(results, 'payment_status', {}),
       "interest_accrued": Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)),
-      "total_debt": Number(get(results, 'remaining_amount_tobe_paid', 0) || get(results, 'total_debt', 0))
+      "total_debt":  Number(get(results, 'payment_status.id', null)) === 1 ?
+      Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
     }
   }
 
   onSubmit() {
+    if(this.billingCreateForm.get('price').value < 0) {
+      this.cantBeNegetive = true;
+      this.billingCreateForm.controls['price'].setErrors({'negetiveValue': true});
+      return;
+    }
 
     if (this.billingCreateForm.valid) {
       this.rs.add(this.billingCreateForm.value, this.selection.selected).subscribe((res) => {
-          this.billingCreateForm.reset();
+          this.billingCreateForm.reset({
+            user: null,
+            price: null,
+            paid_on: new Date()
+          });
           this.snackBar.open('Data Saved Succesfully', "Close", {
             duration: 2000
           } )

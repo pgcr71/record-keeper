@@ -47,11 +47,18 @@ export class FinanceService {
     return this.http.get(URL + '/products')  as Observable<Array<object>>;
   }
 
-  getAllUserOrders(userId: string, date: Date) {
+  getAllUserOrders(userId: string, start_date: Date, end_date: Date, allOrders?: boolean) {
     if (this.isElectron) {
-      return this.appService.electronEmit('getUserOrdersAndRepayments', {id: userId, date});
+      return this.appService.electronEmit('getUserOrdersAndRepayments', {id: userId, startDate: start_date, endDate: end_date, allOrders: allOrders});
     }
-    return this.http.get(`${URL}/getUserOrdersAndRepayments/${userId}/${date}`)  as Observable<Array<object>>;
+    return this.http.get(`${URL}/getUserOrdersAndRepayments/${userId}/${start_date}/${end_date}/${allOrders}`)  as Observable<Array<object>>;
+  }
+
+  getUserRepaymentDetails(userId: string, start_date?: Date, end_date?: Date, allOrders?: boolean) {
+    if (this.isElectron) {
+      return this.appService.electronEmit('getUserRepaymentDetails', {userId: userId});
+    }
+    return this.http.get(`${URL}/getUserRepaymentDetails/${userId}`)  as Observable<Array<object>>;
   }
 
   getRemainingStock(productId: string) {

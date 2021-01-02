@@ -1,7 +1,9 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { OrderRepayment } from "./order_repayments.entity";
 import { PaymentStatus } from "./payment_statuses.entity";
 import { Product } from "./product.entity";
+import { Repayment } from "./repayment.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -20,11 +22,26 @@ export class Order extends BaseEntity {
   })
   "product": Product;
 
+  @OneToMany(type => OrderRepayment, (repayment) => repayment.order)
+  "repayments": OrderRepayment[];
+
   @Column({ type: "bigint", nullable: true })
-  "remaining_amount_tobe_paid": number;
+  "remaining_pricipal_debt": number;
+
+  @Column({ type: "bigint", nullable: true })
+  "remaining_interest_debt": number;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;
+
+  @Column({ type: "datetime", nullable: true })
+  "ordered_on": Date;
+
+  @Column({ type: "datetime", nullable: true })
+  "last_payment_date": Date;
+
+  @Column({type: "varchar", nullable: true})
+  "comments": string;
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
@@ -37,9 +54,6 @@ export class Order extends BaseEntity {
 
   @UpdateDateColumn()
   "updated_on": Date;
-
-  @Column({ type: "datetime", nullable: true })
-  "ordered_on": Date;
 
   @ManyToOne(() => PaymentStatus)
   @JoinColumn({

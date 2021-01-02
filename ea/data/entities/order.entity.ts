@@ -1,7 +1,9 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { OrderRepayment } from "./order_repayments.entity";
 import { PaymentStatus } from "./payment_statuses.entity";
 import { Product } from "./product.entity";
+import { Repayment } from "./repayment.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -13,6 +15,9 @@ export class Order extends BaseEntity {
   })
   "user": User;
 
+  @OneToMany(() => OrderRepayment, (repayment) => repayment.order)
+  "repayments": Repayment[];
+
   @ManyToOne(() => Product)
   @JoinColumn({
     name: "product_id",
@@ -21,7 +26,10 @@ export class Order extends BaseEntity {
   "product": Product;
 
   @Column({ type: "bigint", nullable: true })
-  "remaining_amount_tobe_paid": number;
+  "remaining_pricipal_debt": number;
+
+  @Column({ type: "bigint", nullable: true })
+  "remaining_interest_debt": number;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;

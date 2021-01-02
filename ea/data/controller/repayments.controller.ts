@@ -38,7 +38,7 @@ export class RepaymentController implements IRepository<Repayment> {
             const orderRepayment = new OrderRepayment();
             const paymentStatus = new PaymentStatus();
 
-            if (order.remaining_amount) {
+            if (order.remaining_amount > 0) {
               paymentStatus.id = 2;
               ordersPaidFor.payment_status = paymentStatus;
             } else {
@@ -46,7 +46,7 @@ export class RepaymentController implements IRepository<Repayment> {
               ordersPaidFor.payment_status = paymentStatus;
             }
             ordersPaidFor.id = order.id;
-            ordersPaidFor.remaining_amount_tobe_paid = order.remaining_amount;
+            ordersPaidFor.remaining_pricipal_debt = order.remaining_amount;
             const orderTransaction = await transactionalEntityManager.save(ordersPaidFor);
             orderRepayment.order = ordersPaidFor;
             orderRepayment.payment = repaymentTransaction;

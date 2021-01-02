@@ -27,7 +27,7 @@ export const UserRoutes = [
   },
   {
     method: "get",
-    route: "/getUserOrdersAndRepayments/:id/:date",
+    route: "/getUserOrdersAndRepayments/:id/:start_date/:end_date/:allOrders",
     controller: UserController,
     action: "getUserOrdersAndRepayments"
   },

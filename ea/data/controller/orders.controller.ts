@@ -41,9 +41,11 @@ export class OrderController implements IRepository<Order> {
     const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
     result.initial_cost = result.product.unit_price * result.quantity;
+    const pricipalForInterestCalculation = Number(result.remaining_pricipal_debt) || Number(result.initial_cost);
     const interestRate = result.product.rate_of_interest;
-    result.interest_for_remaining_days = (result.days_since_purchase * result.initial_cost * interestRate * 12) / 36500;
-    result.total_debt = result.initial_cost + result.interest_for_remaining_days;
+    result.interest_for_remaining_days =
+      (result.days_since_purchase * pricipalForInterestCalculation * interestRate * 12) / 36500;
+    result.total_debt = pricipalForInterestCalculation + result.interest_for_remaining_days;
     return result;
   }
 
@@ -53,14 +55,16 @@ export class OrderController implements IRepository<Order> {
     const date2 = new Date().setHours(23, 59, 59, 999);
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
     result.initial_cost = result.product.unit_price * result.quantity;
+    const pricipalForInterestCalculation = Number(result.remaining_pricipal_debt) || Number(result.initial_cost);
     const interestRate = result.product.rate_of_interest;
     const compoundingPeriodInDays = 365;
     const timesToCompound = Math.floor(result.days_since_purchase / compoundingPeriodInDays);
     const compoundingMonthsPerYear = Math.floor(365 / compoundingPeriodInDays);
     result.remaining_days = result.days_since_purchase - timesToCompound * compoundingPeriodInDays;
     result.total_with_interest_on_compound_period =
-      result.initial_cost * Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound);
-    result.interest_on_compound_period = result.total_with_interest_on_compound_period - result.initial_cost;
+      pricipalForInterestCalculation *
+      Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound);
+    result.interest_on_compound_period = result.total_with_interest_on_compound_period - pricipalForInterestCalculation;
     result.interest_for_remaining_days =
       (result.remaining_days * result.total_with_interest_on_compound_period * interestRate * 12) / 36500;
     result.total_debt = result.total_with_interest_on_compound_period + result.interest_for_remaining_days;

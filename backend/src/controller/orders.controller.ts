@@ -27,18 +27,23 @@ export class OrderController implements IRepository<Order> {
       .orderBy("order.ordered_on", "ASC")
       .getMany()
       .then((results) =>
-        results.map((result) =>
-          result.product.interest_type.name === "compound"
+        results.map((result) => {
+          return result.product.interest_type.name === "compound"
             ? this.calculateCompoundInterest(result)
-            : this.calculateSimpleInterest(result),
+            : this.calculateSimpleInterest(result)
+        }
         ),
       );
   }
 
-  calculateSimpleInterest(result: Order, date?: Date | string): Order {
+  calculateSimpleInterest(result: Order, date?: Date | string | number): Order {
     const oneDay = 24 * 60 * 60 * 1000;
-    const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-    const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+    let date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+    let date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+    if(result.payment_status.id === 3) {
+      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+      date2 = new Date(result.last_payment_date).setHours(23, 59, 59, 999);
+    }
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
     result.initial_cost = result.product.unit_price * result.quantity;
     const interestRate = result.product.rate_of_interest;
@@ -47,20 +52,46 @@ export class OrderController implements IRepository<Order> {
     return result;
   }
 
-  calculateCompoundInterest(result: Order, date?: Date | string): Order {
+  calculateCompoundInterest(result: Order, date?: Date | string | number): Order {
     const oneDay = 24 * 60 * 60 * 1000;
-    const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-    const date2 = new Date().setHours(23, 59, 59, 999);
-    result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
-    result.initial_cost = result.product.unit_price * result.quantity;
     const interestRate = result.product.rate_of_interest;
     const compoundingPeriodInDays = 365;
+    result.initial_cost = result.product.unit_price * result.quantity;
+
+    let principal, date1, date2, remainingInterestAfterPartialPayment;
+    if(result.payment_status.id === 3) {
+      principal = result.initial_cost;
+      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+      date2 = new Date(result.last_payment_date).setHours(23, 59, 59, 999);
+    }
+
+    if(result.payment_status.id === 2) {
+      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+      date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+      principal = result.remaining_pricipal_debt;
+      remainingInterestAfterPartialPayment = result.remaining_interest_debt;
+    }
+
+    if(result.payment_status.id === 1) {
+      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+      date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+      principal = result.initial_cost;
+    }
+
+    result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
+
     const timesToCompound = Math.floor(result.days_since_purchase / compoundingPeriodInDays);
     const compoundingMonthsPerYear = Math.floor(365 / compoundingPeriodInDays);
     result.remaining_days = result.days_since_purchase - timesToCompound * compoundingPeriodInDays;
     result.total_with_interest_on_compound_period =
-      result.initial_cost * Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound);
-    result.interest_on_compound_period = result.total_with_interest_on_compound_period - result.initial_cost;
+    principal * Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound);
+
+    if(result.payment_status.id ===2 && remainingInterestAfterPartialPayment) {
+      result.total_with_interest_on_compound_period =  result.total_with_interest_on_compound_period +
+      principal * Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound - 1);
+    }
+
+    result.interest_on_compound_period = result.total_with_interest_on_compound_period - principal;
     result.interest_for_remaining_days =
       (result.remaining_days * result.total_with_interest_on_compound_period * interestRate * 12) / 36500;
     result.total_debt = result.total_with_interest_on_compound_period + result.interest_for_remaining_days;

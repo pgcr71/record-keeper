@@ -46,15 +46,31 @@ export class RepaymentController implements IRepository<Repayment> {
               ordersPaidFor.payment_status = paymentStatus;
             }
             ordersPaidFor.id = order.id;
-            ordersPaidFor.remaining_amount_tobe_paid = order.remaining_amount;
+            ordersPaidFor.remaining_pricipal_debt = order.remaining_amount;
             const orderTransaction = await transactionalEntityManager.save(ordersPaidFor);
             orderRepayment.order = ordersPaidFor;
             orderRepayment.payment = repaymentTransaction;
+            orderRepayment.amount = order.paid_amount;
             const orderRepaymentTransaction = await transactionalEntityManager.save(orderRepayment);
           }
         }
       }
     });
     //return this.repository.insert({});
+  }
+
+  public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
+    console.log(request.params.id)
+    return this.repository
+      .createQueryBuilder("repayment")
+      .select([
+        "repayment",
+        "orderRepayment",
+        "orders"
+      ])
+      .leftJoin('repayment.orderRepayment', 'orderRepayment')
+      .leftJoin('orderRepayment.order', 'orders')
+      .where("repayment.user_id =:userId", {userId: request.params.id})
+      .getMany();
   }
 }

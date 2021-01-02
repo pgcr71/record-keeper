@@ -8,7 +8,7 @@
     "start": "ts-node index.ts",
     "nodemon": "nodemon",
     "migrations:gen": "ts-node ./node_modules/typeorm/cli.js migration:generate -n recordkeeper",
-    "migrations:seed": "ts-node ./node_modules/typeorm/cli.js migration:create -n seeddata",
+    "migrations:seed": "ts-node ./node_modules/typeorm/cli.js migration:create -n seeddata -d=src/seeders",
     "migrations:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migrations:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
   },

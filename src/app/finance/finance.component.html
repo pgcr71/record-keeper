@@ -1,7 +1,7 @@
 <div class='form-group' [formGroup]='orderCreateForm'>
   <mat-form-field class='mr-4' appearance="outline">
     <input matInput formControlName='product' [matAutocomplete]="productAuto" [type]="'text'">
-    <mat-label>Name of Product</mat-label>
+    <mat-label>Select Product/Category</mat-label>
     <mat-autocomplete (optionSelected) = 'onOptionSelect($event.option.value)' #productAuto="matAutocomplete" [displayWith]="productDisplayFn">
       <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
         <div class='product-name'> {{option.name }}</div>
@@ -31,7 +31,7 @@
 
   <mat-form-field class='mr-4' appearance="outline">
     <input matInput formControlName='quantity' [max]='remainingStock' [type]="'number'">
-    <mat-label>Quantity</mat-label>
+    <mat-label>Quantity/Amount</mat-label>
   </mat-form-field>
 
   <mat-form-field class='mr-4' appearance="outline">
@@ -39,6 +39,11 @@
     <mat-label>Issue Date</mat-label>
     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
     <mat-datepicker #picker1></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='comments' [max]='remainingStock' [type]="'text'">
+    <mat-label>Comments</mat-label>
   </mat-form-field>
 
   <button [disabled]='orderCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>

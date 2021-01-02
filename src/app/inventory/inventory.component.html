@@ -27,6 +27,10 @@
     <input matInput formControlName='quantity' [type]="'Quantity'">
     <mat-label>Quantity</mat-label>
   </mat-form-field>
+  <mat-form-field class='mr-4' appearance="outline">
+    <input matInput formControlName='comments' [type]="'text'">
+    <mat-label>Comments</mat-label>
+  </mat-form-field>
   <button [disabled]='inventoryCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
 </div>
 

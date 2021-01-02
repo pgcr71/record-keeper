@@ -33,3 +33,14 @@
 
 textarea { resize: none !important }
 
+.table-checkbox-header-column, .table-checkbox-column {
+  flex: 0 0 6%;
+}
+
+.product-details-column, .product-details-header-column {
+  flex: 0 0 25%;
+}
+
+.interest-details-column, .interest-details-header-column {
+  flex: 0 0 25%;
+}

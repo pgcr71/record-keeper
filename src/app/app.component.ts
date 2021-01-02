@@ -19,17 +19,22 @@ export class AppComponent implements OnInit {
   displaySideNav: boolean;
   links: Array<{name: string, link: string}> = [
     {
-    name: 'Inventory',
-    link: 'products'
-  },
-  {
-    name: "Repayments",
-    link: "repayment"
-  },
-   {
-     name: "Billing",
-     link: "billing"
-   }
+      name: 'Inventory',
+      link: 'products'
+    },
+    {
+      name: 'Orders',
+      link: 'orders'
+    },
+    {
+      name: "Repayment",
+      link: "billing"
+    },
+    {
+      name: "Summary",
+      link: "repayment"
+    },
+
 ]
   constructor(
     private readonly bps: BreakpointService

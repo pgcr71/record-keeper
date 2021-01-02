@@ -54,7 +54,8 @@ export class FinanceComponent implements OnInit {
       user: ['', [Validators.required, RequireMatch]],
       product: ['', [Validators.required, RequireMatch]],
       quantity: [null, [Validators.required]],
-      ordered_on: [new Date(), [Validators.required]]
+      ordered_on: [new Date(), [Validators.required]],
+      comments: ['']
     });
     // this.orderCreateForm.get('quantity').disable();
     this.is.getOrders().subscribe(result => {

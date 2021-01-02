@@ -26,6 +26,12 @@ export const RepaymentRoutes = [
     route: "/repayments/:id",
     controller: RepaymentController,
     action: "remove"
+  },
+  {
+    method: "get",
+    route: "/getUserRepaymentDetails/:id",
+    controller: RepaymentController,
+    action: "getUserRepaymentDetails"
   }
 ]
 

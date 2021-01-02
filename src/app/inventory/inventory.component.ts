@@ -45,7 +45,8 @@ export class InventoryComponent implements OnInit {
       rate_of_interest: [0, Validators.required],
       interest_type: [null, Validators.required],
       unit_price: ['', Validators.required],
-      lot_number: [null, Validators.required]
+      lot_number: [null, Validators.required],
+      comments: ['']
     });
     this.is.get().subscribe(result => {
       console.log(result);
