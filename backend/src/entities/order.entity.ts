@@ -25,10 +25,10 @@ export class Order extends BaseEntity {
   @OneToMany(type => OrderRepayment, (repayment) => repayment.order)
   "repayments": OrderRepayment[];
 
-  @Column({ type: "bigint", nullable: true })
+  @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
   "remaining_pricipal_debt": number;
 
-  @Column({ type: "bigint", nullable: true })
+  @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
   "remaining_interest_debt": number;
 
   @Column({ type: "bigint", nullable: false, default: 0 })

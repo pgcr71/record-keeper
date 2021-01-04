@@ -41,7 +41,7 @@ export class RepaymentsComponent implements OnInit {
   today: Date = new Date();
   displayedColumns = ['period', 'productInfo',  'interestDetails',  'totalDebt', 'remainingAmount'];
   previousPaymentsColumns = ['paymentDate', 'price'];
-  subPaymentsColumns = ['paymentDate', 'price']
+  subPaymentsColumns = ['paymentDate', 'price', 'orderDetails']
   constructor(
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar,

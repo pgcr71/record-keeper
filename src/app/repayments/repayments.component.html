@@ -142,16 +142,29 @@
             <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
           </ng-container>
 
-          <ng-container matColumnDef="price">
-            <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Product Details</mat-header-cell>
+          <ng-container matColumnDef="orderDetails">
+            <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Amount Paid</mat-header-cell>
             <mat-cell class='product-details-column' *matCellDef="let element">
               <div>
-                <div>{{element['amount']}}</div>
+                <div>{{element['order'] && element['order']['product'] && element['order']['product'].name}}</div>
               </div>
             </mat-cell>
             <mat-footer-cell class='product-details-column' *matFooterCellDef>{{totalPrincipal | currency:'inr':'₹': '1.0-2'}}
             </mat-footer-cell>
           </ng-container>
+
+          <ng-container matColumnDef="price">
+            <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Amount Paid</mat-header-cell>
+            <mat-cell class='product-details-column' *matCellDef="let element">
+              <div>
+                <div>{{element['principal_amount']}}</div>
+                <div>{{element['interest_amount']}}</div>
+              </div>
+            </mat-cell>
+            <mat-footer-cell class='product-details-column' *matFooterCellDef>{{totalPrincipal | currency:'inr':'₹': '1.0-2'}}
+            </mat-footer-cell>
+          </ng-container>
+
           <mat-header-row *matHeaderRowDef="subPaymentsColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: subPaymentsColumns;"></mat-row>
           <mat-footer-row *matFooterRowDef='subPaymentsColumns'></mat-footer-row>

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { FinanceService } from '../finance/finance.service';
-import { get } from 'lodash'
+import { get, result } from 'lodash'
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -39,7 +39,7 @@ export class BillingComponent implements OnInit {
     total_debt: number;
 
    }> = [];
-  displayedColumns = ['select', 'period', 'productInfo',  'interestDetails',  'totalDebt', 'remainingAmount']
+  displayedColumns = ['select', 'period', 'productInfo',  'interestDetails',  'totalDebt', 'debts', 'remainingAmount']
   totalPrincipal: number;
   totalInterest: number;
   totalDebt: number;
@@ -91,6 +91,10 @@ export class BillingComponent implements OnInit {
   }
 
     calculateRemaining(amount) {
+      if(!amount) {
+        return;
+      }
+
       this.selection.clear();
         const user = this.billingCreateForm.get('user').value;
         if(!user || !this.billingDetails.length) {
@@ -100,14 +104,25 @@ export class BillingComponent implements OnInit {
         let sumOfFiltered = 0;
         let filteredResults = this.billingDetails.filter((row) => {
           let include = false;
-          row.remaining_amount= row.remaining_amount_copy;
+          row['principalToBeDebited'] = 0;
+          row['interestToBeDebited'] = 0;
+          row['remainingPrincipalTobePaid'] = 0;
+          row['remainingInterestTobePaid'] = 0;
+          row['remaining_principal_debt'] = row['remaining_principal_debt_copy'];
+          row['remaining_interest_debt'] = row['remaining_interest_debt_copy'];
+          row.remaining_amount = row.remaining_amount_copy;
           const diff = sum - Number(amount)
           if (diff <= 0) {
             include = true;
             row.remaining_amount = 0;
 
-            row.paid_amount = row.remaining_amount_copy;
-            sumOfFiltered = sumOfFiltered + Number(row.remaining_amount_copy)
+            sumOfFiltered = sumOfFiltered + Number(row.remaining_amount_copy);
+
+            if(row.interest_type === 'compound') {
+              this.calculateCompoundInterest(row, new Date(), Number(row.remaining_amount_copy));
+            } else {
+              this.calculateSimpleInterest(row , new Date(), Number(row.remaining_amount_copy))
+            }
           }
 
           sum = row.remaining_amount_copy + sum;
@@ -116,21 +131,42 @@ export class BillingComponent implements OnInit {
 
         const last = filteredResults.length - 1;
       if (last > -1) {
-        const remainingAmount = sumOfFiltered - amount;
+        const remainingAmount = (amount - (sumOfFiltered - filteredResults[last].remaining_amount_copy));
         if(filteredResults[last].interest_type === 'compound') {
-          this.calculateCompoundInterest(filteredResults[last], new Date(), Number(amount));
+          this.calculateCompoundInterest(filteredResults[last], new Date(), Number(remainingAmount));
+        } else {
+          this.calculateSimpleInterest(filteredResults[last], new Date(), Number(remainingAmount))
         }
-
-        filteredResults[last].remaining_amount = remainingAmount;
-
-        filteredResults[last].paid_amount = filteredResults[last].remaining_amount_copy - filteredResults[last].remaining_amount ;
       };
       this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + next.remaining_amount, 0);
         this.selection.deselect(...this.billingDetails)
         this.selection.select(...filteredResults);
     }
 
+    calculateSimpleInterest(result: any, date?: Date | string | number, amount?: number) {
+      result['principalToBeDebited'] = 0;
+      result['interestToBeDebited'] = 0;
+      result['remainingPrincipalTobePaid'] = 0;
+      result['remainingInterestTobePaid'] = 0;
+      const oneDay = 24 * 60 * 60 * 1000;
+      const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
+      const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+      const days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
+      const interestRate = result.rate_of_interest;
+      result['principalToBeDebited'] =
+        amount / (1 + (days_since_purchase* 12* interestRate/36500))
+      result['interestToBeDebited'] =  amount - result['principalToBeDebited'];
+      result['remainingPrincipalTobePaid'] = result['remaining_principal_debt'] - result['principalToBeDebited'];
+      result['remainingInterestTobePaid'] = result['remaining_interest_debt'] - result['interestToBeDebited'];
+
+      return result;
+    }
+
     calculateCompoundInterest(result: any, date?: Date | string | number, amount?: number): Order {
+      result['principalToBeDebited'] = 0;
+      result['interestToBeDebited'] = 0;
+      result['remainingPrincipalTobePaid'] = 0;
+      result['remainingInterestTobePaid'] = 0;
       const oneDay = 24 * 60 * 60 * 1000;
       const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
       const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
@@ -141,8 +177,10 @@ export class BillingComponent implements OnInit {
       const compoundingMonthsPerYear = Math.floor(365 / compoundingPeriodInDays);
       const remaining_days = days_since_purchase - timesToCompound * compoundingPeriodInDays;
       result['principalToBeDebited'] =
-        amount / (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) + (remaining_days*interestRate*12/36500));
+        amount / (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) * (1 + (remaining_days*interestRate*12)/36500));
       result['interestToBeDebited'] =  amount - result['principalToBeDebited'];
+      result['remainingPrincipalTobePaid'] = result['remaining_principal_debt'] - result['principalToBeDebited'];
+      result['remainingInterestTobePaid'] = result['remaining_interest_debt'] - result['interestToBeDebited'];
 
       return result;
     }
@@ -216,15 +254,22 @@ export class BillingComponent implements OnInit {
       "created_on": get(results, 'created_on', 0),
       "ordered_on": get(results, 'ordered_on', 0),
       "today": new Date(),
+      "interest_accrued": Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)),
+      "remaining_principal_debt":Number(get(results, 'payment_status.id', null)) === 1?Number(get(results, 'initial_cost', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
+      "remaining_principal_debt_copy":Number(get(results, 'payment_status.id', null)) === 1?Number(get(results, 'initial_cost', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
+      "remaining_interest_debt":Number(get(results, 'payment_status.id', null)) === 1? Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)): Number(get(results, 'remaining_interest_debt', 0)),
+      "remaining_interest_debt_copy":Number(get(results, 'payment_status.id', null)) === 1? Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)): Number(get(results, 'remaining_interest_debt', 0)),
       "remaining_amount":  Number(get(results, 'payment_status.id', null)) === 1 ?
-       Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
+       Number(get(results, 'total_debt', 0)):
+       Number(get(results, 'remaining_pricipal_debt', 0)) + Number(get(results, 'remaining_interest_debt', 0)),
       "remaining_amount_copy":  Number(get(results, 'payment_status.id', null)) === 1 ?
-       Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
+       Number(get(results, 'total_debt', 0)):
+       Number(get(results, 'remaining_pricipal_debt', 0)) +  Number(get(results, 'remaining_interest_debt', 0)),
       "paid_amount" : 0,
       "payment_status": get(results, 'payment_status', {}),
-      "interest_accrued": Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)),
       "total_debt":  Number(get(results, 'payment_status.id', null)) === 1 ?
-      Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
+      Number(get(results, 'total_debt', 0)):
+      Number(get(results, 'remaining_pricipal_debt', 0)) +  Number(get(results, 'remaining_interest_debt', 0)),
     }
   }
 

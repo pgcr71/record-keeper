@@ -111,13 +111,29 @@
 
   <ng-container matColumnDef="totalDebt" >
     <mat-header-cell *matHeaderCellDef> Total Debt</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element['total_debt']| currency:'inr':'₹': '1.0-2'}} </mat-cell>
+    <mat-cell *matCellDef="let element"> {{element['total_debt'] | currency:'inr':'₹': '1.0-2'}} </mat-cell>
     <mat-footer-cell *matFooterCellDef>{{totalDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="debts" >
+    <mat-header-cell *matHeaderCellDef>Amounts That Will Be Debited</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>{{element['principalToBeDebited'] | currency:'inr':'₹': '1.0-2'}}</div>
+        <div>{{element['interestToBeDebited'] | currency:'inr':'₹': '1.0-2'}}</div>
+      </div>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{totalRemainingDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
   </ng-container>
 
   <ng-container matColumnDef="remainingAmount" >
     <mat-header-cell *matHeaderCellDef>Remaining Amount To Be Paid</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element['remaining_amount'] | currency:'inr':'₹': '1.0-2'}} </mat-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>{{element['remainingPrincipalTobePaid'] | currency:'inr':'₹': '1.0-2'}}</div>
+        <div>{{element['remainingInterestTobePaid'] | currency:'inr':'₹': '1.0-2'}}</div>
+      </div>
+    </mat-cell>
     <mat-footer-cell *matFooterCellDef>{{totalRemainingDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
   </ng-container>
 

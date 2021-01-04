@@ -19,8 +19,11 @@ export class OrderRepayment extends BaseEntity {
   })
   "payment": Repayment;
 
-  @Column({ type: "decimal", nullable: false, default: 0 })
-  "amount": number;
+  @Column({ type: "decimal", nullable: false, default: 0, precision:5, scale:2 })
+  "principal_amount": number;
+
+  @Column({ type: "decimal", nullable: false, default: 0, precision:5, scale:2 })
+  "interest_amount": number;
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
