@@ -38,5 +38,17 @@ export class RepaymentsListener {
         event.returnValue = err;
       }
     });
+
+    ipcMain.on("getUserRepaymentDetails", async (event: IpcMainEvent, repayment: Repayment) => {
+      try {
+        event.returnValue = await this.pr.getUserRepaymentDetails(
+          { params: repayment } as never,
+          {} as never,
+          {} as never,
+        );
+      } catch (err) {
+        event.returnValue = err;
+      }
+    });
   }
 }

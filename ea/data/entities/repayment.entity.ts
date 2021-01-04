@@ -13,10 +13,10 @@ export class Repayment extends BaseEntity {
   "user": User;
 
   @OneToMany(() => OrderRepayment, (or) => or.payment)
-  "orderRepayment": OrderRepayment;
+  "orderRepayment": OrderRepayment[];
 
-  @Column({ type: "bigint", nullable: false, default: 0 })
-  "price": string;
+  @Column({ type: "decimal", nullable: false, default: 0, precision: 10, scale: 2 })
+  "price": number;
 
   @Column({ type: "varchar", length: 255, nullable: true })
   "comments": string;

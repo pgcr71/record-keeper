@@ -15,9 +15,6 @@ export class Order extends BaseEntity {
   })
   "user": User;
 
-  @OneToMany(() => OrderRepayment, (repayment) => repayment.order)
-  "repayments": Repayment[];
-
   @ManyToOne(() => Product)
   @JoinColumn({
     name: "product_id",
@@ -25,14 +22,26 @@ export class Order extends BaseEntity {
   })
   "product": Product;
 
-  @Column({ type: "bigint", nullable: true })
+  @OneToMany((type) => OrderRepayment, (repayment) => repayment.order)
+  "repayments": OrderRepayment[];
+
+  @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
   "remaining_pricipal_debt": number;
 
-  @Column({ type: "bigint", nullable: true })
+  @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
   "remaining_interest_debt": number;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;
+
+  @Column({ type: "datetime", nullable: true })
+  "ordered_on": Date;
+
+  @Column({ type: "datetime", nullable: true })
+  "last_payment_date": Date;
+
+  @Column({ type: "varchar", nullable: true })
+  "comments": string;
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;
@@ -45,9 +54,6 @@ export class Order extends BaseEntity {
 
   @UpdateDateColumn()
   "updated_on": Date;
-
-  @Column({ type: "datetime", nullable: true })
-  "ordered_on": Date;
 
   @ManyToOne(() => PaymentStatus)
   @JoinColumn({

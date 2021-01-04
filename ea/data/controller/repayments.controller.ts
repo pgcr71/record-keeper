@@ -38,7 +38,7 @@ export class RepaymentController implements IRepository<Repayment> {
             const orderRepayment = new OrderRepayment();
             const paymentStatus = new PaymentStatus();
 
-            if (order.remaining_amount > 0) {
+            if (Number(order.remainingPrincipalTobePaid) > 0 || Number(order.remainingInterestTobePaid) > 0) {
               paymentStatus.id = 2;
               ordersPaidFor.payment_status = paymentStatus;
             } else {
@@ -46,15 +46,30 @@ export class RepaymentController implements IRepository<Repayment> {
               ordersPaidFor.payment_status = paymentStatus;
             }
             ordersPaidFor.id = order.id;
-            ordersPaidFor.remaining_pricipal_debt = order.remaining_amount;
+            ordersPaidFor.remaining_pricipal_debt = Number(order.remainingPrincipalTobePaid);
+            ordersPaidFor.remaining_interest_debt = Number(order.remainingInterestTobePaid);
             const orderTransaction = await transactionalEntityManager.save(ordersPaidFor);
             orderRepayment.order = ordersPaidFor;
             orderRepayment.payment = repaymentTransaction;
+            orderRepayment.principal_amount = order.principalToBeDebited;
+            orderRepayment.interest_amount = order.interestToBeDebited;
             const orderRepaymentTransaction = await transactionalEntityManager.save(orderRepayment);
           }
         }
       }
     });
     //return this.repository.insert({});
+  }
+
+  public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
+    console.log(request.params.id);
+    return this.repository
+      .createQueryBuilder("repayment")
+      .select(["repayment", "orderRepayment", "orders", "product"])
+      .leftJoin("repayment.orderRepayment", "orderRepayment")
+      .leftJoin("orderRepayment.order", "orders")
+      .leftJoin("orders.product", "product")
+      .where("repayment.user_id =:userId", { userId: request.params.id })
+      .getMany();
   }
 }

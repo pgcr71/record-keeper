@@ -230,6 +230,7 @@ export class BillingComponent implements OnInit {
 
   getUserOrders(userInfo, date: Date, endDate?: Date) {
     this.is.getAllUserOrders(userInfo.id, date, endDate).subscribe((data: Array<object>) => {
+      console.log(data)
      this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
      this.dataSource =  new MatTableDataSource<any>(this.billingDetails);
       this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
