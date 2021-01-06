@@ -7,21 +7,21 @@ import { get } from 'lodash';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { FinanceService } from '../finance/finance.service';
-import { RepaymentService } from './repayment.service';
+import { SummaryService } from './summary.service';
 
 @Component({
   selector: 'app-repayments',
-  templateUrl: './repayments.component.html',
-  styleUrls: ['./repayments.component.scss'],
+  templateUrl: './summary.component.html',
+  styleUrls: ['./summary.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ]
 })
-export class RepaymentsComponent implements OnInit {
+export class SummaryComponent implements OnInit {
 
   repaymentForm: FormGroup;
   userSearch: Observable<any>;
@@ -39,22 +39,22 @@ export class RepaymentsComponent implements OnInit {
   oneYearBeforeFromToday: Date;
   totalRemainingDebt: number;
   today: Date = new Date();
-  displayedColumns = ['period', 'productInfo',  'interestDetails',  'totalDebt', 'remainingAmount'];
+  displayedColumns = ['period', 'productInfo', 'interestDetails', 'totalDebt', 'remainingAmount'];
   previousPaymentsColumns = ['paymentDate', 'price'];
   subPaymentsColumns = ['paymentDate', 'price', 'orderDetails']
   constructor(
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar,
-    private readonly rs: RepaymentService,
+    private readonly rs: SummaryComponent,
     private readonly fs: FinanceService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.oneYearBeforeFromToday = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
     this.repaymentForm = this.fb.group({
-        user: [null, [Validators.required]],
-        start_date: [this.oneYearBeforeFromToday, [Validators.required]],
-        end_date: [this.today, Validators.required],
+      user: [null, [Validators.required]],
+      start_date: [this.oneYearBeforeFromToday, [Validators.required]],
+      end_date: [this.today, Validators.required],
     });
 
     this.fs.getAllUsers().subscribe((users) => {
@@ -64,11 +64,11 @@ export class RepaymentsComponent implements OnInit {
     });
 
     this.userSearch = this.repaymentForm.get('user').valueChanges
-    .pipe(
-      startWith(''),
-      map(value => value && (typeof value === 'string' ? value : value['first_name'] + " " + value['last_name'])),
-      map(name => name ? this._userFilter(name) : this.users.slice())
-    );
+      .pipe(
+        startWith(''),
+        map(value => value && (typeof value === 'string' ? value : value['first_name'] + " " + value['last_name'])),
+        map(name => name ? this._userFilter(name) : this.users.slice())
+      );
 
   }
 
@@ -76,10 +76,10 @@ export class RepaymentsComponent implements OnInit {
     const filterValue = name.toLowerCase();
     return this.users.filter(option =>
       (option['first_name'].toLowerCase()).includes(filterValue) ||
-       (option['last_name'].toLowerCase()).includes(filterValue) ||
-       (option['phone_number'].toLowerCase()).includes(filterValue) ||
-       (option['first_name'] +" "+ option['last_name']).toLowerCase().indexOf(filterValue) === 0
-       );
+      (option['last_name'].toLowerCase()).includes(filterValue) ||
+      (option['phone_number'].toLowerCase()).includes(filterValue) ||
+      (option['first_name'] + " " + option['last_name']).toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
   userDisplayFn(user): string {
@@ -88,7 +88,7 @@ export class RepaymentsComponent implements OnInit {
 
   onOptionClick(userInfo) {
     this.userInfo = userInfo;
-    this.getUserOrders(userInfo, this.oneYearBeforeFromToday, this.today );
+    this.getUserOrders(userInfo, this.oneYearBeforeFromToday, this.today);
   }
 
   getUserOrders(userInfo, date?: Date, endDate?: Date) {
@@ -111,7 +111,7 @@ export class RepaymentsComponent implements OnInit {
       'quantity': get(results, 'quantity', 0),
       'comments': get(results, 'comments', ''),
       "product_name": get(results, 'product.name', 0),
-      'unit_price':  Number(get(results, 'product.unit_price', 0)),
+      'unit_price': Number(get(results, 'product.unit_price', 0)),
       'rate_of_interest': Number(get(results, 'product.rate_of_interest', 0)),
       'interest_type': get(results, 'product.interest_type.name', 0),
       'lot_number': get(results, 'product.lot_number', 0),
@@ -122,12 +122,12 @@ export class RepaymentsComponent implements OnInit {
       "today": new Date(),
       "repayments": get(results, 'repayments', {}),
       "payment_status": get(results, 'payment_status.id', null),
-      "remaining_amount":   Number(get(results, 'payment_status.id', null)) === 1 ?
-      Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0)),
-      "paid_amount" : 0,
+      "remaining_amount": Number(get(results, 'payment_status.id', null)) === 1 ?
+        Number(get(results, 'total_debt', 0)) : Number(get(results, 'remaining_pricipal_debt', 0)),
+      "paid_amount": 0,
       "interest_accrued": Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)),
       "total_debt": Number(get(results, 'payment_status.id', null)) === 1 ?
-      Number(get(results, 'total_debt', 0)): Number(get(results, 'remaining_pricipal_debt', 0))
+        Number(get(results, 'total_debt', 0)) : Number(get(results, 'remaining_pricipal_debt', 0))
     }
   }
 

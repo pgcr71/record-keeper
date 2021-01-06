@@ -8,7 +8,7 @@ import { ElectronService } from 'ngx-electron';
 @Injectable({
   providedIn: 'root'
 })
-export class RepaymentService {
+export class SummaryService {
   isElectron: boolean;
 
   constructor(
@@ -21,10 +21,10 @@ export class RepaymentService {
 
   add(totalPayments, orderRepayments) {
     if (this.isElectron) {
-      return this.appService.electronEmit('saveRepayments', {totalAmount: totalPayments, orderPaidFor: orderRepayments});
+      return this.appService.electronEmit('saveRepayments', { totalAmount: totalPayments, orderPaidFor: orderRepayments });
     }
 
-    return this.http.post(URL + '/repayments', {totalAmount: totalPayments, orderPaidFor: orderRepayments});
+    return this.http.post(URL + '/repayments', { totalAmount: totalPayments, orderPaidFor: orderRepayments });
   }
 
   get(): Observable<Array<object>> {
