@@ -16,7 +16,7 @@ export class Repayment extends BaseEntity {
   @OneToMany(type => OrderRepayment, (or) => or.payment)
   "orderRepayment": OrderRepayment[];
 
-  @Column({ type: "decimal", nullable: false, default: 0, precision: 10, scale: 2 })
+  @Column({ type: "decimal", nullable: false, default: 0, precision: 20, scale: 2 })
   "price": number;
 
   @Column({ type: "varchar", length: 255, nullable: true })

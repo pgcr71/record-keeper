@@ -25,10 +25,10 @@ export class Order extends BaseEntity {
   @OneToMany(type => OrderRepayment, (repayment) => repayment.order)
   "repayments": OrderRepayment[];
 
-  @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
+  @Column({ type: "decimal", nullable: true, precision: 20, scale: 2 })
   "remaining_pricipal_debt": number;
 
-  @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
+  @Column({ type: "decimal", nullable: true, precision: 20, scale: 2 })
   "remaining_interest_debt": number;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
@@ -40,7 +40,7 @@ export class Order extends BaseEntity {
   @Column({ type: "datetime", nullable: true })
   "last_payment_date": Date;
 
-  @Column({type: "varchar", nullable: true})
+  @Column({ type: "varchar", nullable: true })
   "comments": string;
 
   @Column({ type: "varchar", length: 36, nullable: true })

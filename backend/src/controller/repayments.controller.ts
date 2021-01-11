@@ -28,7 +28,6 @@ export class RepaymentController implements IRepository<Repayment> {
       repayments.user = amount.user;
       repayments.paid_on = amount.paid_on;
       repayments.price = amount.price;
-      console.log(repayments);
       const repaymentTransaction = await transactionalEntityManager.save(repayments);
       if (request.body && request.body.orderPaidFor) {
         for (let i = 0; i < request.body.orderPaidFor.length; i++) {
@@ -38,7 +37,7 @@ export class RepaymentController implements IRepository<Repayment> {
             const orderRepayment = new OrderRepayment();
             const paymentStatus = new PaymentStatus();
 
-            if (Number(order.remainingPrincipalTobePaid) >0 || Number(order.remainingInterestTobePaid) >0) {
+            if (Number(order.remainingPrincipalTobePaid) > 0 || Number(order.remainingInterestTobePaid) > 0) {
               paymentStatus.id = 2;
               ordersPaidFor.payment_status = paymentStatus;
             } else {
@@ -46,13 +45,14 @@ export class RepaymentController implements IRepository<Repayment> {
               ordersPaidFor.payment_status = paymentStatus;
             }
             ordersPaidFor.id = order.id;
-            ordersPaidFor.remaining_pricipal_debt =  Number(order.remainingPrincipalTobePaid);
+            ordersPaidFor.remaining_pricipal_debt = Number(order.remainingPrincipalTobePaid);
             ordersPaidFor.remaining_interest_debt = Number(order.remainingInterestTobePaid);
+            ordersPaidFor.last_payment_date = amount.paid_on;
             const orderTransaction = await transactionalEntityManager.save(ordersPaidFor);
             orderRepayment.order = ordersPaidFor;
             orderRepayment.payment = repaymentTransaction;
-            orderRepayment.principal_amount = order.principalToBeDebited;
-            orderRepayment.interest_amount = order.interestToBeDebited;
+            orderRepayment.principal_amount = Number(order.principalToBeDebited);
+            orderRepayment.interest_amount = Number(order.interestToBeDebited);
             const orderRepaymentTransaction = await transactionalEntityManager.save(orderRepayment);
           }
         }
@@ -74,7 +74,7 @@ export class RepaymentController implements IRepository<Repayment> {
       .leftJoin('repayment.orderRepayment', 'orderRepayment')
       .leftJoin('orderRepayment.order', 'orders')
       .leftJoin('orders.product', 'product')
-      .where("repayment.user_id =:userId", {userId: request.params.id})
+      .where("repayment.user_id =:userId", { userId: request.params.id })
       .getMany();
   }
 }

@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from './modals/add-user/add-user.component';
 import { RequireMatch } from '../shared/validators/require-match.validator';
 import { get } from 'lodash';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { Moment } from 'moment';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -41,7 +43,7 @@ export class FinanceComponent implements OnInit {
   maxDate = new Date();
   remainingStock: number;
   selectedProduct: void;
-  stockInfo: {quantity: number; sold: number};
+  stockInfo: { quantity: number; sold: number };
   constructor(
     private is: FinanceService,
     private readonly fb: FormBuilder,
@@ -72,18 +74,18 @@ export class FinanceComponent implements OnInit {
     });
 
     this.userSearch = this.orderCreateForm.get('user').valueChanges
-    .pipe(
-      startWith(''),
-      map(value => value && (typeof value === 'string' ? value : value['first_name'] + " " + value['last_name'])),
-      map(name => name ? this._userFilter(name) : this.users.slice())
-    );
+      .pipe(
+        startWith(''),
+        map(value => value && (typeof value === 'string' ? value : value['first_name'] + " " + value['last_name'])),
+        map(name => name ? this._userFilter(name) : this.users.slice())
+      );
 
     this.productSearch = this.orderCreateForm.get('product').valueChanges
-    .pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? value : value.name),
-      map(name => name ? this._productFilter(name) : this.products.slice()),
-    );
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value.name),
+        map(name => name ? this._productFilter(name) : this.products.slice()),
+      );
   }
 
   userDisplayFn(user): string {
@@ -91,10 +93,10 @@ export class FinanceComponent implements OnInit {
   }
 
   productDisplayFn(product): string {
-    if(product && !product.name) {
+    if (product && !product.name) {
       return "";
     }
-    return product && product.name ? product.name: '';
+    return product && product.name ? product.name : '';
   }
 
   private _userFilter(name: string) {
@@ -102,10 +104,10 @@ export class FinanceComponent implements OnInit {
 
     return this.users.filter(option =>
       (option['first_name'].toLowerCase()).includes(filterValue) ||
-       (option['last_name'].toLowerCase()).includes(filterValue) ||
-       (option['phone_number'].toLowerCase()).includes(filterValue) ||
-       (option['first_name'] +" "+ option['last_name']).toLowerCase().indexOf(filterValue) === 0
-       );
+      (option['last_name'].toLowerCase()).includes(filterValue) ||
+      (option['phone_number'].toLowerCase()).includes(filterValue) ||
+      (option['first_name'] + " " + option['last_name']).toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
   private _productFilter(name: string) {
@@ -120,10 +122,10 @@ export class FinanceComponent implements OnInit {
   }
 
   getRemainingCount(productId: string) {
-      this.is.getRemainingStock(productId).subscribe((data) => {
-        this.stockInfo = data;
-        this.remainingStock = Number(data.quantity) - Number(data.sold);
-      })
+    this.is.getRemainingStock(productId).subscribe((data) => {
+      this.stockInfo = data;
+      this.remainingStock = Number(data.quantity) - Number(data.sold);
+    })
   }
 
   addUser() {
@@ -138,24 +140,25 @@ export class FinanceComponent implements OnInit {
     event.preventDefault();
     if (this.orderCreateForm.valid) {
       console.log(this.orderCreateForm)
+      this.orderCreateForm.value.ordered_on = this.orderCreateForm.value.ordered_on.toISOString();
       this.is.saveOrders(this.orderCreateForm.value)
-      .subscribe(() => {
+        .subscribe(() => {
           this.order = [...this.order, this.orderCreateForm.value];
           this.orderCreateForm.reset({
             product: '',
-            user:'',
+            user: '',
             quantity: 0
           });
           this.snackBar.open('Data Saved Succesfully', "Close", {
             duration: 2000
-          } )
-      }, error => {
-        console.log(error)
-        this.snackBar.open(error.error.sqlMessage, "Close", {
-          duration: 2000,
-          panelClass: ['waring-snackbar']
-        } )
-      })
+          })
+        }, error => {
+          console.log(error)
+          this.snackBar.open(error.error.sqlMessage, "Close", {
+            duration: 2000,
+            panelClass: ['waring-snackbar']
+          })
+        })
     }
   }
 }

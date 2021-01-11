@@ -42,10 +42,12 @@ export class SummaryComponent implements OnInit {
   displayedColumns = ['period', 'productInfo', 'interestDetails', 'totalDebt', 'remainingAmount'];
   previousPaymentsColumns = ['paymentDate', 'price'];
   subPaymentsColumns = ['paymentDate', 'price', 'orderDetails']
+  previousPaidPayments: any;
+  totalPrincipalRemaining: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar,
-    private readonly rs: SummaryComponent,
+    private readonly rs: SummaryService,
     private readonly fs: FinanceService
   ) { }
 
@@ -92,17 +94,24 @@ export class SummaryComponent implements OnInit {
   }
 
   getUserOrders(userInfo, date?: Date, endDate?: Date) {
-    this.fs.getUserRepaymentDetails(userInfo.id).subscribe((repayments) => {
-      this.repayments = repayments;
-    })
-    // this.fs.getAllUserOrders(userInfo.id, date, endDate, true).subscribe((data: Array<object>) => {
-    //  this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
-    //  this.dataSource =  new MatTableDataSource<any>(this.billingDetails);
-    //   this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
-    //   this.totalInterest = this.billingDetails.reduce((acc, next) => acc + next.interest_accrued, 0);
-    //   this.totalDebt = this.billingDetails.reduce((acc, next) => acc + next.total_debt, 0);
-    //   this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + next.remaining_amount, 0);
-    // })
+    if (userInfo && userInfo.id) {
+      this.fs.getUserRepaymentDetails(userInfo.id).subscribe((repayments) => {
+        this.repayments = repayments;
+
+      })
+      this.fs.getAllUserOrders(userInfo.id, null, endDate, true).subscribe((data: Array<object>) => {
+        this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
+        this.dataSource = new MatTableDataSource<any>(this.billingDetails);
+        this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
+        this.totalInterest = this.billingDetails.reduce((acc, next) => acc + next.interest_accrued, 0);
+        this.totalDebt = this.billingDetails.reduce((acc, next) => acc + next.total_debt, 0);
+        this.totalPrincipalRemaining = this.billingDetails.reduce((acc, next) => acc + next.remaining_principal_debt, 0);
+        this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + next.remaining_amount, 0) + this.totalInterest;
+        this.previousPaidPayments = this.billingDetails.reduce((acc, element) =>
+          acc + Number(get(element, 'repayments', []).reduce((acc, next) => acc + Number(next.principal_amount) + Number(next.interest_amount), 0))
+          , 0);
+      })
+    }
   }
 
   formatData(results) {
@@ -122,17 +131,12 @@ export class SummaryComponent implements OnInit {
       "today": new Date(),
       "repayments": get(results, 'repayments', {}),
       "payment_status": get(results, 'payment_status.id', null),
-      "remaining_amount": Number(get(results, 'payment_status.id', null)) === 1 ?
-        Number(get(results, 'total_debt', 0)) : Number(get(results, 'remaining_pricipal_debt', 0)),
       "paid_amount": 0,
+      "remaining_principal_debt": Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
+      "remaining_interest_debt": Number(get(results, 'remaining_interest_debt', 0)) || 0,
       "interest_accrued": Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)),
-      "total_debt": Number(get(results, 'payment_status.id', null)) === 1 ?
-        Number(get(results, 'total_debt', 0)) : Number(get(results, 'remaining_pricipal_debt', 0))
+      "total_debt": Number(get(results, 'total_debt', 0))
     }
-  }
-
-  calculateRemaining(value: any) {
-    throw new Error('Method not implemented.');
   }
 
   onSubmit() {

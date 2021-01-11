@@ -10,10 +10,10 @@ export class Product extends BaseEntity {
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;
 
-  @Column({ type: "decimal", nullable: false, default: 0, precision: 10, scale: 2 })
+  @Column({ type: "decimal", nullable: false, default: 0, precision: 20, scale: 2 })
   "unit_price": number;
 
-  @Column({ type: "decimal", nullable: true, default: 0, precision: 10, scale: 2 })
+  @Column({ type: "decimal", nullable: true, default: 0, precision: 20, scale: 2 })
   "rate_of_interest": number;
 
   @Column({ type: "bigint", nullable: true, default: 0 })

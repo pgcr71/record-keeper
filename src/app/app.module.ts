@@ -14,6 +14,7 @@ import { ContentComponent } from './content/content.component';
 import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material/material.module';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +37,8 @@ import { MaterialModule } from './shared/material/material.module';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    { provide: AUTOID, useClass: AutoID }
+    { provide: AUTOID, useClass: AutoID },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-IN' }
   ],
   bootstrap: [AppComponent],
   entryComponents: [ToasterComponent]

@@ -123,7 +123,7 @@
         <div>{{element['interestToBeDebited'] | currency:'inr':'₹': '1.0-2'}}</div>
       </div>
     </mat-cell>
-    <mat-footer-cell *matFooterCellDef>{{totalRemainingDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
+    <mat-footer-cell *matFooterCellDef>{{totalPaid | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
   </ng-container>
 
   <ng-container matColumnDef="remainingAmount" >

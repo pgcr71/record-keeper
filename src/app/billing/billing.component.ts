@@ -49,6 +49,7 @@ export class BillingComponent implements OnInit {
   userInfo: any;
   totalRemainingDebt: any;
   cantBeNegetive: boolean;
+  totalPaid: number;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -72,7 +73,7 @@ export class BillingComponent implements OnInit {
 
     this.billingCreateForm.get('paid_on')
       .valueChanges.subscribe((value) => {
-        this.getUserOrders(this.userInfo, value);
+        this.getUserOrders(this.userInfo, null, value);
       })
 
     this.billingCreateForm.get('price')
@@ -106,8 +107,8 @@ export class BillingComponent implements OnInit {
       let include = false;
       row['principalToBeDebited'] = 0;
       row['interestToBeDebited'] = 0;
-      row['remainingPrincipalTobePaid'] = 0;
-      row['remainingInterestTobePaid'] = 0;
+      row['remainingPrincipalTobePaid'] = row['remaining_principal_debt'];
+      row['remainingInterestTobePaid'] = row['remaining_interest_debt'];
       row['remaining_principal_debt'] = row['remaining_principal_debt_copy'];
       row['remaining_interest_debt'] = row['remaining_interest_debt_copy'];
       row.remaining_amount = row.remaining_amount_copy;
@@ -119,9 +120,9 @@ export class BillingComponent implements OnInit {
         sumOfFiltered = sumOfFiltered + Number(row.remaining_amount_copy);
 
         if (row.interest_type === 'compound') {
-          this.calculateCompoundInterest(row, new Date(), Number(row.remaining_amount_copy));
+          this.calculateCompoundInterest(row, this.billingCreateForm.get('paid_on').value, Number(row.remaining_amount_copy));
         } else {
-          this.calculateSimpleInterest(row, new Date(), Number(row.remaining_amount_copy))
+          this.calculateSimpleInterest(row, this.billingCreateForm.get('paid_on').value, Number(row.remaining_amount_copy))
         }
       }
 
@@ -133,12 +134,14 @@ export class BillingComponent implements OnInit {
     if (last > -1) {
       const remainingAmount = (amount - (sumOfFiltered - filteredResults[last].remaining_amount_copy));
       if (filteredResults[last].interest_type === 'compound') {
-        this.calculateCompoundInterest(filteredResults[last], new Date(), Number(remainingAmount));
+        this.calculateCompoundInterest(filteredResults[last], this.billingCreateForm.get('paid_on').value, Number(remainingAmount));
       } else {
-        this.calculateSimpleInterest(filteredResults[last], new Date(), Number(remainingAmount))
+        this.calculateSimpleInterest(filteredResults[last], this.billingCreateForm.get('paid_on').value, Number(remainingAmount))
       }
+      this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + Number(next["remainingPrincipalTobePaid"]) + Number(next["remainingInterestTobePaid"]), 0);
+      this.totalPaid = this.billingDetails.reduce((acc, next) => acc + Number(next["principalToBeDebited"]) + Number(next["interestToBeDebited"]), 0);
     };
-    this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + next.remaining_amount, 0);
+
     this.selection.deselect(...this.billingDetails)
     this.selection.select(...filteredResults);
   }
@@ -146,18 +149,19 @@ export class BillingComponent implements OnInit {
   calculateSimpleInterest(result: any, date?: Date | string | number, amount?: number) {
     result['principalToBeDebited'] = 0;
     result['interestToBeDebited'] = 0;
-    result['remainingPrincipalTobePaid'] = 0;
-    result['remainingInterestTobePaid'] = 0;
+    result['remainingPrincipalTobePaid'] = result['remaining_principal_debt'];
+    result['remainingInterestTobePaid'] = result['remaining_interest_debt'];
     const oneDay = 24 * 60 * 60 * 1000;
     const date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
     const date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
     const days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
+    console.log(days_since_purchase);
     const interestRate = result.rate_of_interest;
     result['principalToBeDebited'] =
-      amount / (1 + (days_since_purchase * 12 * interestRate / 36500))
-    result['interestToBeDebited'] = amount - result['principalToBeDebited'];
-    result['remainingPrincipalTobePaid'] = result['remaining_principal_debt'] - result['principalToBeDebited'];
-    result['remainingInterestTobePaid'] = result['remaining_interest_debt'] - result['interestToBeDebited'];
+      (amount / (1 + (days_since_purchase * 12 * interestRate / 36500))).toFixed(2);
+    result['interestToBeDebited'] = (amount - result['principalToBeDebited']).toFixed(2);
+    result['remainingPrincipalTobePaid'] = (result['remaining_principal_debt'] - result['principalToBeDebited']).toFixed(2);
+    result['remainingInterestTobePaid'] = (result['remaining_interest_debt'] - result['interestToBeDebited']).toFixed(2);
 
     return result;
   }
@@ -177,10 +181,10 @@ export class BillingComponent implements OnInit {
     const compoundingMonthsPerYear = Math.floor(365 / compoundingPeriodInDays);
     const remaining_days = days_since_purchase - timesToCompound * compoundingPeriodInDays;
     result['principalToBeDebited'] =
-      amount / (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) * (1 + (remaining_days * interestRate * 12) / 36500));
-    result['interestToBeDebited'] = amount - result['principalToBeDebited'];
-    result['remainingPrincipalTobePaid'] = result['remaining_principal_debt'] - result['principalToBeDebited'];
-    result['remainingInterestTobePaid'] = result['remaining_interest_debt'] - result['interestToBeDebited'];
+      (amount / (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) * (1 + (remaining_days * interestRate * 12) / 36500))).toFixed(2);
+    result['interestToBeDebited'] = (amount - result['principalToBeDebited']).toFixed(2);;
+    result['remainingPrincipalTobePaid'] = (result['remaining_principal_debt'] - result['principalToBeDebited']).toFixed(2);;
+    result['remainingInterestTobePaid'] = (result['remaining_interest_debt'] - result['interestToBeDebited']).toFixed(2);;
 
     return result;
   }
@@ -225,12 +229,11 @@ export class BillingComponent implements OnInit {
 
   onOptionClick(userInfo) {
     this.userInfo = userInfo;
-    this.getUserOrders(userInfo, null, new Date());
+    this.getUserOrders(userInfo, null, this.billingCreateForm.get('paid_on').value);
   }
 
   getUserOrders(userInfo, date: Date, endDate?: Date) {
     this.is.getAllUserOrders(userInfo.id, date, endDate).subscribe((data: Array<object>) => {
-      console.log(data)
       this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
       this.dataSource = new MatTableDataSource<any>(this.billingDetails);
       this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
@@ -255,22 +258,15 @@ export class BillingComponent implements OnInit {
       "created_on": get(results, 'created_on', 0),
       "ordered_on": get(results, 'ordered_on', 0),
       "today": new Date(),
-      "interest_accrued": Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)),
-      "remaining_principal_debt": Number(get(results, 'payment_status.id', null)) === 1 ? Number(get(results, 'initial_cost', 0)) : Number(get(results, 'remaining_pricipal_debt', 0)),
-      "remaining_principal_debt_copy": Number(get(results, 'payment_status.id', null)) === 1 ? Number(get(results, 'initial_cost', 0)) : Number(get(results, 'remaining_pricipal_debt', 0)),
-      "remaining_interest_debt": Number(get(results, 'payment_status.id', null)) === 1 ? Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)) : Number(get(results, 'remaining_interest_debt', 0)),
-      "remaining_interest_debt_copy": Number(get(results, 'payment_status.id', null)) === 1 ? Number(get(results, 'interest_on_compound_period', 0) + get(results, 'interest_for_remaining_days', 0)) : Number(get(results, 'remaining_interest_debt', 0)),
-      "remaining_amount": Number(get(results, 'payment_status.id', null)) === 1 ?
-        Number(get(results, 'total_debt', 0)) :
-        Number(get(results, 'remaining_pricipal_debt', 0)) + Number(get(results, 'remaining_interest_debt', 0)),
-      "remaining_amount_copy": Number(get(results, 'payment_status.id', null)) === 1 ?
-        Number(get(results, 'total_debt', 0)) :
-        Number(get(results, 'remaining_pricipal_debt', 0)) + Number(get(results, 'remaining_interest_debt', 0)),
+      "interest_accrued": Number(get(results, 'remaining_interest_debt', 0)),
+      "remaining_principal_debt": Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
+      "remaining_principal_debt_copy": Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
+      "remaining_interest_debt": Number(get(results, 'remaining_interest_debt', 0)) || 0,
+      "remaining_interest_debt_copy": Number(get(results, 'remaining_interest_debt', 0)) || 0,
+      "remaining_amount_copy": Number(get(results, 'total_debt', 0)),
       "paid_amount": 0,
       "payment_status": get(results, 'payment_status', {}),
-      "total_debt": Number(get(results, 'payment_status.id', null)) === 1 ?
-        Number(get(results, 'total_debt', 0)) :
-        Number(get(results, 'remaining_pricipal_debt', 0)) + Number(get(results, 'remaining_interest_debt', 0)),
+      "total_debt": Number(get(results, 'total_debt', 0))
     }
   }
 
@@ -284,7 +280,7 @@ export class BillingComponent implements OnInit {
     if (this.billingCreateForm.valid) {
       this.rs.add(this.billingCreateForm.value, this.selection.selected).subscribe((res) => {
         this.billingCreateForm.reset({
-          user: null,
+          user: this.userInfo,
           price: null,
           paid_on: new Date()
         });
