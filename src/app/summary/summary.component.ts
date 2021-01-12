@@ -99,7 +99,7 @@ export class SummaryComponent implements OnInit {
         this.repayments = repayments;
 
       })
-      this.fs.getAllUserOrders(userInfo.id, null, endDate, true).subscribe((data: Array<object>) => {
+      this.fs.getAllUserOrders(userInfo && userInfo.id, null, endDate, true).subscribe((data: Array<object>) => {
         this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
         this.dataSource = new MatTableDataSource<any>(this.billingDetails);
         this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);

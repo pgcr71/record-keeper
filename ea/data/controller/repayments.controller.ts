@@ -28,7 +28,6 @@ export class RepaymentController implements IRepository<Repayment> {
       repayments.user = amount.user;
       repayments.paid_on = amount.paid_on;
       repayments.price = amount.price;
-      console.log(repayments);
       const repaymentTransaction = await transactionalEntityManager.save(repayments);
       if (request.body && request.body.orderPaidFor) {
         for (let i = 0; i < request.body.orderPaidFor.length; i++) {
@@ -48,11 +47,12 @@ export class RepaymentController implements IRepository<Repayment> {
             ordersPaidFor.id = order.id;
             ordersPaidFor.remaining_pricipal_debt = Number(order.remainingPrincipalTobePaid);
             ordersPaidFor.remaining_interest_debt = Number(order.remainingInterestTobePaid);
+            ordersPaidFor.last_payment_date = amount.paid_on;
             const orderTransaction = await transactionalEntityManager.save(ordersPaidFor);
             orderRepayment.order = ordersPaidFor;
             orderRepayment.payment = repaymentTransaction;
-            orderRepayment.principal_amount = order.principalToBeDebited;
-            orderRepayment.interest_amount = order.interestToBeDebited;
+            orderRepayment.principal_amount = Number(order.principalToBeDebited);
+            orderRepayment.interest_amount = Number(order.interestToBeDebited);
             const orderRepaymentTransaction = await transactionalEntityManager.save(orderRepayment);
           }
         }
@@ -62,7 +62,7 @@ export class RepaymentController implements IRepository<Repayment> {
   }
 
   public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
-    console.log(request.params.id);
+    console.log(request.params);
     return this.repository
       .createQueryBuilder("repayment")
       .select(["repayment", "orderRepayment", "orders", "product"])

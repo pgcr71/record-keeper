@@ -233,7 +233,7 @@ export class BillingComponent implements OnInit {
   }
 
   getUserOrders(userInfo, date: Date, endDate?: Date) {
-    this.is.getAllUserOrders(userInfo.id, date, endDate).subscribe((data: Array<object>) => {
+    this.is.getAllUserOrders(userInfo && userInfo.id, date, endDate, false).subscribe((data: Array<object>) => {
       this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
       this.dataSource = new MatTableDataSource<any>(this.billingDetails);
       this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
@@ -278,7 +278,9 @@ export class BillingComponent implements OnInit {
     }
 
     if (this.billingCreateForm.valid) {
-      this.rs.add(this.billingCreateForm.value, this.selection.selected).subscribe((res) => {
+      const paidOn = this.billingCreateForm.get('paid_on') && this.billingCreateForm.get('paid_on').value.toISOString();
+      const data = { ...this.billingCreateForm.value, paid_on: paidOn }
+      this.rs.add(data, this.selection.selected).subscribe((res) => {
         this.billingCreateForm.reset({
           user: this.userInfo,
           price: null,

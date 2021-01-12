@@ -2,7 +2,7 @@
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
 import { PaymentStatus } from "..";
 
-export class seed1609428250360 implements MigrationInterface {
+export class seed1610457775313 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     const paymentStatus1 = getRepository(PaymentStatus).create({
       name: "NOT_PAID",
@@ -22,5 +22,5 @@ export class seed1609428250360 implements MigrationInterface {
     await getRepository(PaymentStatus).save(paymentStatus3);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> { }
 }

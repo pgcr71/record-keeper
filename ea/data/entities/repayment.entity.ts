@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { Order } from "./order.entity";
 import { OrderRepayment } from "./order_repayments.entity";
 import { User } from "./user.entity";
 
@@ -12,7 +13,7 @@ export class Repayment extends BaseEntity {
   })
   "user": User;
 
-  @OneToMany(() => OrderRepayment, (or) => or.payment)
+  @OneToMany((type) => OrderRepayment, (or) => or.payment)
   "orderRepayment": OrderRepayment[];
 
   @Column({ type: "decimal", nullable: false, default: 0, precision: 20, scale: 2 })

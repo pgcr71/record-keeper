@@ -33,7 +33,7 @@
     <mat-label>Commments</mat-label>
   </mat-form-field>
 
-  <button [disabled]='billingCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
+  <button [disabled]='billingCreateForm.invalid' type="button" (click) =  'onSubmit()' mat-raised-button color="primary">submit</button>
 </div>
 
 <mat-table *ngIf = 'billingDetails && billingDetails.length' [dataSource]="dataSource" class="mat-elevation-z8">

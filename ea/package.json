@@ -34,7 +34,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf build/data && npm run build && npm run migrations:run",
-    "start": "npm run build && npm run migrations:run && electron-forge start --inspect-electron",
+    "start": "npm run build && npm run migrations:run && electron-forge start --inspect-electron build/electronindex.js",
     "package": "npm run clean && electron-forge package",
     "make": "npm run clean && electron-forge make",
     "startWithElectron": "electron .",

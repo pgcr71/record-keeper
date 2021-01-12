@@ -45,8 +45,9 @@ export class UserController implements IRepository<User> {
       request.params.start_date !== "null" &&
       request.params.start_date !== "undefined" &&
       new Date(new Date(request.params.start_date).setHours(0, 0, 1)).toISOString();
-    const endDate = request.params.end_date;
-    request.params.end_date !== "null" &&
+    const endDate =
+      request.params.end_date &&
+      request.params.end_date !== "null" &&
       request.params.end_date !== "undefined" &&
       new Date(new Date(request.params.end_date).setHours(23, 59, 59, 99)).toISOString();
     const allOrders = request.params.allOrders;
@@ -70,20 +71,20 @@ export class UserController implements IRepository<User> {
       .leftJoin("order.payment_status", "paymentStatus")
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.id });
-    let getOrders: Promise<User> | undefined = undefined;
+    let getOrders;
     if (!allOrders || allOrders === "null" || allOrders === "undefined") {
       getOrders = repo
         .andWhere("paymentStatus.id!=:notPaidId", { notPaidId: 3 })
         .orderBy("order.ordered_on", "ASC")
-        .getOne() as Promise<User>;
+        .getOne();
     }
 
     if (allOrders) {
       getOrders = repo
         .orderBy("order.ordered_on", "ASC")
-        .andWhere("order.ordered_on >= :start_date", { start_date: date })
-        .andWhere("order.ordered_on <= :end_date", { end_date: endDate })
-        .getOne() as Promise<User>;
+        // .andWhere("order.ordered_on >= :start_date", { start_date: date })
+        // .andWhere("order.ordered_on <= :end_date", { end_date: endDate })
+        .getOne();
     }
 
     return (

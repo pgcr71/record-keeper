@@ -2,7 +2,7 @@
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
 import { InterestDefaults, InterestTypes, RegistrationStatus, UserRoles } from "..";
 
-export class seed1609428169394 implements MigrationInterface {
+export class seed1610457795779 implements MigrationInterface {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<void> {
     const registrationStatuses1 = getRepository(RegistrationStatus).create({
@@ -67,5 +67,5 @@ export class seed1609428169394 implements MigrationInterface {
     await getRepository(InterestDefaults).save(interestDefaults);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> { }
 }

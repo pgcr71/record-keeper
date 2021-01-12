@@ -35,30 +35,30 @@ export class OrderController implements IRepository<Order> {
       );
   }
 
-  calculateSimpleInterest(result: Order, date?: Date | string | number): Order {
-    const oneDay = 24 * 60 * 60 * 1000;
-    let date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-    let date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
-    result.initial_cost = result.product.unit_price * result.quantity;
-    let principal = 0;
-    let remainingInterestAfterPartialPayment;
-    const interestRate = result.product.rate_of_interest;
+  calculateSimpleInterest(result: Order, endDate?: Date | string | number, startDate?: Date | string | number): Order {
+    const oneDay = 24 * 60 * 60 * 1000,
+      orderedOnAsDate = new Date(result.ordered_on),
+      startDateAsDate = new Date(startDate || result.ordered_on),
+      endDateAsDate = endDate ? new Date(endDate) : new Date(),
+      today = new Date(),
+      lastPaymentDateAsDate = new Date(result.last_payment_date),
+      sd = orderedOnAsDate.getTime() > startDateAsDate.getTime() ? orderedOnAsDate : startDateAsDate,
+      ed = endDateAsDate ? endDateAsDate : today;
 
-    if (result.payment_status.id === 3) {
-      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-      date2 = new Date(result.last_payment_date).setHours(23, 59, 59, 999);
-    }
+    result.initial_cost = Number(result.product.unit_price) * Number(result.quantity);
+    let principal = result.initial_cost,
+      date1 = sd.setHours(23, 59, 59, 999),
+      date2 = ed.setHours(23, 59, 59, 999);
+
+    const interestRate = Number(result.product.rate_of_interest);
 
     if (result.payment_status.id === 2) {
-      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-      date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
-      principal = result.remaining_pricipal_debt;
+      principal = Number(result.remaining_pricipal_debt);
     }
 
-    if (result.payment_status.id === 1) {
-      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-      date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
-      principal = result.initial_cost;
+    if (result.payment_status.id === 3) {
+      date1 = orderedOnAsDate.setHours(23, 59, 59, 999);
+      date2 = lastPaymentDateAsDate.setHours(23, 59, 59, 999);
     }
 
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
@@ -66,36 +66,47 @@ export class OrderController implements IRepository<Order> {
 
     result.total_debt = principal + result.interest_for_remaining_days;
 
+    if (result.payment_status.id == 1) {
+      result.remaining_pricipal_debt = result.initial_cost;
+      result.remaining_interest_debt = result.interest_for_remaining_days;
+    }
+
+    if (result.payment_status.id == 2) {
+      result.remaining_interest_debt = result.interest_for_remaining_days;
+    }
     return result;
   }
 
-  calculateCompoundInterest(result: Order, date?: Date | string | number): Order {
-    const oneDay = 24 * 60 * 60 * 1000;
-    const interestRate = result.product.rate_of_interest;
-    const compoundingPeriodInDays = 365;
+  calculateCompoundInterest(
+    result: Order,
+    endDate?: Date | string | number,
+    startDate?: Date | string | number,
+  ): Order {
+    console.log(result, endDate, startDate);
+    const oneDay = 24 * 60 * 60 * 1000,
+      orderedOnAsDate = new Date(result.ordered_on),
+      startDateAsDate = new Date(startDate || result.ordered_on),
+      endDateAsDate = endDate ? new Date(endDate) : new Date(),
+      today = new Date(),
+      lastPaymentDateAsDate = new Date(result.last_payment_date),
+      sd = orderedOnAsDate.getTime() > startDateAsDate.getTime() ? orderedOnAsDate : startDateAsDate,
+      ed = endDateAsDate ? endDateAsDate : today,
+      interestRate = result.product.rate_of_interest,
+      compoundingPeriodInDays = 365;
     result.initial_cost = result.product.unit_price * result.quantity;
+    let principal = result.initial_cost,
+      date1 = sd.setHours(23, 59, 59, 999),
+      date2 = ed.setHours(23, 59, 59, 999);
 
-    let principal = 0,
-      date1 = 0,
-      date2 = 0,
-      remainingInterestAfterPartialPayment;
-    if (result.payment_status.id === 3) {
-      principal = result.initial_cost;
-      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-      date2 = new Date(result.last_payment_date).setHours(23, 59, 59, 999);
+    if (result.payment_status.id == 3) {
+      result.remaining_pricipal_debt = 0;
+      result.remaining_interest_debt = 0;
+      date1 = orderedOnAsDate.setHours(23, 59, 59, 999);
+      date2 = lastPaymentDateAsDate.setHours(23, 59, 59, 999);
     }
 
-    if (result.payment_status.id === 2) {
-      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-      date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
+    if (result.payment_status.id == 2) {
       principal = result.remaining_pricipal_debt;
-      remainingInterestAfterPartialPayment = result.remaining_interest_debt;
-    }
-
-    if (result.payment_status.id === 1) {
-      date1 = new Date(result.ordered_on).setHours(23, 59, 59, 999);
-      date2 = date ? new Date(date).setHours(23, 59, 59, 999) : new Date().setHours(23, 59, 59, 999);
-      principal = result.initial_cost;
     }
 
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
@@ -106,16 +117,19 @@ export class OrderController implements IRepository<Order> {
     result.total_with_interest_on_compound_period =
       principal * Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound);
 
-    if (result.payment_status.id === 2 && remainingInterestAfterPartialPayment) {
-      result.total_with_interest_on_compound_period =
-        result.total_with_interest_on_compound_period +
-        principal * Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound - 1);
-    }
-
     result.interest_on_compound_period = result.total_with_interest_on_compound_period - principal;
     result.interest_for_remaining_days =
       (result.remaining_days * result.total_with_interest_on_compound_period * interestRate * 12) / 36500;
     result.total_debt = result.total_with_interest_on_compound_period + result.interest_for_remaining_days;
+
+    if (result.payment_status.id == 1) {
+      result.remaining_pricipal_debt = result.initial_cost;
+      result.remaining_interest_debt = result.interest_for_remaining_days + result.interest_on_compound_period;
+    }
+
+    if (result.payment_status.id == 2) {
+      result.remaining_interest_debt = result.interest_for_remaining_days + result.interest_on_compound_period;
+    }
 
     return result;
   }

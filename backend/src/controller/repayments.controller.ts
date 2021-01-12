@@ -62,7 +62,6 @@ export class RepaymentController implements IRepository<Repayment> {
   }
 
   public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
-    console.log(request.params.id)
     return this.repository
       .createQueryBuilder("repayment")
       .select([
