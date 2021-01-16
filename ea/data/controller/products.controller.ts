@@ -29,7 +29,7 @@ export class ProductController implements IRepository<Product> {
     //   interest_type = request.body.interestTypeId;
     //   const product = {...request.body, ...{InterestType: interest_type}}
     //   console.log(product)
-    return this.repository.insert(request.body);
+    return this.repository.save(request.body);
   }
 
   public async getStockDetails(

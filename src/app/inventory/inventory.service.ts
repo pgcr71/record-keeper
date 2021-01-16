@@ -34,11 +34,11 @@ export class InventoryService {
     return this.http.get(URL + '/products') as Observable<Array<object>>;
   }
 
-  delete() {
+  delete(data) {
     if (this.isElectron) {
-      return this.appService.electronEmit('removeProducts');
+      return this.appService.electronEmit('removeProducts', data);
     }
-    return this.http.delete(URL + '/products')
+    return this.http.delete(`${URL}/products/${data.id}`)
   }
 
   update(data) {

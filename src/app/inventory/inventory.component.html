@@ -1,4 +1,10 @@
-<div class='form-group' [formGroup]='inventoryCreateForm'>
+<ng-container *ngIf='!editMode'>
+  <div  *ngTemplateOutlet = 'form'></div>
+</ng-container>
+
+
+<ng-template #form>
+<div class='form-group'  [formGroup]='editMode? inventoryEditForm: inventoryCreateForm'>
   <mat-form-field class='mr-4' appearance="outline">
     <input matInput formControlName='name' [type]="'text'">
     <mat-label>Enter Name of Product</mat-label>
@@ -13,7 +19,7 @@
   </mat-form-field>
   <mat-form-field class='mr-4' appearance="outline">
     <mat-label>Interest Type</mat-label>
-    <mat-select formControlName='interest_type'>
+    <mat-select  [compareWith]='compareWith' formControlName='interest_type'>
       <mat-option *ngFor="let interestType of interestTypes" [value]="interestType">
         {{interestType.name}}
       </mat-option>
@@ -31,13 +37,27 @@
     <input matInput formControlName='comments' [type]="'text'">
     <mat-label>Comments</mat-label>
   </mat-form-field>
-  <button [disabled]='inventoryCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
+  <button [disabled]='inventoryCreateForm.invalid' type="button" (click)='onSubmit($event)' mat-raised-button
+    color="primary" *ngIf='!editMode'>submit</button>
 </div>
-
-<mat-table [dataSource]="inventory" class="mat-elevation-z8">
+</ng-template>
+<mat-table multiTemplateDataRows='true' [dataSource]="inventory" class="mat-elevation-z8">
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element['name']}} </mat-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        Name: <div>{{element['name']}} </div>
+        Comments: <div>{{element['comments']}} </div>
+        Lot Number: <div>{{element['lot_number']}} </div>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="editsection">
+    <mat-cell  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+    class='editsection-column' *matCellDef="let element">
+      <div *ngTemplateOutlet='form'></div>
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="quantity">
@@ -45,20 +65,42 @@
     <mat-cell *matCellDef="let element"> {{element['quantity']}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="unit_price" >
+  <ng-container matColumnDef="unit_price">
     <mat-header-cell *matHeaderCellDef> Unit Price </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element['unit_price']}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="rate_of_interest">
     <mat-header-cell *matHeaderCellDef>Rate Of Interest </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element["rate_of_interest"]}} </mat-cell>
+    <mat-cell *matCellDef="let element">
+      Interest Rate: {{element["rate_of_interest"]}}
+      Interest Type: {{element["interest_type"].name}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="buttons">
+    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <button *ngIf='expandedElement !== element' (click)="expandedElement = element; setFormData(element)" color='primary'
+        mat-icon-button> <mat-icon>edit</mat-icon> </button>
+        <button *ngIf='expandedElement !== element' (click)="onDelete(element)" color='warn'
+        mat-icon-button> <mat-icon>delete</mat-icon></button>
+      </div>
+      <div>
+      <button class='mr-4' *ngIf='expandedElement && expandedElement === element' (click)="expandedElement = null; updateData(element)" color='primary' mat-raised-button color="primary">save</button>
+      <button *ngIf='expandedElement && expandedElement === element' (click)="expandedElement = null; resetForm(element)" color='primary' mat-icon-button><mat-icon color="warn">cancel</mat-icon></button>
+    </div>
+    </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"
+  [class.expanded-row]="expandedElement === row"></mat-row>
+  <mat-row  *matRowDef="let row; columns: ['editsection']" class="detail-row"></mat-row>
   <!-- <mat-row class="mat-row" *matNoDataRow>
     <mat-cell class="mat-cell">No data to display</mat-cell>
   </mat-row > -->
 </mat-table>
-<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="inventory && !inventory.length">No Records Found</mat-toolbar>
+<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="inventory && !inventory.length">No Records Found
+</mat-toolbar>
