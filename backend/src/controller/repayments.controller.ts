@@ -62,17 +62,13 @@ export class RepaymentController implements IRepository<Repayment> {
   }
 
   public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
+    console.log(request.params);
     return this.repository
       .createQueryBuilder("repayment")
-      .select([
-        "repayment",
-        "orderRepayment",
-        "orders",
-        "product"
-      ])
-      .leftJoin('repayment.orderRepayment', 'orderRepayment')
-      .leftJoin('orderRepayment.order', 'orders')
-      .leftJoin('orders.product', 'product')
+      .select(["repayment", "orderRepayment", "orders", "product"])
+      .leftJoin("repayment.orderRepayment", "orderRepayment")
+      .leftJoin("orderRepayment.order", "orders")
+      .leftJoin("orders.product", "product")
       .where("repayment.user_id =:userId", { userId: request.params.id })
       .getMany();
   }

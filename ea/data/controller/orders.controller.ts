@@ -106,7 +106,7 @@ export class OrderController implements IRepository<Order> {
     }
 
     if (result.payment_status.id == 2) {
-      principal = result.remaining_pricipal_debt;
+      principal = Number(result.remaining_pricipal_debt);
     }
 
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));

@@ -6,17 +6,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatTableModule} from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatDatepickerModule } from '@angular/material/datepicker';
-import {MatMomentDateModule} from '@angular/material-moment-adapter';
-import {MatCheckboxModule} from '@angular/material/checkbox'
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [],
@@ -39,7 +40,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox'
     MatDialogModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule
   ],
   exports: [
     MatSidenavModule,
@@ -59,7 +61,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox'
     MatDialogModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule
   ]
 })
 export class MaterialModule { }

@@ -5,14 +5,14 @@ import { Repayment } from "./repayment.entity";
 
 @Entity()
 export class OrderRepayment extends BaseEntity {
-  @ManyToOne(() => Order, order => order.repayments)
+  @ManyToOne(() => Order, (order) => order.repayments, { onDelete: "CASCADE" })
   @JoinColumn({
     name: "order_id",
     referencedColumnName: "id",
   })
   "order": Order;
 
-  @ManyToOne(() => Repayment, repayment => repayment.orderRepayment)
+  @ManyToOne(() => Repayment, (repayment) => repayment.orderRepayment, { onDelete: "CASCADE" })
   @JoinColumn({
     name: "payment_id",
     referencedColumnName: "id",

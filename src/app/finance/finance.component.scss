@@ -41,3 +41,14 @@
   }
 }
 
+.detail-row {
+  display: none;
+ }
+
+ .expanded-row + .detail-row {
+   display: flex;
+ }
+
+ .editsection-column {
+   width: 100%;
+ }

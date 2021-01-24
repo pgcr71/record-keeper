@@ -19,11 +19,11 @@ export class FinanceService {
     this.isElectron = this.electronService.isElectronApp;
   }
 
-  getOrders() {
+  getOrders(skip, take) {
     if (this.isElectron) {
-      return this.appService.electronEmit('allOrders');
+      return this.appService.electronEmit('allOrders', { skip, take });
     }
-    return this.http.get(URL + '/orders') as Observable<Array<object>>;
+    return this.http.get(`${URL}/orders`, { params: { skip, take } }) as Observable<Array<object>>;
   }
 
   saveOrders(data) {
@@ -40,6 +40,19 @@ export class FinanceService {
     return this.http.get(URL + '/users') as Observable<Array<object>>
   }
 
+  update(data) {
+    if (this.isElectron) {
+      return this.appService.electronEmit('allUsers');
+    }
+    return this.http.get(URL + '/users') as Observable<Array<object>>
+  }
+
+  delete(data) {
+    if (this.isElectron) {
+      return this.appService.electronEmit('allUsers');
+    }
+    return this.http.get(URL + '/users') as Observable<Array<object>>
+  }
   getAllProducts() {
     if (this.isElectron) {
       return this.appService.electronEmit('allProducts');

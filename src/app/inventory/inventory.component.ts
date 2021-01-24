@@ -96,7 +96,7 @@ export class InventoryComponent implements OnInit {
       id: [data.id]
     });
 
-    this.inventoryEditFormCopy = cloneDeep(this.inventoryEditFormCopy);
+    this.inventoryEditFormCopy = cloneDeep(this.inventoryEditForm);
   }
 
   onDelete(element) {

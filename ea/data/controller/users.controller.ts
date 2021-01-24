@@ -72,14 +72,14 @@ export class UserController implements IRepository<User> {
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.id });
     let getOrders;
-    if (!allOrders || allOrders === "null" || allOrders === "undefined") {
+    if (!allOrders || allOrders === "null" || allOrders === "undefined" || allOrders == "false") {
       getOrders = repo
         .andWhere("paymentStatus.id!=:notPaidId", { notPaidId: 3 })
         .orderBy("order.ordered_on", "ASC")
         .getOne();
     }
 
-    if (allOrders) {
+    if (allOrders || allOrders == "true") {
       getOrders = repo
         .orderBy("order.ordered_on", "ASC")
         // .andWhere("order.ordered_on >= :start_date", { start_date: date })

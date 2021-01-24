@@ -1,22 +1,24 @@
-import { Order } from "..";
 import { getRepository, InsertResult, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
 import { NextFunction, Request, Response } from "express";
 import { PaymentStatus } from "../entities/payment_statuses.entity";
+import { Order } from "../entities/order.entity";
 
 export class OrderController implements IRepository<Order> {
   repository: Repository<Order> = getRepository(Order);
-  public async all(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
+  public async all(request: Request, response: Response, next: NextFunction): Promise<[Order[], number]> {
     return this.repository
       .createQueryBuilder("order")
       .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
       .leftJoin("order.user", "usr")
       .leftJoin("order.product", "prdt")
       .leftJoin("prdt.interest_type", "it")
-      .getMany();
+      .take(request.query.take || 5)
+      .skip(request.query.skip || 0)
+      .getManyAndCount();
   }
 
-  public async getOrdersByUserId(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
+  public async getOrdersByUserId(request: Request, response: Response, next: NextFunction): Promise<[Order[], number]> {
     return this.repository
       .createQueryBuilder("order")
       .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
@@ -25,23 +27,20 @@ export class OrderController implements IRepository<Order> {
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.userId })
       .orderBy("order.ordered_on", "ASC")
-      .getMany()
-      .then((results) =>
-        results.map((result) => {
-          return result.product.interest_type.name === "compound"
-            ? this.calculateCompoundInterest(result)
-            : this.calculateSimpleInterest(result)
-        }
-        ),
+      .take(request.query.take || 5)
+      .skip(request.query.skip || 0)
+      .getManyAndCount()
+      .then((results) => ([results[0].map((result) =>
+        result.product.interest_type.name === "compound" ? this.calculateCompoundInterest(result) : this.calculateSimpleInterest(result)
+      ), results[1]]),
       );
   }
 
   calculateSimpleInterest(result: Order, endDate?: Date | string | number, startDate?: Date | string | number): Order {
     const oneDay = 24 * 60 * 60 * 1000,
       orderedOnAsDate = new Date(result.ordered_on),
-
       startDateAsDate = new Date(startDate || result.ordered_on),
-      endDateAsDate = new Date(endDate),
+      endDateAsDate = endDate ? new Date(endDate) : new Date(),
       today = new Date(),
       lastPaymentDateAsDate = new Date(result.last_payment_date),
       sd = orderedOnAsDate.getTime() > startDateAsDate.getTime() ? orderedOnAsDate : startDateAsDate,
@@ -79,12 +78,16 @@ export class OrderController implements IRepository<Order> {
     return result;
   }
 
-  calculateCompoundInterest(result: Order, endDate?: Date | string | number, startDate?: Date | string | number): Order {
-    console.log(result, endDate, startDate)
+  calculateCompoundInterest(
+    result: Order,
+    endDate?: Date | string | number,
+    startDate?: Date | string | number,
+  ): Order {
+    console.log(result, endDate, startDate);
     const oneDay = 24 * 60 * 60 * 1000,
       orderedOnAsDate = new Date(result.ordered_on),
       startDateAsDate = new Date(startDate || result.ordered_on),
-      endDateAsDate = new Date(endDate),
+      endDateAsDate = endDate ? new Date(endDate) : new Date(),
       today = new Date(),
       lastPaymentDateAsDate = new Date(result.last_payment_date),
       sd = orderedOnAsDate.getTime() > startDateAsDate.getTime() ? orderedOnAsDate : startDateAsDate,
@@ -104,7 +107,7 @@ export class OrderController implements IRepository<Order> {
     }
 
     if (result.payment_status.id == 2) {
-      principal = result.remaining_pricipal_debt;
+      principal = Number(result.remaining_pricipal_debt);
     }
 
     result.days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));

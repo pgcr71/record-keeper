@@ -1,58 +1,65 @@
-  <div class='form-group' [formGroup]='orderCreateForm'>
-  <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='product' [matAutocomplete]="productAuto" [type]="'text'">
-    <mat-label>Select Product/Category</mat-label>
-    <mat-autocomplete (optionSelected) = 'onOptionSelect($event.option.value)' #productAuto="matAutocomplete" [displayWith]="productDisplayFn">
-      <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
-        <div class='product-name'> {{option.name }}</div>
-        <div class='product-date'>{{ option.created_on | date:'dd/MM/yy hh:mm'}}</div>
+<ng-template #form>
+  <div class='form-group' [formGroup]='!editMode? orderCreateForm: orderEditForm'>
+    <mat-form-field class='mr-4' appearance="outline">
+      <input matInput formControlName='product' [matAutocomplete]="productAuto" [type]="'text'">
+      <mat-label>Select Product/Category</mat-label>
+      <mat-autocomplete (optionSelected)='onOptionSelect($event.option.value)' #productAuto="matAutocomplete"
+        [displayWith]="productDisplayFn">
+        <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
+          <div class='product-name'> {{option.name }} ({{option.interest_type.name}})</div>
+          <div class='product-date'>{{ option.created_on | date:'dd/MM/yy hh:mm'}}</div>
 
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-
-  <mat-form-field  appearance="outline" class='mr-4'>
-    <mat-label>Name of the Person</mat-label>
-    <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="userDisplayFn">
-      <ng-container *ngIf="userSearch | async as us">
-        <mat-option class='mat-option' *ngFor="let option of us"  [value]="option">
-          <div>
-            <div>{{option.first_name}} {{option.last_name}}</div>
-            <div>{{option.phone_number}}</div>
-          </div>
         </mat-option>
-        <mat-option (click) ='addUser()' *ngIf = '!us.length'>
-          ADD USER
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-  </mat-form-field>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='quantity' [max]='remainingStock' [type]="'number'">
-    <mat-label>Quantity/Amount</mat-label>
-  </mat-form-field>
+    <mat-form-field appearance="outline" class='mr-4'>
+      <mat-label>Name of the Person</mat-label>
+      <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="userDisplayFn">
+        <ng-container *ngIf="userSearch | async as us">
+          <mat-option class='mat-option' *ngFor="let option of us" [value]="option">
+            <div>
+              <div>{{option.first_name}} {{option.last_name}}</div>
+              <div>{{option.phone_number}}</div>
+            </div>
+          </mat-option>
+          <mat-option (click)='addUser()' *ngIf='!us.length'>
+            ADD USER
+          </mat-option>
+        </ng-container>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='ordered_on' [max]="maxDate" [matDatepicker]="picker1" [type]="'text'">
-    <mat-label>Issue Date</mat-label>
-    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-    <mat-datepicker #picker1></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field class='mr-4' appearance="outline">
+      <input matInput formControlName='quantity' [max]='remainingStock' [type]="'number'">
+      <mat-label>Quantity/Amount</mat-label>
+    </mat-form-field>
 
-  <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='comments' [max]='remainingStock' [type]="'text'">
-    <mat-label>Comments</mat-label>
-  </mat-form-field>
+    <mat-form-field class='mr-4' appearance="outline">
+      <input matInput formControlName='ordered_on' [max]="maxDate" [matDatepicker]="picker1" [type]="'text'">
+      <mat-label>Issue Date</mat-label>
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
 
-  <button [disabled]='orderCreateForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button>
+    <mat-form-field class='mr-4' appearance="outline">
+      <input matInput formControlName='comments' [max]='remainingStock' [type]="'text'">
+      <mat-label>Comments</mat-label>
+    </mat-form-field>
 
-  <div *ngIf =' remainingStock'>Only {{remainingStock}} products available out of {{stockInfo.quantity}}</div>
-</div>
+    <button [disabled]='orderCreateForm.invalid' type="button" (click)='onSubmit($event)' mat-raised-button
+      color="primary">submit</button>
 
+    <div *ngIf=' remainingStock'>Only {{remainingStock}} products available out of {{stockInfo.quantity}}</div>
+  </div>
+</ng-template>
 
-<mat-table [dataSource]="order" class="mat-elevation-z8">
+<ng-container *ngIf='!editMode'>
+  <div   *ngTemplateOutlet='form'> </div>
+</ng-container>
+
+<mat-table [dataSource]="order" multiTemplateDataRows='true' class="mat-elevation-z8">
   <ng-container matColumnDef="user">
     <mat-header-cell *matHeaderCellDef>Name of User</mat-header-cell>
     <mat-cell *matCellDef="let element">
@@ -68,15 +75,44 @@
     <mat-cell *matCellDef="let element"> {{element['quantity']}} </mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="buttons">
+    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <button *ngIf='expandedElement !== element' (click)="expandedElement = element; setFormData(element)" color='primary'
+        mat-icon-button> <mat-icon>edit</mat-icon> </button>
+        <button *ngIf='expandedElement !== element' (click)="onDelete(element)" color='warn'
+        mat-icon-button> <mat-icon>delete</mat-icon></button>
+      </div>
+      <div>
+      <button class='mr-4' *ngIf='expandedElement && expandedElement === element' (click)="expandedElement = null; updateData(element)" color='primary' mat-raised-button color="primary">save</button>
+      <button *ngIf='expandedElement && expandedElement === element' (click)="expandedElement = null; resetForm(element)" color='primary' mat-icon-button><mat-icon color="warn">cancel</mat-icon></button>
+    </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="editsection">
+    <mat-cell  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+    class='editsection-column' *matCellDef="let element">
+      <ng-container  *ngTemplateOutlet='form'></ng-container>
+    </mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="product" >
     <mat-header-cell *matHeaderCellDef> Name of Product </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element['product'].name}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"  [class.expanded-row]="expandedElement === row"></mat-row>
+  <mat-row  *matRowDef="let row; columns: ['editsection']" class="detail-row"></mat-row>
   <!-- <mat-row class="mat-row" *matNoDataRow>
     <mat-cell class="mat-cell">No data to display</mat-cell>
   </mat-row > -->
 </mat-table>
 <mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="order && !order.length">No Records Found</mat-toolbar>
+<mat-paginator [length]="length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               (page)="onPageNumberClick($event)">
+</mat-paginator>

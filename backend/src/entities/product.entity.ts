@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
 import { InterestTypes } from "./interest_types.entity";
+import { Order } from "./order.entity";
 
 @Entity()
 export class Product extends BaseEntity {
@@ -19,7 +20,7 @@ export class Product extends BaseEntity {
   @Column({ type: "bigint", nullable: true, default: 0 })
   "lot_number": string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: "varchar", nullable: true })
   "comments": string;
 
   @ManyToOne(() => InterestTypes)
@@ -28,6 +29,9 @@ export class Product extends BaseEntity {
     referencedColumnName: "id",
   })
   "interest_type": InterestTypes;
+
+  @OneToMany(() => Order, (ordr) => ordr.product)
+  "orders": Order[];
 
   @Column({ type: "varchar", length: 36, nullable: true })
   "created_by": string;

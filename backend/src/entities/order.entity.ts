@@ -3,7 +3,6 @@ import { BaseEntity } from "./base.entity";
 import { OrderRepayment } from "./order_repayments.entity";
 import { PaymentStatus } from "./payment_statuses.entity";
 import { Product } from "./product.entity";
-import { Repayment } from "./repayment.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -15,14 +14,14 @@ export class Order extends BaseEntity {
   })
   "user": User;
 
-  @ManyToOne(() => Product)
+  @ManyToOne(() => Product, (prdt) => prdt.orders, { onDelete: "CASCADE" })
   @JoinColumn({
     name: "product_id",
     referencedColumnName: "id",
   })
   "product": Product;
 
-  @OneToMany(type => OrderRepayment, (repayment) => repayment.order)
+  @OneToMany((type) => OrderRepayment, (repayment) => repayment.order)
   "repayments": OrderRepayment[];
 
   @Column({ type: "decimal", nullable: true, precision: 20, scale: 2 })
