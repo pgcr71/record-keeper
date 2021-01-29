@@ -1,11 +1,10 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
 
-@import "../abstracts/variables";
-@import "../abstracts/mixins";
-
-.row{
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
+.row {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 @include grid-columns($no-of-columns, $all);
@@ -14,9 +13,8 @@
 @include grid-columns($no-of-columns, $lg);
 @include grid-columns($no-of-columns, $xl);
 
-@include grid-columns-with-custom-left-margin($no-of-columns, 5%,$all);
-@include grid-columns-with-custom-left-margin($no-of-columns, 5%,$sm);
-@include grid-columns-with-custom-left-margin($no-of-columns, 5%,$md);
-@include grid-columns-with-custom-left-margin($no-of-columns, 5%,$lg);
-@include grid-columns-with-custom-left-margin($no-of-columns, 5%,$xl);
-
+@include grid-columns-with-custom-left-margin($no-of-columns, 5%, $all);
+@include grid-columns-with-custom-left-margin($no-of-columns, 5%, $sm);
+@include grid-columns-with-custom-left-margin($no-of-columns, 5%, $md);
+@include grid-columns-with-custom-left-margin($no-of-columns, 5%, $lg);
+@include grid-columns-with-custom-left-margin($no-of-columns, 5%, $xl);

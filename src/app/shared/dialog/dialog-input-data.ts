@@ -1,3 +1,3 @@
-export class DialogInputData<D = any>{
-    data?: D;
+export class DialogInputData<D = any> {
+  data?: D;
 }

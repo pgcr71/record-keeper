@@ -1,120 +1,146 @@
-<div class='form-group' [formGroup]='repaymentForm'>
-  <mat-form-field  appearance="outline" class='mr-4'>
+<div class="form-group" [formGroup]="repaymentForm">
+  <mat-form-field appearance="outline" class="mr-4">
     <mat-label>Name of the Person</mat-label>
-    <input type="text" matInput formControlName="user" [matAutocomplete]="auto">
+    <input type="text" matInput formControlName="user" [matAutocomplete]="auto" />
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="userDisplayFn">
       <ng-container *ngIf="userSearch | async as us">
-        <mat-option (click) ='onOptionClick(option)' class='mat-option' *ngFor="let option of us"  [value]="option">
+        <mat-option (click)="onOptionClick(option)" class="mat-option" *ngFor="let option of us" [value]="option">
           <div>
-            <div>{{option.first_name}} {{option.last_name}}</div>
-            <div>{{option.phone_number}}</div>
+            <div>{{ option.first_name }} {{ option.last_name }}</div>
+            <div>{{ option.phone_number }}</div>
           </div>
         </mat-option>
       </ng-container>
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='start_date'  [matDatepicker]="picker1" [type]="'text'">
+  <mat-form-field class="mr-4" appearance="outline">
+    <input matInput formControlName="start_date" [matDatepicker]="picker1" [type]="'text'" />
     <mat-label>Start Date</mat-label>
     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
     <mat-datepicker #picker1></mat-datepicker>
   </mat-form-field>
 
-  <mat-form-field class='mr-4' appearance="outline">
-    <input matInput formControlName='end_date' [max]="maxDate" [matDatepicker]="picker2" [type]="'text'">
+  <mat-form-field class="mr-4" appearance="outline">
+    <input matInput formControlName="end_date" [max]="maxDate" [matDatepicker]="picker2" [type]="'text'" />
     <mat-label>End Date</mat-label>
     <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
     <mat-datepicker #picker2></mat-datepicker>
   </mat-form-field>
 
   <!-- <button [disabled]='repaymentForm.invalid' type="button" (click) =  'onSubmit($event)' mat-raised-button color="primary">submit</button> -->
-
 </div>
 
-<mat-table *ngIf = 'billingDetails && billingDetails.length' [dataSource]="dataSource" class="mat-elevation-z8">
-
+<mat-table *ngIf="billingDetails && billingDetails.length" [dataSource]="dataSource" class="mat-elevation-z8">
   <!-- Checkbox Column -->
 
-<ng-container matColumnDef="period">
-  <mat-header-cell *matHeaderCellDef> Period</mat-header-cell>
+  <ng-container matColumnDef="period">
+    <mat-header-cell *matHeaderCellDef> Period</mat-header-cell>
 
-  <mat-cell *matCellDef="let element">
-    <div>
-      <div> Start Date: {{element['ordered_on'] | date: 'dd/MM/yyyy'}}</div>
-      <div> End: {{element['today'] | date: 'dd/MM/yyyy'}}</div>
-      <div> Days Since Purchase: {{element['days_since_purchase']}}</div>
-    </div>
-  </mat-cell>
-  <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
-</ng-container>
-
-<ng-container matColumnDef="productInfo">
-  <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Product Details</mat-header-cell>
-  <mat-cell class='product-details-column' *matCellDef="let element">
-    <div>
-      <div>Product/Category Name: {{element['product_name']}} </div>
-      <div *ngIf="element && element['comments']">Comments: {{element['comments']}}</div>
-      <div>unit Price: {{element['unit_price']}}</div>
-      <div>Quantity/Amount: {{ element['quantity'] | currency:'inr':'₹': '1.0-0'}}</div>
-      <div>Total Cost : {{element['initial_cost']}}</div>
-    </div>
-   </mat-cell>
-   <mat-footer-cell class='product-details-column' *matFooterCellDef>{{totalPrincipal | currency:'inr':'₹': '1.0-2'}}</mat-footer-cell>
-</ng-container>
-
-<ng-container matColumnDef="interestDetails">
-  <mat-header-cell class='interest-details-header-column' *matHeaderCellDef>Interest to be paid </mat-header-cell>
-  <mat-cell class='interest-details-column' *matCellDef="let element">
-    <div>
-      <div>Interest Type: {{ element['interest_type']}} </div>
-      <div>Interest Rate({{element['rate_of_interest'] | currency:'inr':'₹': '1.0-2'}})</div>
-      <div>Total Interest Accrued{{element['interest_accrued'] | currency:'inr':'₹': '1.0-2'}}</div>
-    </div>
-  </mat-cell>
-  <mat-footer-cell class='interest-details-column' *matFooterCellDef>{{totalInterest | currency:'inr':'₹': '1.0-2'}}</mat-footer-cell>
-</ng-container>
-
-<ng-container matColumnDef="paidInterest">
-  <mat-header-cell class='interest-details-header-column' *matHeaderCellDef>Interest Already Paid</mat-header-cell>
-  <mat-cell class='interest-details-column' *matCellDef="let element">
-    <div>
-      <div>Interest Type: {{ element['interest_accrued']}} </div>
-    </div>
-  </mat-cell>
-  <mat-footer-cell class='interest-details-column' *matFooterCellDef>{{totalInterest | currency:'inr':'₹': '1.0-2'}}</mat-footer-cell>
-</ng-container>
-<ng-container matColumnDef="totalDebt" >
-  <mat-header-cell *matHeaderCellDef> Previous Payments</mat-header-cell>
-  <mat-cell *matCellDef="let element">
-    <div>
-      <div *ngFor="let payment of element['repayments']">
-        <div>P:{{ payment.principal_amount | currency:'inr':'₹': '1.0-2' }}</div>
-        <div> I:{{ payment.interest_amount | currency:'inr':'₹': '1.0-2' }}</div>
-        <div>({{ payment.paid_on | date: 'dd/MM/yyyy'}}) </div>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>Start Date: {{ element['ordered_on'] | date: 'dd/MM/yyyy' }}</div>
+        <div>End: {{ element['today'] | date: 'dd/MM/yyyy' }}</div>
+        <div>Days Since Purchase: {{ element['days_since_purchase'] }}</div>
       </div>
-    </div>
-  </mat-cell>
-  <mat-footer-cell *matFooterCellDef>{{previousPaidPayments | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
-</ng-container>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
+  </ng-container>
 
-<ng-container matColumnDef="remainingAmount" >
-  <mat-header-cell *matHeaderCellDef>Remaining Amount To Be Paid</mat-header-cell>
-  <mat-cell *matCellDef="let element"> {{element['remaining_principal_debt'] | currency:'inr':'₹': '1.0-2'}} </mat-cell>
-  <mat-footer-cell *matFooterCellDef>{{totalPrincipalRemaining  | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
-</ng-container>
+  <ng-container matColumnDef="productInfo">
+    <mat-header-cell class="product-details-header-column" *matHeaderCellDef>Product Details</mat-header-cell>
+    <mat-cell class="product-details-column" *matCellDef="let element">
+      <div>
+        <div>Product/Category Name: {{ element['product_name'] }}</div>
+        <div *ngIf="element && element['comments']">Comments: {{ element['comments'] }}</div>
+        <div>unit Price: {{ element['unit_price'] }}</div>
+        <div>Quantity/Amount: {{ element['quantity'] | currency: 'inr':'₹':'1.0-0' }}</div>
+        <div>Total Cost : {{ element['initial_cost'] }}</div>
+      </div>
+    </mat-cell>
+    <mat-footer-cell class="product-details-column" *matFooterCellDef>{{
+      totalPrincipal | currency: 'inr':'₹':'1.0-2'
+    }}</mat-footer-cell>
+  </ng-container>
 
+  <ng-container matColumnDef="interestDetails">
+    <mat-header-cell class="interest-details-header-column" *matHeaderCellDef>Interest to be paid </mat-header-cell>
+    <mat-cell class="interest-details-column" *matCellDef="let element">
+      <div>
+        <div>Interest Type: {{ element['interest_type'] }}</div>
+        <div>Interest Rate({{ element['rate_of_interest'] | currency: 'inr':'₹':'1.0-2' }})</div>
+        <div>Total Interest Accrued{{ element['interest_accrued'] | currency: 'inr':'₹':'1.0-2' }}</div>
+      </div>
+    </mat-cell>
+    <mat-footer-cell class="interest-details-column" *matFooterCellDef>{{
+      totalInterest | currency: 'inr':'₹':'1.0-2'
+    }}</mat-footer-cell>
+  </ng-container>
 
-<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  <ng-container matColumnDef="paidInterest">
+    <mat-header-cell class="interest-details-header-column" *matHeaderCellDef>Interest Already Paid</mat-header-cell>
+    <mat-cell class="interest-details-column" *matCellDef="let element">
+      <div>
+        <div>Interest Type: {{ element['interest_accrued'] }}</div>
+      </div>
+    </mat-cell>
+    <mat-footer-cell class="interest-details-column" *matFooterCellDef>{{
+      totalInterest | currency: 'inr':'₹':'1.0-2'
+    }}</mat-footer-cell>
+  </ng-container>
+  <ng-container matColumnDef="previousPayments">
+    <mat-header-cell *matHeaderCellDef> Previous Payments</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div *ngFor="let payment of element['repayments']">
+          <div>P:{{ payment.principal_amount | currency: 'inr':'₹':'1.0-2' }}</div>
+          <div>I:{{ payment.interest_amount | currency: 'inr':'₹':'1.0-2' }}</div>
+          <div>({{ payment.paid_on | date: 'dd/MM/yyyy' }})</div>
+        </div>
+      </div>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{ previousPaidPayments | currency: 'inr':'₹':'1.0-2' }}</mat-footer-cell>
+  </ng-container>
 
-<mat-footer-row *matFooterRowDef='displayedColumns' ></mat-footer-row>
+  <ng-container matColumnDef="remainingpricipal">
+    <mat-header-cell *matHeaderCellDef>Remaining Principal To Be Paid</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element['remaining_principal_debt'] | currency: 'inr':'₹':'1.0-2' }}
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{ totalPrincipalRemaining | currency: 'inr':'₹':'1.0-2' }}</mat-footer-cell>
+  </ng-container>
 
+  <ng-container matColumnDef="remainingInterest">
+    <mat-header-cell *matHeaderCellDef>Remaining Interest To Be Paid</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element['remaining_interest_debt'] | currency: 'inr':'₹':'1.0-2' }}
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{ totalinteresetRemaining | currency: 'inr':'₹':'1.0-2' }}</mat-footer-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="totalRemaining">
+    <mat-header-cell *matHeaderCellDef>Remaining debt</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element['total_debt'] | currency: 'inr':'₹':'1.0-2' }} </mat-cell>
+    <mat-footer-cell *matFooterCellDef>{{
+      totalPrincipalRemaining + totalinteresetRemaining | currency: 'inr':'₹':'1.0-2'
+    }}</mat-footer-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+  <mat-footer-row *matFooterRowDef="displayedColumns"></mat-footer-row>
 </mat-table>
-<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="billingDetails && !billingDetails.length">No Records Found</mat-toolbar>
+<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="billingDetails && !billingDetails.length"
+  >No Records Found</mat-toolbar
+>
 
-<mat-table multiTemplateDataRows='true' *ngIf='repayments && repayments.length' [dataSource]="repayments" class="mat-elevation-z8">
-
+<mat-table
+  multiTemplateDataRows="true"
+  *ngIf="repayments && repayments.length"
+  [dataSource]="repayments"
+  class="mat-elevation-z8"
+>
   <!-- Checkbox Column -->
 
   <ng-container matColumnDef="paymentDate">
@@ -122,79 +148,84 @@
 
     <mat-cell *matCellDef="let element">
       <div>
-        <div> Payment Date: {{element['paid_on'] | date: 'dd/MM/yyyy'}}</div>
+        <div>Payment Date: {{ element['paid_on'] | date: 'dd/MM/yyyy' }}</div>
       </div>
     </mat-cell>
     <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
   </ng-container>
 
   <ng-container matColumnDef="price">
-    <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Product Details</mat-header-cell>
-    <mat-cell class='product-details-column' *matCellDef="let element">
+    <mat-header-cell class="product-details-header-column" *matHeaderCellDef>Product Details</mat-header-cell>
+    <mat-cell class="product-details-column" *matCellDef="let element">
       <div>
-        <div>{{element['price']}}</div>
+        <div>{{ element['price'] }}</div>
       </div>
     </mat-cell>
-    <mat-footer-cell class='product-details-column' *matFooterCellDef>{{previousPaidPayments | currency:'inr':'₹': '1.0-2'}}
+    <mat-footer-cell class="product-details-column" *matFooterCellDef
+      >{{ previousPaidPayments | currency: 'inr':'₹':'1.0-2' }}
     </mat-footer-cell>
   </ng-container>
-
 
   <ng-container matColumnDef="subpayments">
-    <mat-cell  [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
-    class='sub-payments-details-column' *matCellDef="let element">
-        <mat-table [dataSource] = 'element["orderRepayment"]'>
-          <ng-container matColumnDef="paymentDate">
-            <mat-header-cell *matHeaderCellDef>Date of Payment</mat-header-cell>
+    <mat-cell
+      [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+      class="sub-payments-details-column"
+      *matCellDef="let element"
+    >
+      <mat-table [dataSource]="element['orderRepayment']">
+        <ng-container matColumnDef="paymentDate">
+          <mat-header-cell *matHeaderCellDef>Date of Payment</mat-header-cell>
 
-            <mat-cell *matCellDef="let element">
-              <div>
-                <div> Payment Date: {{element['created_on'] | date: 'dd/MM/yyyy'}}</div>
-              </div>
-            </mat-cell>
-            <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
-          </ng-container>
+          <mat-cell *matCellDef="let element">
+            <div>
+              <div>Payment Date: {{ element['created_on'] | date: 'dd/MM/yyyy' }}</div>
+            </div>
+          </mat-cell>
+          <mat-footer-cell *matFooterCellDef>Total</mat-footer-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="orderDetails">
-            <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Amount Paid</mat-header-cell>
-            <mat-cell class='product-details-column' *matCellDef="let element">
-              <div>
-                <div>{{element['order'] && element['order']['product'] && element['order']['product'].name}}</div>
-              </div>
-            </mat-cell>
-            <mat-footer-cell class='product-details-column' *matFooterCellDef>{{totalPrincipal | currency:'inr':'₹': '1.0-2'}}
-            </mat-footer-cell>
-          </ng-container>
+        <ng-container matColumnDef="orderDetails">
+          <mat-header-cell class="product-details-header-column" *matHeaderCellDef>Amount Paid</mat-header-cell>
+          <mat-cell class="product-details-column" *matCellDef="let element">
+            <div>
+              <div>{{ element['order'] && element['order']['product'] && element['order']['product'].name }}</div>
+            </div>
+          </mat-cell>
+          <mat-footer-cell class="product-details-column" *matFooterCellDef
+            >{{ totalPrincipal | currency: 'inr':'₹':'1.0-2' }}
+          </mat-footer-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="price">
-            <mat-header-cell class='product-details-header-column' *matHeaderCellDef>Amount Paid</mat-header-cell>
-            <mat-cell class='product-details-column' *matCellDef="let element">
-              <div>
-                <div>{{element['principal_amount']}}</div>
-                <div>{{element['interest_amount']}}</div>
-              </div>
-            </mat-cell>
-            <mat-footer-cell class='product-details-column' *matFooterCellDef>{{totalPrincipal | currency:'inr':'₹': '1.0-2'}}
-            </mat-footer-cell>
-          </ng-container>
+        <ng-container matColumnDef="price">
+          <mat-header-cell class="product-details-header-column" *matHeaderCellDef>Amount Paid</mat-header-cell>
+          <mat-cell class="product-details-column" *matCellDef="let element">
+            <div>
+              <div>{{ element['principal_amount'] }}</div>
+              <div>{{ element['interest_amount'] }}</div>
+            </div>
+          </mat-cell>
+          <mat-footer-cell class="product-details-column" *matFooterCellDef
+            >{{ totalPrincipal | currency: 'inr':'₹':'1.0-2' }}
+          </mat-footer-cell>
+        </ng-container>
 
-          <mat-header-row *matHeaderRowDef="subPaymentsColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: subPaymentsColumns;"></mat-row>
-          <mat-footer-row *matFooterRowDef='subPaymentsColumns'></mat-footer-row>
-        </mat-table>
+        <mat-header-row *matHeaderRowDef="subPaymentsColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: subPaymentsColumns"></mat-row>
+        <mat-footer-row *matFooterRowDef="subPaymentsColumns"></mat-footer-row>
+      </mat-table>
     </mat-cell>
-    <mat-footer-cell class='interest-details-column' *matFooterCellDef>{{totalInterest | currency:'inr':'₹': '1.0-2'}}
+    <mat-footer-cell class="interest-details-column" *matFooterCellDef
+      >{{ totalInterest | currency: 'inr':'₹':'1.0-2' }}
     </mat-footer-cell>
   </ng-container>
 
-
   <mat-header-row *matHeaderRowDef="previousPaymentsColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: previousPaymentsColumns;"
-   [class.expanded-row]="expandedElement === row"
-  (click)="expandedElement = expandedElement === row ? null : row"></mat-row>
-  <mat-row  *matRowDef="let row; columns: ['subpayments']" class="detail-row"></mat-row>
+  <mat-row
+    *matRowDef="let row; columns: previousPaymentsColumns"
+    [class.expanded-row]="expandedElement === row"
+    (click)="expandedElement = expandedElement === row ? null : row"
+  ></mat-row>
+  <mat-row *matRowDef="let row; columns: ['subpayments']" class="detail-row"></mat-row>
 
-  <mat-footer-row *matFooterRowDef='previousPaymentsColumns'></mat-footer-row>
-
+  <mat-footer-row *matFooterRowDef="previousPaymentsColumns"></mat-footer-row>
 </mat-table>
-

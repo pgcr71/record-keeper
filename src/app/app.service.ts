@@ -1,14 +1,13 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL } from '../environments/environment.prod';
-import { BehaviorSubject, Observable, of, throwError } from "rxjs";
-import { ElectronService } from "ngx-electron";
-import { catchError } from "rxjs/operators";
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { ElectronService } from 'ngx-electron';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-
 export class AppService {
-  isElectron: boolean
+  isElectron: boolean;
   constructor(private http: HttpClient, private readonly _electronService: ElectronService) {
     this.isElectron = this._electronService.isElectronApp;
   }
@@ -29,18 +28,18 @@ export class AppService {
 
   delete(endpoint: string, options?): any {
     if (this.isElectron) {
-      return this.electronEmit('remove', options)
+      return this.electronEmit('remove', options);
     }
 
-    return this.http.delete(endpoint, options)
+    return this.http.delete(endpoint, options);
   }
 
   put(endpoint: string, body?, options?): any {
     if (this.isElectron) {
-      return this.electronEmit(endpoint, body, options)
+      return this.electronEmit(endpoint, body, options);
     }
 
-    return this.http.put(endpoint, body, options)
+    return this.http.put(endpoint, body, options);
   }
 
   electronEmit(endPoint: string, data?: any, options?: any) {

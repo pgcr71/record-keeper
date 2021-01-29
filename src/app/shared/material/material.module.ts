@@ -16,8 +16,9 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 
 @NgModule({
   declarations: [],
@@ -41,7 +42,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatDatepickerModule,
     MatMomentDateModule,
     MatCheckboxModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ],
   exports: [
     MatSidenavModule,
@@ -62,7 +63,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatDatepickerModule,
     MatMomentDateModule,
     MatCheckboxModule,
-    MatPaginatorModule
-  ]
+    MatPaginatorModule,
+  ],
 })
-export class MaterialModule { }
+export class MaterialModule {}

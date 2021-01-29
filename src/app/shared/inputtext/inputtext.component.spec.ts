@@ -6,12 +6,13 @@ describe('InputtextComponent', () => {
   let component: InputtextComponent;
   let fixture: ComponentFixture<InputtextComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ InputtextComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [InputtextComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InputtextComponent);

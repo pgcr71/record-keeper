@@ -1,20 +1,26 @@
-import { Injectable, Type, ComponentFactoryResolver, Injector, ApplicationRef, ComponentRef, EmbeddedViewRef } from '@angular/core';
+import {
+  Injectable,
+  Type,
+  ComponentFactoryResolver,
+  Injector,
+  ApplicationRef,
+  ComponentRef,
+  EmbeddedViewRef,
+} from '@angular/core';
 import { DialogComponent } from './dialog.component';
 import { DialogOutput } from './dialog-output-data';
-import {DialogInputData} from './dialog-input-data';
+import { DialogInputData } from './dialog-input-data';
 import { DialogInjector } from './dialog-injector';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DialogService {
-  dialogComponentRef: ComponentRef<DialogComponent>
+  dialogComponentRef: ComponentRef<DialogComponent>;
   domElem: HTMLElement;
-  constructor(private _cfr: ComponentFactoryResolver,
-    private _injector: Injector,
-    private _ar: ApplicationRef) { }
+  constructor(private _cfr: ComponentFactoryResolver, private _injector: Injector, private _ar: ApplicationRef) {}
 
-  open(_component: Type<any>, inputData?:DialogInputData) {
+  open(_component: Type<any>, inputData?: DialogInputData) {
     let onclose = this.appendDialogComponentToBody(inputData);
     this.dialogComponentRef.instance.childComponent = _component;
     return onclose;
@@ -23,8 +29,7 @@ export class DialogService {
   appendDialogComponentToBody(inputData) {
     if (this.dialogComponentRef) {
       this.removeDialogComponentFromBody();
-    }
-    else {
+    } else {
       var dialogOutput: DialogOutput = new DialogOutput();
       let dialoginput: DialogInputData<any> = inputData;
       const map = new WeakMap();
@@ -37,7 +42,7 @@ export class DialogService {
       document.body.append(this.domElem);
       dialogOutput._onClose.subscribe(() => {
         this.removeDialogComponentFromBody();
-      })
+      });
     }
 
     return dialogOutput._onClose;

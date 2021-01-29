@@ -15,15 +15,10 @@ import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material/material.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AutocompleteModule } from './shared/autocomplete/autocomplete.module';
 @NgModule({
-  declarations: [
-    AppComponent,
-    NotFoundComponent,
-    HeaderComponent,
-    FooterComponent,
-    ContentComponent,
-    ToasterComponent
-  ],
+  declarations: [AppComponent, NotFoundComponent, HeaderComponent, FooterComponent, ContentComponent, ToasterComponent],
 
   imports: [
     NgxElectronModule,
@@ -32,16 +27,15 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     AppRouterModule,
     MaterialModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: AUTOID, useClass: AutoID },
-    { provide: MAT_DATE_LOCALE, useValue: 'en-IN' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-IN' },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ToasterComponent]
+  entryComponents: [ToasterComponent],
 })
-
-export class AppModule { }
+export class AppModule {}

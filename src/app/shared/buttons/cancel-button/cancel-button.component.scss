@@ -1,29 +1,26 @@
 @import '../../../../scss/abstracts/variables';
 
-.secondary-button{
-    font-family: inherit;
-    font-size: inherit;
-    background-color: white;
-    color:black;
-    border: 1px solid var(--primary-border-color);
-    height: 50px;
-    text-align: center;
-    width: 100%;
+.secondary-button {
+  font-family: inherit;
+  font-size: inherit;
+  background-color: white;
+  color: black;
+  border: 1px solid var(--primary-border-color);
+  height: 50px;
+  text-align: center;
+  width: 100%;
 }
 
-:host{
-    display: block;
+:host {
+  display: block;
 }
 
-
-@media screen and (min-width:$sm){
-    .secondary-button{
+@media screen and (min-width: $sm) {
+  .secondary-button {
     width: 100px;
-    }
+  }
 
-    
-:host{
+  :host {
     display: inline;
-    }
+  }
 }
-

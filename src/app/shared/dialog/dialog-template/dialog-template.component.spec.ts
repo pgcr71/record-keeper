@@ -6,12 +6,13 @@ describe('DialogTemplateComponent', () => {
   let component: DialogTemplateComponent;
   let fixture: ComponentFixture<DialogTemplateComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DialogTemplateComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DialogTemplateComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DialogTemplateComponent);

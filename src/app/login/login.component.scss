@@ -1,59 +1,54 @@
 @import '../../scss/abstracts/variables';
 
-:host{
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.button-section {
+  display: block;
+  @media only screen and (min-width: $sm) {
     display: flex;
-    justify-content: center;
-    align-items:center;
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-color) , var(--secondary-color));
+    justify-content: flex-end;
+  }
 }
 
-.button-section{
-    display:block;
-    @media only screen and (min-width:$sm){
-        display: flex;
-        justify-content: flex-end;
-    }
+.error-message {
+  color: red;
+  font-size: 12px;
 }
 
-.error-message{
-    color: red;
-    font-size: 12px;
+.form-section {
+  margin: auto;
 }
 
-.form-section{
-    margin: auto;
-}
+.phonenumber-section {
+  .country-code {
+    width: 100%;
+  }
 
-.phonenumber-section{
+  .drop-down {
+    width: 100%;
+  }
 
-
-    .country-code{
-        width:100%;
+  @media screen and (min-width: $sm) {
+    .country-code {
+      width: 40%;
     }
 
-    .drop-down{
-        width:100%;
+    .drop-down {
+      width: 58%;
     }
-
-    @media screen and (min-width:$sm){
-        .country-code{
-            width:40%;
-        }
-
-        .drop-down{
-            width:58%;
-        }
-    }
-
+  }
 }
 
-.heading{
-    color: white;
-    font-size: 25px;
-    font-weight: bold;
-    padding: 10px;
-    background-color: var(--primary-color);
+.heading {
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 10px;
+  background-color: var(--primary-color);
 }
-
-

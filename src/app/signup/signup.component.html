@@ -1,27 +1,59 @@
-<form  #form = 'ngForm' class='form p-primary col-12-12 col-md-5-12'>
-    <div class='m-b-primary'>
-        <app-dropdown class='' [label]='"Country Code"' name ='fdas' [(ngModel)] = 'countryCode' [name]= '"countrycode"' [options]='options'></app-dropdown>
-        <app-inputtext class='' [label]='"Phone Number"'(change)="validatePhoneNumber()" [(ngModel)]='phonenumber' [id]='phonenumber' [name]='"phonenumber"'></app-inputtext>
-        <div *ngIf='isPhoneNumberValid'>phone number valid</div>
+<form #form="ngForm" class="form p-primary col-12-12 col-md-5-12">
+  <div class="m-b-primary">
+    <app-dropdown
+      class=""
+      [label]="'Country Code'"
+      name="fdas"
+      [(ngModel)]="countryCode"
+      [name]="'countrycode'"
+      [options]="options"
+    ></app-dropdown>
+    <app-inputtext
+      class=""
+      [label]="'Phone Number'"
+      (change)="validatePhoneNumber()"
+      [(ngModel)]="phonenumber"
+      [id]="phonenumber"
+      [name]="'phonenumber'"
+    ></app-inputtext>
+    <div *ngIf="isPhoneNumberValid">phone number valid</div>
+  </div>
+  <div class="">
+    <app-inputtext
+      class=""
+      [label]="'First Name'"
+      [(ngModel)]="firstname"
+      [id]="firstname"
+      [name]="'firstname'"
+    ></app-inputtext>
+  </div>
 
-    </div>
-    <div class=''>
-        <app-inputtext class='' [label]='"First Name"' [(ngModel)]='firstname' [id]='firstname' [name]='"firstname"'></app-inputtext>
-    </div>
-
-    <div class=''>
-        <app-inputtext class='' [label]='"Last Name"' [(ngModel)]='lastname' [id]='lastname' [name]='"lastname"'></app-inputtext>
-    </div>
-    <div class='m-b-primary'>
-        <app-inputtext class='' #un [label]='"User Name"' (change)="validateUserName()" [(ngModel)]='username' [id]='"username"' [name]='"username"'></app-inputtext>
-        <div *ngIf='isUserNameValid'>username valid</div>
-    </div>
-    <div class='m-b-primary'>
-        <app-inputtext [label]='"Password"' [id]='password1' [(ngModel)]='password1' [name]='"password1"'></app-inputtext>
-        <app-inputtext [label]='"Re-Enter Password"' [(ngModel)]='password2' [id]='password2' [name]='"password2"'>
-
-        </app-inputtext>
-        <div *ngIf = 'password1 !== password2' class='error'>Passwords much be same</div>
-    </div>
-    <app-button (click) = 'onSubmit(form)'>SUBMIT</app-button>
+  <div class="">
+    <app-inputtext
+      class=""
+      [label]="'Last Name'"
+      [(ngModel)]="lastname"
+      [id]="lastname"
+      [name]="'lastname'"
+    ></app-inputtext>
+  </div>
+  <div class="m-b-primary">
+    <app-inputtext
+      class=""
+      #un
+      [label]="'User Name'"
+      (change)="validateUserName()"
+      [(ngModel)]="username"
+      [id]="'username'"
+      [name]="'username'"
+    ></app-inputtext>
+    <div *ngIf="isUserNameValid">username valid</div>
+  </div>
+  <div class="m-b-primary">
+    <app-inputtext [label]="'Password'" [id]="password1" [(ngModel)]="password1" [name]="'password1'"></app-inputtext>
+    <app-inputtext [label]="'Re-Enter Password'" [(ngModel)]="password2" [id]="password2" [name]="'password2'">
+    </app-inputtext>
+    <div *ngIf="password1 !== password2" class="error">Passwords much be same</div>
+  </div>
+  <app-button (click)="onSubmit(form)">SUBMIT</app-button>
 </form>

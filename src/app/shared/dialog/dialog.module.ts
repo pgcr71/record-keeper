@@ -8,11 +8,7 @@ import { DialogTemplateComponent } from './dialog-template/dialog-template.compo
 
 @NgModule({
   declarations: [DialogComponent, DialogTemplateComponent],
-  imports: [
-    CommonModule,
-    ButtonsModule,
-    FormsModule
-  ],
-  entryComponents: [DialogComponent, DialogTemplateComponent]
+  imports: [CommonModule, ButtonsModule, FormsModule],
+  entryComponents: [DialogComponent, DialogTemplateComponent],
 })
-export class DialogModule { }
+export class DialogModule {}

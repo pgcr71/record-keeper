@@ -6,12 +6,13 @@ describe('CancelButtonComponent', () => {
   let component: CancelButtonComponent;
   let fixture: ComponentFixture<CancelButtonComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CancelButtonComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [CancelButtonComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CancelButtonComponent);

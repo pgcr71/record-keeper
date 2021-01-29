@@ -1,0 +1,6 @@
+ea/build
+backend
+.vscode
+.history
+node_modules
+out

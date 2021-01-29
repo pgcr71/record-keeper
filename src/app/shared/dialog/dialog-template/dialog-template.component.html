@@ -1,17 +1,15 @@
-<div class='row dialog__container'>
+<div class="row dialog__container">
+  <div class="dialog__header display-flex justify-content-space-between col-12-12">
+    <span>title goes here</span>
+    <span (click)="onClose()">X</span>
+  </div>
 
-    <div class='dialog__header display-flex justify-content-space-between col-12-12'>
-        <span>title goes here</span>
-        <span (click)='onClose()'>X</span>
-    </div>
+  <div class="dialog__body col-12-12">
+    <input type="text" name="txt" #txt id="" />
+  </div>
 
-    <div class='dialog__body col-12-12'>
-        <input type="text" name="txt" #txt id="">
-    </div>
-
-    <div class='dialog__footer col-12-12 display-flex justify-content-flex-end'>
-        <app-button (click)='onOk(txt)'>{{okButtonInnerText}}</app-button>
-        <app-button (click)='onClose()'>{{closeButtonInnerText }}</app-button>
-    </div>
-
+  <div class="dialog__footer col-12-12 display-flex justify-content-flex-end">
+    <app-button (click)="onOk(txt)">{{ okButtonInnerText }}</app-button>
+    <app-button (click)="onClose()">{{ closeButtonInnerText }}</app-button>
+  </div>
 </div>

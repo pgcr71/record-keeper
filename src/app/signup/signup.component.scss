@@ -1,12 +1,12 @@
-:host{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--primary-color);
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
 }
 
-.form{
-    margin: auto;
-    background-color: white;
-    border: var(--primary-border-color);
+.form {
+  margin: auto;
+  background-color: white;
+  border: var(--primary-border-color);
 }

@@ -2,13 +2,13 @@ import { Injectable, ApplicationRef, ComponentFactoryResolver, Injector, Embedde
 import { ToasterComponent } from './toaster.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToasterService {
   componentRef: any;
   domElem: HTMLElement;
 
-  constructor(private injector: Injector, private app: ApplicationRef, private cfr: ComponentFactoryResolver) { }
+  constructor(private injector: Injector, private app: ApplicationRef, private cfr: ComponentFactoryResolver) {}
 
   success(message, options?) {
     this.appendToasterComponentToBody(message, options ? options : { color: 'green' });
@@ -34,11 +34,14 @@ export class ToasterService {
   }
 
   removeAfterTimeout(options) {
-    setTimeout(() => {
-      this.app.detachView(this.componentRef.hostView);
-      this.componentRef.destroy();
-      document.body.removeChild(this.domElem);
-      this.componentRef = null;
-    }, options.time ? options.time : 10000)
+    setTimeout(
+      () => {
+        this.app.detachView(this.componentRef.hostView);
+        this.componentRef.destroy();
+        document.body.removeChild(this.domElem);
+        this.componentRef = null;
+      },
+      options.time ? options.time : 10000
+    );
   }
 }

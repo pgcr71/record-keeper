@@ -22,5 +22,5 @@ export class seed1610457775313 implements MigrationInterface {
     await getRepository(PaymentStatus).save(paymentStatus3);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> { }
+  public async down(queryRunner: QueryRunner): Promise<void> {}
 }

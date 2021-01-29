@@ -1,8 +1,8 @@
 @import '../../scss/abstracts/variables';
 
-:host{
-    display: block;
-    margin:0px 20px 0px 20px;
+:host {
+  display: block;
+  margin: 0px 20px 0px 20px;
 }
 
 .form-group {
@@ -13,17 +13,17 @@
 }
 
 .mr-4 {
-   padding-right: 16px;
+  padding-right: 16px;
 }
 
 .no-data-color {
   display: flex;
   justify-content: center;
-  background-color:  white;
+  background-color: white;
 }
 
 .waring-snackbar {
-   background-color:  red;
+  background-color: red;
 }
 
 .mat-option {
@@ -43,12 +43,12 @@
 
 .detail-row {
   display: none;
- }
+}
 
- .expanded-row + .detail-row {
-   display: flex;
- }
+.expanded-row + .detail-row {
+  display: flex;
+}
 
- .editsection-column {
-   width: 100%;
- }
+.editsection-column {
+  width: 100%;
+}

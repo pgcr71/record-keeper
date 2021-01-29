@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { FinanceService } from '../finance/finance.service';
-import { get, result } from 'lodash'
+import { get, result } from 'lodash';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,7 +13,7 @@ import { SummaryService } from '../summary/summary.service';
 @Component({
   selector: 'app-billing',
   templateUrl: './billing.component.html',
-  styleUrls: ['./billing.component.scss']
+  styleUrls: ['./billing.component.scss'],
 })
 export class BillingComponent implements OnInit {
   billingCreateForm: FormGroup;
@@ -29,7 +29,7 @@ export class BillingComponent implements OnInit {
     lot_number: any;
     initial_cost: any;
     days_since_purchase: any;
-    ordered_on: any,
+    ordered_on: any;
     created_on: any;
     today: Date;
     interest_accrued: any;
@@ -37,9 +37,8 @@ export class BillingComponent implements OnInit {
     remaining_amount_copy: number;
     paid_amount: number;
     total_debt: number;
-
   }> = [];
-  displayedColumns = ['select', 'period', 'productInfo', 'interestDetails', 'totalDebt', 'debts', 'remainingAmount']
+  displayedColumns = ['select', 'period', 'productInfo', 'interestDetails', 'totalDebt', 'debts', 'remainingAmount'];
   totalPrincipal: number;
   totalInterest: number;
   totalDebt: number;
@@ -56,39 +55,35 @@ export class BillingComponent implements OnInit {
     private readonly is: FinanceService,
     private readonly snackBar: MatSnackBar,
     private readonly rs: SummaryService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.billingCreateForm = this.fb.group({
       user: ['', Validators.required],
       price: [null, Validators.required],
       paid_on: [new Date(), Validators.required],
-      comments: ['']
+      comments: [''],
     });
 
     this.is.getAllUsers().subscribe((users) => {
       this.users = users;
-      this.billingCreateForm.get('user').setValue('')
+      this.billingCreateForm.get('user').setValue('');
     });
 
-    this.billingCreateForm.get('paid_on')
-      .valueChanges.subscribe((value) => {
-        this.getUserOrders(this.userInfo, null, value);
-      })
+    this.billingCreateForm.get('paid_on').valueChanges.subscribe((value) => {
+      this.getUserOrders(this.userInfo, null, value);
+    });
 
-    this.billingCreateForm.get('price')
-      .valueChanges
-      .pipe(
-        debounceTime(500),
-      ).subscribe((value) => this.calculateRemaining(value))
+    this.billingCreateForm
+      .get('price')
+      .valueChanges.pipe(debounceTime(500))
+      .subscribe((value) => this.calculateRemaining(value));
 
-    this.userSearch = this.billingCreateForm.get('user').valueChanges
-      .pipe(
-        startWith(''),
-        map(value => value && (typeof value === 'string' ? value : value['first_name'] + " " + value['last_name'])),
-        map(name => name ? this._userFilter(name) : this.users.slice())
-      );
-
+    this.userSearch = this.billingCreateForm.get('user').valueChanges.pipe(
+      startWith(''),
+      map((value) => value && (typeof value === 'string' ? value : value['first_name'] + ' ' + value['last_name'])),
+      map((name) => (name ? this._userFilter(name) : this.users.slice()))
+    );
   }
 
   calculateRemaining(amount) {
@@ -112,7 +107,7 @@ export class BillingComponent implements OnInit {
       row['remaining_principal_debt'] = row['remaining_principal_debt_copy'];
       row['remaining_interest_debt'] = row['remaining_interest_debt_copy'];
       row.remaining_amount = row.remaining_amount_copy;
-      const diff = sum - Number(amount)
+      const diff = sum - Number(amount);
       if (diff <= 0) {
         include = true;
         row.remaining_amount = 0;
@@ -120,29 +115,51 @@ export class BillingComponent implements OnInit {
         sumOfFiltered = sumOfFiltered + Number(row.remaining_amount_copy);
 
         if (row.interest_type === 'compound') {
-          this.calculateCompoundInterest(row, this.billingCreateForm.get('paid_on').value, Number(row.remaining_amount_copy));
+          this.calculateCompoundInterest(
+            row,
+            this.billingCreateForm.get('paid_on').value,
+            Number(row.remaining_amount_copy)
+          );
         } else {
-          this.calculateSimpleInterest(row, this.billingCreateForm.get('paid_on').value, Number(row.remaining_amount_copy))
+          this.calculateSimpleInterest(
+            row,
+            this.billingCreateForm.get('paid_on').value,
+            Number(row.remaining_amount_copy)
+          );
         }
       }
 
       sum = row.remaining_amount_copy + sum;
       return include;
-    })
+    });
 
     const last = filteredResults.length - 1;
     if (last > -1) {
-      const remainingAmount = (amount - (sumOfFiltered - filteredResults[last].remaining_amount_copy));
+      const remainingAmount = amount - (sumOfFiltered - filteredResults[last].remaining_amount_copy);
       if (filteredResults[last].interest_type === 'compound') {
-        this.calculateCompoundInterest(filteredResults[last], this.billingCreateForm.get('paid_on').value, Number(remainingAmount));
+        this.calculateCompoundInterest(
+          filteredResults[last],
+          this.billingCreateForm.get('paid_on').value,
+          Number(remainingAmount)
+        );
       } else {
-        this.calculateSimpleInterest(filteredResults[last], this.billingCreateForm.get('paid_on').value, Number(remainingAmount))
+        this.calculateSimpleInterest(
+          filteredResults[last],
+          this.billingCreateForm.get('paid_on').value,
+          Number(remainingAmount)
+        );
       }
-      this.totalRemainingDebt = this.billingDetails.reduce((acc, next) => acc + Number(next["remainingPrincipalTobePaid"]) + Number(next["remainingInterestTobePaid"]), 0);
-      this.totalPaid = this.billingDetails.reduce((acc, next) => acc + Number(next["principalToBeDebited"]) + Number(next["interestToBeDebited"]), 0);
-    };
+      this.totalRemainingDebt = this.billingDetails.reduce(
+        (acc, next) => acc + Number(next['remainingPrincipalTobePaid']) + Number(next['remainingInterestTobePaid']),
+        0
+      );
+      this.totalPaid = this.billingDetails.reduce(
+        (acc, next) => acc + Number(next['principalToBeDebited']) + Number(next['interestToBeDebited']),
+        0
+      );
+    }
 
-    this.selection.deselect(...this.billingDetails)
+    this.selection.deselect(...this.billingDetails);
     this.selection.select(...filteredResults);
   }
 
@@ -157,11 +174,14 @@ export class BillingComponent implements OnInit {
     const days_since_purchase = Math.round(Math.abs((date1 - date2) / oneDay));
     console.log(days_since_purchase);
     const interestRate = result.rate_of_interest;
-    result['principalToBeDebited'] =
-      (amount / (1 + (days_since_purchase * 12 * interestRate / 36500))).toFixed(2);
+    result['principalToBeDebited'] = (amount / (1 + (days_since_purchase * 12 * interestRate) / 36500)).toFixed(2);
     result['interestToBeDebited'] = (amount - result['principalToBeDebited']).toFixed(2);
-    result['remainingPrincipalTobePaid'] = (result['remaining_principal_debt'] - result['principalToBeDebited']).toFixed(2);
-    result['remainingInterestTobePaid'] = (result['remaining_interest_debt'] - result['interestToBeDebited']).toFixed(2);
+    result['remainingPrincipalTobePaid'] = (
+      result['remaining_principal_debt'] - result['principalToBeDebited']
+    ).toFixed(2);
+    result['remainingInterestTobePaid'] = (result['remaining_interest_debt'] - result['interestToBeDebited']).toFixed(
+      2
+    );
 
     return result;
   }
@@ -180,11 +200,18 @@ export class BillingComponent implements OnInit {
     const timesToCompound = Math.floor(days_since_purchase / compoundingPeriodInDays);
     const compoundingMonthsPerYear = Math.floor(365 / compoundingPeriodInDays);
     const remaining_days = days_since_purchase - timesToCompound * compoundingPeriodInDays;
-    result['principalToBeDebited'] =
-      (amount / (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) * (1 + (remaining_days * interestRate * 12) / 36500))).toFixed(2);
-    result['interestToBeDebited'] = (amount - result['principalToBeDebited']).toFixed(2);;
-    result['remainingPrincipalTobePaid'] = (result['remaining_principal_debt'] - result['principalToBeDebited']).toFixed(2);;
-    result['remainingInterestTobePaid'] = (result['remaining_interest_debt'] - result['interestToBeDebited']).toFixed(2);;
+    result['principalToBeDebited'] = (
+      amount /
+      (Math.pow(1 + (interestRate * 12) / (compoundingMonthsPerYear * 100), timesToCompound) *
+        (1 + (remaining_days * interestRate * 12) / 36500))
+    ).toFixed(2);
+    result['interestToBeDebited'] = (amount - result['principalToBeDebited']).toFixed(2);
+    result['remainingPrincipalTobePaid'] = (
+      result['remaining_principal_debt'] - result['principalToBeDebited']
+    ).toFixed(2);
+    result['remainingInterestTobePaid'] = (result['remaining_interest_debt'] - result['interestToBeDebited']).toFixed(
+      2
+    );
 
     return result;
   }
@@ -197,9 +224,7 @@ export class BillingComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   /** The label for the checkbox on the passed row */
@@ -212,18 +237,18 @@ export class BillingComponent implements OnInit {
 
   userDisplayFn(user): string {
     console.log(user);
-    return (user && (user['first_name'] + user['last_name'])) ? user['first_name'] + " " + user['last_name'] : '';
+    return user && user['first_name'] + user['last_name'] ? user['first_name'] + ' ' + user['last_name'] : '';
   }
-
 
   private _userFilter(name: string) {
     const filterValue = name.toLowerCase();
 
-    return this.users.filter(option =>
-      (option['first_name'].toLowerCase()).includes(filterValue) ||
-      (option['last_name'].toLowerCase()).includes(filterValue) ||
-      (option['phone_number'].toLowerCase()).includes(filterValue) ||
-      (option['first_name'] + " " + option['last_name']).toLowerCase().indexOf(filterValue) === 0
+    return this.users.filter(
+      (option) =>
+        option['first_name'].toLowerCase().includes(filterValue) ||
+        option['last_name'].toLowerCase().includes(filterValue) ||
+        option['phone_number'].toLowerCase().includes(filterValue) ||
+        (option['first_name'] + ' ' + option['last_name']).toLowerCase().indexOf(filterValue) === 0
     );
   }
 
@@ -234,68 +259,71 @@ export class BillingComponent implements OnInit {
 
   getUserOrders(userInfo, date: Date, endDate?: Date) {
     this.is.getAllUserOrders(userInfo && userInfo.id, date, endDate, false).subscribe((data: Array<object>) => {
-      this.billingDetails = get(data, 'orders', []).map(result => this.formatData(result));
+      this.billingDetails = get(data, 'orders', []).map((result) => this.formatData(result));
       this.dataSource = new MatTableDataSource<any>(this.billingDetails);
       this.totalPrincipal = this.billingDetails.reduce((acc, next) => acc + next.initial_cost, 0);
       this.totalInterest = this.billingDetails.reduce((acc, next) => acc + next.interest_accrued, 0);
       this.totalDebt = this.billingDetails.reduce((acc, next) => acc + next.total_debt, 0);
       this.calculateRemaining(this.billingCreateForm.get('price').value);
-    })
+    });
   }
 
   formatData(results) {
     return {
-      'id': get(results, 'id', ''),
-      'quantity': get(results, 'quantity', 0),
-      'comments': get(results, 'comments', ''),
-      "product_name": get(results, 'product.name', 0),
-      'unit_price': Number(get(results, 'product.unit_price', 0)),
-      'rate_of_interest': Number(get(results, 'product.rate_of_interest', 0)),
-      'interest_type': get(results, 'product.interest_type.name', 0),
-      'lot_number': get(results, 'product.lot_number', 0),
-      "initial_cost": Number(get(results, 'initial_cost', 0)),
-      "days_since_purchase": Number(get(results, 'days_since_purchase', 0)),
-      "created_on": get(results, 'created_on', 0),
-      "ordered_on": get(results, 'ordered_on', 0),
-      "today": new Date(),
-      "interest_accrued": Number(get(results, 'remaining_interest_debt', 0)),
-      "remaining_principal_debt": Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
-      "remaining_principal_debt_copy": Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
-      "remaining_interest_debt": Number(get(results, 'remaining_interest_debt', 0)) || 0,
-      "remaining_interest_debt_copy": Number(get(results, 'remaining_interest_debt', 0)) || 0,
-      "remaining_amount_copy": Number(get(results, 'total_debt', 0)),
-      "paid_amount": 0,
-      "payment_status": get(results, 'payment_status', {}),
-      "total_debt": Number(get(results, 'total_debt', 0))
-    }
+      id: get(results, 'id', ''),
+      quantity: get(results, 'quantity', 0),
+      comments: get(results, 'comments', ''),
+      product_name: get(results, 'product.name', 0),
+      unit_price: Number(get(results, 'product.unit_price', 0)),
+      rate_of_interest: Number(get(results, 'product.rate_of_interest', 0)),
+      interest_type: get(results, 'product.interest_type.name', 0),
+      lot_number: get(results, 'product.lot_number', 0),
+      initial_cost: Number(get(results, 'initial_cost', 0)),
+      days_since_purchase: Number(get(results, 'days_since_purchase', 0)),
+      created_on: get(results, 'created_on', 0),
+      ordered_on: get(results, 'ordered_on', 0),
+      today: new Date(),
+      interest_accrued: Number(get(results, 'remaining_interest_debt', 0)),
+      remaining_principal_debt: Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
+      remaining_principal_debt_copy: Number(get(results, 'remaining_pricipal_debt', 0)) || 0,
+      remaining_interest_debt: Number(get(results, 'remaining_interest_debt', 0)) || 0,
+      remaining_interest_debt_copy: Number(get(results, 'remaining_interest_debt', 0)) || 0,
+      remaining_amount_copy: Number(get(results, 'total_debt', 0)),
+      paid_amount: 0,
+      payment_status: get(results, 'payment_status', {}),
+      total_debt: Number(get(results, 'total_debt', 0)),
+    };
   }
 
   onSubmit() {
     if (this.billingCreateForm.get('price').value < 0) {
       this.cantBeNegetive = true;
-      this.billingCreateForm.controls['price'].setErrors({ 'negetiveValue': true });
+      this.billingCreateForm.controls['price'].setErrors({ negetiveValue: true });
       return;
     }
 
     if (this.billingCreateForm.valid) {
       const paidOn = this.billingCreateForm.get('paid_on') && this.billingCreateForm.get('paid_on').value.toISOString();
-      const data = { ...this.billingCreateForm.value, paid_on: paidOn }
-      this.rs.add(data, this.selection.selected).subscribe((res) => {
-        this.billingCreateForm.reset({
-          user: this.userInfo,
-          price: null,
-          paid_on: new Date()
-        });
-        this.snackBar.open('Data Saved Succesfully', "Close", {
-          duration: 2000
-        })
-      }, error => {
-        console.log(error)
-        this.snackBar.open(error.error.sqlMessage, "Close", {
-          duration: 2000,
-          panelClass: ['waring-snackbar']
-        })
-      })
+      const data = { ...this.billingCreateForm.value, paid_on: paidOn };
+      this.rs.add(data, this.selection.selected).subscribe(
+        (res) => {
+          this.billingCreateForm.reset({
+            user: this.userInfo,
+            price: null,
+            paid_on: new Date(),
+          });
+          this.snackBar.open('Data Saved Succesfully', 'Close', {
+            duration: 2000,
+          });
+        },
+        (error) => {
+          console.log(error);
+          this.snackBar.open(error.error.sqlMessage, 'Close', {
+            duration: 2000,
+            panelClass: ['waring-snackbar'],
+          });
+        }
+      );
     }
   }
 }

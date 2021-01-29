@@ -6,13 +6,14 @@ import { AutoID, AUTOID } from 'src/app/auto-id.provide';
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DropdownComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DropdownComponent),
+      multi: true,
+    },
+  ],
 })
-
 export class DropdownComponent implements OnInit, ControlValueAccessor {
   tempId = this.autoID.newID();
   @Input() multi = false;
@@ -23,8 +24,8 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
   @Input() id: string = 'dropdown' + this.tempId;
   @Input() label: string;
   @Input() key: string;
-  @Output() searchTerm = new EventEmitter<string>()
-  private _value: any ;
+  @Output() searchTerm = new EventEmitter<string>();
+  private _value: any;
 
   get value(): any {
     return this._value;
@@ -42,11 +43,9 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
   copyOfOptions = JSON.parse(JSON.stringify(this.options || []));
   displayInputInsteadOfButton = false;
 
-  constructor(@Inject(AUTOID) private autoID: AutoID) { }
+  constructor(@Inject(AUTOID) private autoID: AutoID) {}
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   ngOnChanges(simpleChanges) {
     if (simpleChanges && simpleChanges.hasOwnProperty('id')) {
@@ -70,10 +69,8 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
         return option[this.key].includes(value);
       }
       return option.includes(value);
-    })
+    });
   }
-
-
 
   writeValue(value: any) {
     this._value = value;
@@ -93,12 +90,14 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
     this.displayList = !this.displayList;
     this.rotateIcon = !this.rotateIcon;
     this.displayInputInsteadOfButton = !this.displayInputInsteadOfButton;
-
   }
 
-  onChange = (_) => { };
-  onTouched = () => { };
-  registerOnChange(fn) { this.onChange = fn; }
-  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
-
+  onChange = (_) => {};
+  onTouched = () => {};
+  registerOnChange(fn) {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
 }

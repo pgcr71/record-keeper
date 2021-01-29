@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BreakpointService {
   isDesktop = new BehaviorSubject<boolean>(false);
@@ -17,9 +17,13 @@ export class BreakpointService {
   }
 
   observeBreakPoints() {
-    this.breakpointObserver.observe([Breakpoints.TabletLandscape, Breakpoints.Web, Breakpoints.HandsetLandscape])
-      .pipe(tap(result => this.isDesktop.next(result.matches))).subscribe();
-    this.breakpointObserver.observe([Breakpoints.HandsetPortrait, Breakpoints.TabletPortrait])
-      .pipe(tap(result => this.isMobile.next(result.matches))).subscribe();
+    this.breakpointObserver
+      .observe([Breakpoints.TabletLandscape, Breakpoints.Web, Breakpoints.HandsetLandscape])
+      .pipe(tap((result) => this.isDesktop.next(result.matches)))
+      .subscribe();
+    this.breakpointObserver
+      .observe([Breakpoints.HandsetPortrait, Breakpoints.TabletPortrait])
+      .pipe(tap((result) => this.isMobile.next(result.matches)))
+      .subscribe();
   }
 }

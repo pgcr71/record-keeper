@@ -1,19 +1,34 @@
-<app-header  *ngIf = 'isDesktop' (rkIconClick)='displaySideNav = !displaySideNav'></app-header>
-<mat-sidenav-container [hasBackdrop]='false' class='side-nav-container'>
-  <mat-sidenav [autoFocus]='false' class='side-nav' *ngIf='isDesktop || displaySideNav' color='primary' #drawer [mode]="isDesktop?'side':'over' " opened position='start'>
+<app-header *ngIf="isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
+<mat-sidenav-container [hasBackdrop]="false" class="side-nav-container">
+  <mat-sidenav
+    [autoFocus]="false"
+    class="side-nav"
+    *ngIf="isDesktop || displaySideNav"
+    color="primary"
+    #drawer
+    [mode]="isDesktop ? 'side' : 'over'"
+    opened
+    position="start"
+  >
     <mat-nav-list>
-    <button (click) ='displaySideNav = !displaySideNav' *ngIf="!isDesktop" mat-icon-button class="rk-icon" aria-label="rk icon-button with menu icon">
-      <mat-icon >close</mat-icon>
-    </button>
-  </mat-nav-list>
+      <button
+        (click)="displaySideNav = !displaySideNav"
+        *ngIf="!isDesktop"
+        mat-icon-button
+        class="rk-icon"
+        aria-label="rk icon-button with menu icon"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-nav-list>
     <mat-nav-list>
-      <mat-list-item [routerLink] ="link.link" *ngFor="let link of links">
-         <a matLine >{{ link.name }}</a>
+      <mat-list-item [routerLink]="link.link" *ngFor="let link of links">
+        <a matLine>{{ link.name }}</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-header *ngIf = '!isDesktop' (rkIconClick)='displaySideNav = !displaySideNav'></app-header>
+    <app-header *ngIf="!isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
     <app-content></app-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

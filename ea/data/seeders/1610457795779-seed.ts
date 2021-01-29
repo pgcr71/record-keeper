@@ -67,5 +67,5 @@ export class seed1610457795779 implements MigrationInterface {
     await getRepository(InterestDefaults).save(interestDefaults);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> { }
+  public async down(queryRunner: QueryRunner): Promise<void> {}
 }

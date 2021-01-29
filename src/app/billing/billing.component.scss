@@ -1,9 +1,8 @@
-
 @import '../../scss/abstracts/variables';
 
-:host{
-    display: block;
-    margin:0px 20px 0px 20px;
+:host {
+  display: block;
+  margin: 0px 20px 0px 20px;
 }
 
 .form-group {
@@ -14,7 +13,7 @@
 }
 
 .mr-4 {
-   padding-right: 16px;
+  padding-right: 16px;
 }
 
 .mat-option {
@@ -24,23 +23,28 @@
 .no-data-color {
   display: flex;
   justify-content: center;
-  background-color:  white;
+  background-color: white;
 }
 
 .waring-snackbar {
-   background-color:  red;
+  background-color: red;
 }
 
-textarea { resize: none !important }
+textarea {
+  resize: none !important;
+}
 
-.table-checkbox-header-column, .table-checkbox-column {
+.table-checkbox-header-column,
+.table-checkbox-column {
   flex: 0 0 6%;
 }
 
-.product-details-column, .product-details-header-column {
+.product-details-column,
+.product-details-header-column {
   flex: 0 0 25%;
 }
 
-.interest-details-column, .interest-details-header-column {
+.interest-details-column,
+.interest-details-header-column {
   flex: 0 0 25%;
 }

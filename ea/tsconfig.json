@@ -14,18 +14,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "*": [
-        "node_modules/*"
-      ]
+      "*": ["node_modules/*"]
     }
   },
-  "include": [
-    "data/**/*",
-    "electronindex.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "data/migrations",
-    "data/seeders"
-  ]
+  "include": ["data/**/*", "electronindex.ts"],
+  "exclude": ["node_modules", "data/migrations", "data/seeders"]
 }

@@ -6,43 +6,39 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   selector: 'app-inputtext',
   templateUrl: './inputtext.component.html',
   styleUrls: ['./inputtext.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => InputtextComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputtextComponent),
+      multi: true,
+    },
+  ],
 })
-
 export class InputtextComponent implements OnInit, ControlValueAccessor, OnChanges {
-
-  constructor(@Inject(AUTOID) private autoID: AutoID) {
-
-  }
+  constructor(@Inject(AUTOID) private autoID: AutoID) {}
   tempid = this.autoID.newID();
   @Input()
   id;
   @Input()
-  name
+  name;
   @Input()
-  label
+  label;
 
- value
+  value;
 
-  onChange = (_) => { };
-  onTouched = () => { };
+  onChange = (_) => {};
+  onTouched = () => {};
 
   ngOnChanges(SimpleChange) {
-    if(SimpleChange.id)
-    this.id = this.id + '_' + this.tempid;
-    if(SimpleChange.name)
-    this.name = this.name + '_' + this.tempid;
+    if (SimpleChange.id) this.id = this.id + '_' + this.tempid;
+    if (SimpleChange.name) this.name = this.name + '_' + this.tempid;
   }
 
   ngOnInit() {
-    if(!this.id){
+    if (!this.id) {
       this.id = 'inputtext' + '_' + this.tempid;
     }
-    if(!this.name){
+    if (!this.name) {
       this.name = 'inputtext' + '_' + this.tempid;
     }
   }
@@ -56,6 +52,10 @@ export class InputtextComponent implements OnInit, ControlValueAccessor, OnChang
     this.value = value;
   }
 
-  registerOnChange(fn) { this.onChange = fn; }
-  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+  registerOnChange(fn) {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
 }

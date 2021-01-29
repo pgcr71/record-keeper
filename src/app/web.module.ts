@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AppCommonModule } from './shared/common/app-common.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    AppCommonModule
-  ]
+  imports: [CommonModule, AppCommonModule],
 })
-export class WebModule { }
+export class WebModule {}

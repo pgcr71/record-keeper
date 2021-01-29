@@ -7,42 +7,35 @@ import { BreakpointService } from './shared/breakpoint.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-
-
-
 export class AppComponent implements OnInit {
   row: any;
   showFiller = 'false';
   isDesktop: boolean;
   displaySideNav: boolean;
-  links: Array<{name: string, link: string}> = [
+  links: Array<{ name: string; link: string }> = [
     {
       name: 'Inventory',
-      link: 'products'
+      link: 'products',
     },
     {
       name: 'Orders',
-      link: 'orders'
+      link: 'orders',
     },
     {
-      name: "Repayment",
-      link: "billing"
+      name: 'Repayment',
+      link: 'billing',
     },
     {
-      name: "Summary",
-      link: "repayment"
+      name: 'Summary',
+      link: 'repayment',
     },
-
-]
-  constructor(
-    private readonly bps: BreakpointService
-    ) {
-  }
+  ];
+  constructor(private readonly bps: BreakpointService) {}
 
   ngOnInit() {
-    this.bps.isDesktop$.subscribe(bool => this.isDesktop = bool);
+    this.bps.isDesktop$.subscribe((bool) => (this.isDesktop = bool));
   }
 
   // redirectToOrders() {

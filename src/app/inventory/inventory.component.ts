@@ -26,11 +26,9 @@ export const ELEMENT_DATA: PeriodicElement[] = [];
       state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
-  ]
+  ],
 })
-
 export class InventoryComponent implements OnInit {
-
   displayedColumns: string[] = ['name', 'quantity', 'unit_price', 'rate_of_interest', 'buttons'];
   name = '';
   quantity = 0;
@@ -50,7 +48,7 @@ export class InventoryComponent implements OnInit {
     private ts: ToasterService,
     private readonly fb: FormBuilder,
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.inventoryCreateForm = this.fb.group({
@@ -60,23 +58,26 @@ export class InventoryComponent implements OnInit {
       interest_type: [null, Validators.required],
       unit_price: ['', Validators.required],
       lot_number: [null, Validators.required],
-      comments: ['']
+      comments: [''],
     });
-    this.is.get().subscribe(result => {
+    this.is.get().subscribe((result) => {
       console.log(result);
       this.inventory = result || [];
-    })
-    this.is.getInterestTypes().subscribe(result => {
+    });
+    this.is.getInterestTypes().subscribe((result) => {
       this.interestTypes = result;
       this.inventoryCreateForm.get('interest_type').setValue(this.interestTypes && this.interestTypes[0]);
-    })
+    });
   }
 
   updateData(element) {
-    this.is.update(this.inventoryEditForm.value).subscribe((res) => {
-      this.editMode = false;
-      this.inventory = this.inventory.map((el) => el.id === res.id ? res : el);
-    }, err => console.log(err));
+    this.is.update(this.inventoryEditForm.value).subscribe(
+      (res) => {
+        this.editMode = false;
+        this.inventory = this.inventory.map((el) => (el.id === res.id ? res : el));
+      },
+      (err) => console.log(err)
+    );
   }
 
   resetForm(element) {
@@ -93,46 +94,51 @@ export class InventoryComponent implements OnInit {
       unit_price: [data.unit_price, Validators.required],
       lot_number: [data.lot_number, Validators.required],
       comments: [data.comments],
-      id: [data.id]
+      id: [data.id],
     });
 
     this.inventoryEditFormCopy = cloneDeep(this.inventoryEditForm);
   }
 
   onDelete(element) {
-    this.is.delete(element).subscribe((res) => {
-      this.inventory = this.inventory.filter((el) => el.id !== element.id);
-    }, err => console.log(err))
+    this.is.delete(element).subscribe(
+      (res) => {
+        this.inventory = this.inventory.filter((el) => el.id !== element.id);
+      },
+      (err) => console.log(err)
+    );
   }
   compareWith(o1, o2) {
     if (!o1 || !o2) {
       return;
     }
-    if (o1.id == o2.id)
-      return true;
-    else return false
+    if (o1.id == o2.id) return true;
+    else return false;
   }
 
   onSubmit(event: Event) {
     event.preventDefault();
     if (this.inventoryCreateForm.valid) {
-      this.is.add(this.inventoryCreateForm.value).subscribe((res) => {
-        const id = get(res, "identifiers[0].id", null) || get(res, "id", null);
-        this.inventory = [...this.inventory, { ...this.inventoryCreateForm.value, id: id }];
-        this.inventoryCreateForm.reset({
-          name: '',
-          interest_type: this.interestTypes[0]
-        });
+      this.is.add(this.inventoryCreateForm.value).subscribe(
+        (res) => {
+          const id = get(res, 'identifiers[0].id', null) || get(res, 'id', null);
+          this.inventory = [...this.inventory, { ...this.inventoryCreateForm.value, id: id }];
+          this.inventoryCreateForm.reset({
+            name: '',
+            interest_type: this.interestTypes[0],
+          });
 
-        this.snackBar.open('Data Saved Succesfully', "Close", {
-          duration: 2000
-        })
-      }, error => {
-        this.snackBar.open(error.error.sqlMessage, "Close", {
-          duration: 2000,
-          panelClass: ['waring-snackbar']
-        })
-      })
+          this.snackBar.open('Data Saved Succesfully', 'Close', {
+            duration: 2000,
+          });
+        },
+        (error) => {
+          this.snackBar.open(error.error.sqlMessage, 'Close', {
+            duration: 2000,
+            panelClass: ['waring-snackbar'],
+          });
+        }
+      );
     }
   }
 }

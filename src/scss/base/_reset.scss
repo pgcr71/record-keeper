@@ -1,29 +1,31 @@
 html {
-    font-size: 62.5%;
-    background: var(--primary-background-color);
+  font-size: 62.5%;
+  background: var(--primary-background-color);
 }
 
 * {
-    padding: 0rem;
-    margin: 0rem;
-    border: 0rem;
-    box-sizing: border-box;
+  padding: 0rem;
+  margin: 0rem;
+  border: 0rem;
+  box-sizing: border-box;
 }
 
-body{
-    font-size: 1.6rem;
-    font-family: var(--primary-font);
+body {
+  font-size: 1.6rem;
+  font-family: var(--primary-font);
 }
 
-input, textarea, select{
-    font-family: inherit;
-    font-size: inherit;
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
 }
 ul,
 li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 :focus {
-    outline: 0rem;
+  outline: 0rem;
 }

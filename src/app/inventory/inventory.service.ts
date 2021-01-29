@@ -6,7 +6,7 @@ import { AppService } from '../app.service';
 import { ElectronService } from 'ngx-electron';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InventoryService {
   isElectron: boolean;
@@ -38,20 +38,20 @@ export class InventoryService {
     if (this.isElectron) {
       return this.appService.electronEmit('removeProducts', data);
     }
-    return this.http.delete(`${URL}/products/${data.id}`)
+    return this.http.delete(`${URL}/products/${data.id}`);
   }
 
   update(data) {
     if (this.isElectron) {
       return this.appService.electronEmit('saveProducts', data);
     }
-    return this.http.put(URL + '/products', data)
+    return this.http.put(URL + '/products', data);
   }
 
   getInterestTypes(): Observable<Array<object>> {
     if (this.isElectron) {
       return this.appService.electronEmit('allInterestTypes');
     }
-    return this.http.get(URL + '/interestTypes') as Observable<Array<object>>
+    return this.http.get(URL + '/interestTypes') as Observable<Array<object>>;
   }
 }

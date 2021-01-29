@@ -1,10 +1,10 @@
 $no-of-columns: 12;
-$margin-percent-between-columns:5;
-$iphone-4s-min-width:320px;
-$iphone-4s-max-width:480px;
-$iphone-4s-pixel-ratio:2;
+$margin-percent-between-columns: 5;
+$iphone-4s-min-width: 320px;
+$iphone-4s-max-width: 480px;
+$iphone-4s-pixel-ratio: 2;
 $orientation-portrait: portrait;
-$orientation-landscape:landscape;
+$orientation-landscape: landscape;
 $min_width: 320px;
 $max_width: 1200px;
 $min_font: 16px;
@@ -13,13 +13,13 @@ $max_font: 24px;
 $sm: 567px;
 $md: 768px;
 $lg: 992px;
-$xl:1200px;
-$all:0px;
+$xl: 1200px;
+$all: 0px;
 
-:root{
-    --sm:567px;
-    --md:768px;
-    --lg: 992px;
-    --xl:1200px;
-    --all:0px;
+:root {
+  --sm: 567px;
+  --md: 768px;
+  --lg: 992px;
+  --xl: 1200px;
+  --all: 0px;
 }

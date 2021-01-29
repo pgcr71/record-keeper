@@ -1,87 +1,87 @@
 .display {
-    &-block {
-        display: block;
-    }
+  &-block {
+    display: block;
+  }
 
-    &-none {
-        display: none;
-    }
+  &-none {
+    display: none;
+  }
 
-    &-flex {
-        display: flex;
-    }
+  &-flex {
+    display: flex;
+  }
 
-    &-inline {
-        display: inline;
-    }
+  &-inline {
+    display: inline;
+  }
 }
 
 .justify-content {
-    &-center {
-        justify-content: center;
-    }
-    &-flex-start{
-        justify-content: flex-start;
-    }
-    &-flex-end{
-        justify-content: flex-end;
-    }
-    &-space-between{
-        justify-content: space-between;
-    }
+  &-center {
+    justify-content: center;
+  }
+  &-flex-start {
+    justify-content: flex-start;
+  }
+  &-flex-end {
+    justify-content: flex-end;
+  }
+  &-space-between {
+    justify-content: space-between;
+  }
 }
 
 .align-items {
-    &-center {
-        align-items: center;
-    }
-    &-flex-start{
-        align-items: flex-start;
-    }
-    &-flex-end{
-        align-items: flex-end;
-    }
-    &-space-between{
-        align-items: space-between;
-    }
+  &-center {
+    align-items: center;
+  }
+  &-flex-start {
+    align-items: flex-start;
+  }
+  &-flex-end {
+    align-items: flex-end;
+  }
+  &-space-between {
+    align-items: space-between;
+  }
 }
 
 .align-content {
-    &-center {
-        align-content: center;
-    }
+  &-center {
+    align-content: center;
+  }
 }
 
 .postion {
-    &-absolute {
-        position: absolute;
-    }
+  &-absolute {
+    position: absolute;
+  }
 
-    &-relative {
-        position: relative;
-    }
+  &-relative {
+    position: relative;
+  }
 
-    &-fixed {
-        position: fixed;
-    }
+  &-fixed {
+    position: fixed;
+  }
 }
 
-.flex-direction{
-    &-row{
-        flex-direction: row;
-    }
-    &-column{
-        flex-direction: column;
-    }
+.flex-direction {
+  &-row {
+    flex-direction: row;
+  }
+  &-column {
+    flex-direction: column;
+  }
 }
 
-.align-self-flex-end{
-    align-self: flex-end;
+.align-self-flex-end {
+  align-self: flex-end;
 }
-.pd-2vw{
-padding:2vw;
+.pd-2vw {
+  padding: 2vw;
 }
 
-.pd-1vw{
-    padding:1vw;
+.pd-1vw {
+  padding: 1vw;
 }

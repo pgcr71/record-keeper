@@ -1,2 +1,10 @@
-<label  *ngIf = 'label'  class='display-block m-b-ternary' [attr.for] = 'id'>{{label}}</label>
-<input #in [attr.id] = 'id' (input) = 'change(in.value)' [(ngModel)] = 'value' class='w-100 p-secondary b-primary' type="text"  [attr.name]='name'>
+<label *ngIf="label" class="display-block m-b-ternary" [attr.for]="id">{{ label }}</label>
+<input
+  #in
+  [attr.id]="id"
+  (input)="change(in.value)"
+  [(ngModel)]="value"
+  class="w-100 p-secondary b-primary"
+  type="text"
+  [attr.name]="name"
+/>

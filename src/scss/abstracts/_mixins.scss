@@ -2,63 +2,65 @@
 @import '../abstracts/functions';
 
 @mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
-    $u1: unit($min-vw);
-    $u2: unit($max-vw);
-    $u3: unit($min-font-size);
-    $u4: unit($max-font-size);
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
 
-    @if $u1==$u2 and $u1==$u3 and $u1==$u4 {
-        & {
-            font-size: $min-font-size;
+  @if $u1==$u2 and $u1==$u3 and $u1==$u4 {
+    & {
+      font-size: $min-font-size;
 
-            @media screen and (min-width: $min-vw) {
-                font-size: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
-            }
+      @media screen and (min-width: $min-vw) {
+        font-size: calc(
+          #{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} *
+            ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
+        );
+      }
 
-            @media screen and (min-width: $max-vw) {
-                font-size: $max-font-size;
-            }
-        }
+      @media screen and (min-width: $max-vw) {
+        font-size: $max-font-size;
+      }
     }
+  }
 }
 
-
 @mixin grid-columns($columns, $width) {
-    $screenType: screenType($width);
+  $screenType: screenType($width);
 
-    @media screen and (min-width:$width) {
-        @for $var from 1 to $columns+1 {
-            .col#{$screenType}#{$var}-#{$columns} {
-                flex: 0 0 colWidth($columns, $var);
-                width: colWidth($columns, $var);
-            }
-        }
+  @media screen and (min-width: $width) {
+    @for $var from 1 to $columns + 1 {
+      .col#{$screenType}#{$var}-#{$columns} {
+        flex: 0 0 colWidth($columns, $var);
+        width: colWidth($columns, $var);
+      }
     }
+  }
 }
 
 @mixin grid-columns-with-custom-left-margin($columns, $margin, $width) {
-    $screenType: screenType($width);
+  $screenType: screenType($width);
 
-    @media screen and (min-width:$width) {
-        @for $var from 1 to $columns+1 {
-            .col#{$screenType}#{$var}-#{$columns}-with-mrgn-lft {
-                flex: 0 0 colWidthWithMargin($columns, $var, $margin);
+  @media screen and (min-width: $width) {
+    @for $var from 1 to $columns + 1 {
+      .col#{$screenType}#{$var}-#{$columns}-with-mrgn-lft {
+        flex: 0 0 colWidthWithMargin($columns, $var, $margin);
 
-                @if $var !=$columns {
-                    margin-left: $margin;
-                }
-
-                width: colWidthWithMargin($columns, $var, $margin);
-            }
+        @if $var !=$columns {
+          margin-left: $margin;
         }
-    }
 
-    @media screen and (min-width:$width) {
-        @for $var from 1 to $columns+1 {
-            .col#{$screenType}#{$var}-#{$columns}-no-mrgn-lft {
-                flex: 0 0 colWidthWithMargin($columns, $var, $margin);
-                width: colWidthWithMargin($columns, $var, $margin);
-            }
-        }
+        width: colWidthWithMargin($columns, $var, $margin);
+      }
     }
+  }
+
+  @media screen and (min-width: $width) {
+    @for $var from 1 to $columns + 1 {
+      .col#{$screenType}#{$var}-#{$columns}-no-mrgn-lft {
+        flex: 0 0 colWidthWithMargin($columns, $var, $margin);
+        width: colWidthWithMargin($columns, $var, $margin);
+      }
+    }
+  }
 }

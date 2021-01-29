@@ -6,12 +6,13 @@ describe('TooptipComponent', () => {
   let component: TooptipComponent;
   let fixture: ComponentFixture<TooptipComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TooptipComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [TooptipComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TooptipComponent);

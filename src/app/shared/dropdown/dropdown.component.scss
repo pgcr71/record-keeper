@@ -1,72 +1,70 @@
-.app-dropdown{
-    font-family: inherit;
-    font-size: inherit;
-    padding: 1.25rem;
-    border-radius: 0;
-    position: relative;
+.app-dropdown {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 1.25rem;
+  border-radius: 0;
+  position: relative;
 
-  &.reset{
+  &.reset {
     -webkit-appearance: none;
     appearance: none;
     -moz-appearance: none;
-}
-}
-
-.rotate{
-    transform: rotate(180deg);
+  }
 }
 
-.display-block{
-    display: block;
+.rotate {
+  transform: rotate(180deg);
 }
 
-.display-none{
-    display: none !important;
+.display-block {
+  display: block;
 }
 
-:host{
-    position: relative;
-    display: inline-block;
+.display-none {
+  display: none !important;
 }
 
-.dropdown-container{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 200px;
-    border: 1px solid var(--primary-border-color);
+:host {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  border: 1px solid var(--primary-border-color);
 }
 
 .dropdown-toggle {
   display: flex;
-  padding:1.25rem;
+  padding: 1.25rem;
   justify-content: space-between;
 }
 
-.drowndown-list{
-    max-height: 300px;
-    position: absolute;
-    top:47px;
-    z-index: 200;
-    width: 100%;
-    background: white;
-    border: 1px solid var(--primary-border-color);
-    overflow:scroll;
-
+.drowndown-list {
+  max-height: 300px;
+  position: absolute;
+  top: 47px;
+  z-index: 200;
+  width: 100%;
+  background: white;
+  border: 1px solid var(--primary-border-color);
+  overflow: scroll;
 }
-.no-data{
-    background-color:white;
-    border:1px solid var(--primary-border-color);
-    height:100px;
-    max-height:300px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.no-data {
+  background-color: white;
+  border: 1px solid var(--primary-border-color);
+  height: 100px;
+  max-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.dropdown-listitem{
-    padding:10px;
-    &:not(:last-child){
-        border-bottom: 1px solid var(--primary-border-color);
-    }
-
+.dropdown-listitem {
+  padding: 10px;
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--primary-border-color);
+  }
 }

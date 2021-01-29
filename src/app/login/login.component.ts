@@ -5,38 +5,33 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
-  constructor(private ls: LoginService, private router: Router) { }
-  countryCodes = [91,92,93];
+  constructor(private ls: LoginService, private router: Router) {}
+  countryCodes = [91, 92, 93];
   countryCode = 91;
   phonenumber = '';
   password = '';
   isPhoneNumberValid = false;
   submitted = false;
 
-  ngOnInit() {
-
-
-  }
+  ngOnInit() {}
 
   onSubmit(form) {
     this.submitted = true;
     if (form.valid) {
-      this.ls.login(this.phonenumber, this.password)
-        .subscribe((value) => {
+      this.ls.login(this.phonenumber, this.password).subscribe(
+        (value) => {
           if (value['isAuthorized']) {
             localStorage.setItem('token', value['token']);
             localStorage.setItem('userId', value['data']['id']);
             localStorage.setItem('rolesId', value['data']['rolesid']);
-            this.router.navigate(['index'])
+            this.router.navigate(['index']);
           }
-        }, () => {
-
-
-        });
+        },
+        () => {}
+      );
     }
   }
 }
