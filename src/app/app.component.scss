@@ -1,5 +1,6 @@
 :host {
   display: block;
+  width: calc(100vw - (100vw - 100%));
 }
 
 .add-icon {
@@ -7,10 +8,33 @@
   padding-left: 16px;
   border-bottom: 1px solid black;
 }
-// .side-nav-container {
-// height: 85vh;
-// }
 
 .side-nav {
   min-width: 200px;
+}
+
+.d-flex {
+  display: flex;
+  width: calc(100vw - (100vw - 100%));
+}
+
+.recent-users-section {
+  flex: 0 0 20vw;
+  max-width: calc(20vw - (20vw - 100%));
+}
+
+.recent-users-details {
+  flex: 0 0 80vw;
+  max-width: calc(80vw - (80vw - 100%));
+  display: flex;
+}
+
+@media print {
+  .side-nav {
+    display: none;
+  }
+
+  mat-sidenav-content {
+    margin-left: 0 !important;
+  }
 }

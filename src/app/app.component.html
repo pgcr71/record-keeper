@@ -1,35 +1,8 @@
 <app-header *ngIf="isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
-<mat-sidenav-container [hasBackdrop]="false" class="side-nav-container">
-  <mat-sidenav
-    [autoFocus]="false"
-    class="side-nav"
-    *ngIf="isDesktop || displaySideNav"
-    color="primary"
-    #drawer
-    [mode]="isDesktop ? 'side' : 'over'"
-    opened
-    position="start"
-  >
-    <mat-nav-list>
-      <button
-        (click)="displaySideNav = !displaySideNav"
-        *ngIf="!isDesktop"
-        mat-icon-button
-        class="rk-icon"
-        aria-label="rk icon-button with menu icon"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-nav-list>
-    <mat-nav-list>
-      <mat-list-item [routerLink]="link.link" *ngFor="let link of links">
-        <a matLine>{{ link.name }}</a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <app-header *ngIf="!isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
-    <app-content></app-content>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<app-header *ngIf="!isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
+<div class='d-flex body'>
+  <app-recent-users (selectedUser)='onUserSelection($event)' class='recent-users-section'></app-recent-users>
+  <app-content class='recent-users-details'></app-content>
+</div>
+
 <!-- <app-footer></app-footer> -->

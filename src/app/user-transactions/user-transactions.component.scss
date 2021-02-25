@@ -5,6 +5,19 @@
   margin: 0px 20px 0px 20px;
 }
 
+.mat-table {
+  height: 400px;
+  width: calc(80vw - 60px);
+  max-width: calc(80vw - 60px);
+  overflow: scroll;
+}
+
+.mat-cell,
+.mat-header-cell,
+.mat-footer-cell {
+  min-width: 150px;
+}
+
 .form-group {
   padding: 10px;
   background-color: white;
@@ -51,4 +64,24 @@
 
 .editsection-column {
   width: 100%;
+}
+
+.repayment {
+  display: flex;
+  border: 1px solid red;
+}
+
+.repaid-amount {
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+}
+
+.repaid-orders {
+  flex: 0 0 50%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
 }

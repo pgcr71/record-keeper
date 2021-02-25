@@ -3,12 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Route } from '@angular/router';
 import { BillingComponent } from 'src/app/billing/billing.component';
-import { FinanceComponent } from 'src/app/finance/finance.component';
-import { AddUserComponent } from 'src/app/finance/modals/add-user/add-user.component';
-import { InterestComponent } from 'src/app/interest/interest.component';
+import { UserTransactionsComponent } from 'src/app/user-transactions/user-transactions.component';
+import { AddUserComponent } from 'src/app/add-user/add-user.component';
 import { InventoryComponent } from 'src/app/inventory/inventory.component';
 import { LoginComponent } from 'src/app/login/login.component';
-import { SummaryComponent } from 'src/app/summary/summary.component';
+import { PlaceOrderComponent } from 'src/app/place-order/place-order.component';
 import { ReturnsComponent } from 'src/app/returns/returns.component';
 import { SignupComponent } from 'src/app/signup/signup.component';
 import { ButtonsModule } from '../buttons/buttons.module';
@@ -21,14 +20,13 @@ import { TooltipModule } from '../tooltip/tooltip.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 
 const routes: Array<Route> = [
-  { path: '', pathMatch: 'full', redirectTo: 'products' },
+  { path: '', pathMatch: 'full', redirectTo: 'users' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'interest', component: InterestComponent },
-  { path: 'orders', component: FinanceComponent },
+  { path: 'users', component: UserTransactionsComponent },
   { path: 'products', component: InventoryComponent },
-  { path: 'billing', component: BillingComponent },
-  { path: 'repayment', component: SummaryComponent },
+  { path: 'repayment', component: BillingComponent },
+  { path: 'orders', component: PlaceOrderComponent },
 ];
 @NgModule({
   declarations: [
@@ -40,11 +38,10 @@ const routes: Array<Route> = [
     InputtextComponent,
     TableComponent,
     DropdownComponent,
-    FinanceComponent,
-    InterestComponent,
+    UserTransactionsComponent,
     BillingComponent,
-    SummaryComponent,
-    ReturnsComponent,
+    PlaceOrderComponent,
+    ReturnsComponent
   ],
   imports: [
     CommonModule,
@@ -67,11 +64,10 @@ const routes: Array<Route> = [
     InputtextComponent,
     TableComponent,
     DropdownComponent,
-    FinanceComponent,
-    InterestComponent,
+    UserTransactionsComponent,
     BillingComponent,
-    SummaryComponent,
-    ReturnsComponent,
+    PlaceOrderComponent,
+    ReturnsComponent
   ],
 })
-export class AppCommonModule {}
+export class AppCommonModule { }

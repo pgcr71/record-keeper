@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { AppService } from 'src/app/app.service';
-import { URL } from '../../../../environments/environment';
+import { URL } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

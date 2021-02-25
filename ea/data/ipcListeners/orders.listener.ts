@@ -39,6 +39,15 @@ export class OrderListener {
       }
     });
 
+    ipcMain.on("updateOrders", async (event: IpcMainEvent, order: Order) => {
+      try {
+        event.returnValue = await this.pr.update({ body: order } as never, {} as never, {} as never);
+      } catch (err) {
+        event.returnValue = err;
+      }
+    });
+
+
     ipcMain.on("userAllOrders", async (event: IpcMainEvent, userId: string) => {
       try {
         event.returnValue = await this.pr.getOrdersByUserId({ params: { userId } } as never, {} as never, {} as never);

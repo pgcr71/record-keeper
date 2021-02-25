@@ -19,22 +19,23 @@ export class SummaryService {
     this.isElectron = this.electronService.isElectronApp;
   }
 
-  add(totalPayments, orderRepayments) {
+  add(totalPayments, orderRepayments, excessAmount) {
     if (this.isElectron) {
       return this.appService.electronEmit('saveRepayments', {
         totalAmount: totalPayments,
         orderPaidFor: orderRepayments,
+        savings: excessAmount,
       });
     }
 
-    return this.http.post(URL + '/repayments', { totalAmount: totalPayments, orderPaidFor: orderRepayments });
+    return this.http.post(URL + '/repayments', { totalAmount: totalPayments, orderPaidFor: orderRepayments, savings: excessAmount });
   }
 
-  get(): Observable<Array<object>> {
+  get(): Observable<Array<any>> {
     if (this.isElectron) {
       return this.appService.electronEmit('allProducts');
     }
-    return this.http.get(URL + '/products') as Observable<Array<object>>;
+    return this.http.get(URL + '/products') as Observable<Array<any>>;
   }
 
   delete() {
@@ -51,10 +52,10 @@ export class SummaryService {
     return this.http.put(URL + '/products', data);
   }
 
-  getInterestTypes(): Observable<Array<object>> {
+  getInterestTypes(): Observable<Array<any>> {
     if (this.isElectron) {
       return this.appService.electronEmit('allInterestTypes');
     }
-    return this.http.get(URL + '/interestTypes') as Observable<Array<object>>;
+    return this.http.get(URL + '/interestTypes') as Observable<Array<any>>;
   }
 }

@@ -83,7 +83,6 @@ export class OrderController implements IRepository<Order> {
     endDate?: Date | string | number,
     startDate?: Date | string | number,
   ): Order {
-    console.log(result, endDate, startDate);
     const oneDay = 24 * 60 * 60 * 1000,
       orderedOnAsDate = new Date(result.ordered_on),
       startDateAsDate = new Date(startDate || result.ordered_on),
@@ -145,9 +144,17 @@ export class OrderController implements IRepository<Order> {
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
-    const paymentStatus = new PaymentStatus();
-    paymentStatus.id = 1;
-    return this.repository.insert({ ...request.body, ...{ payment_status: paymentStatus } });
+
+    if (!request.body.id) {
+      const paymentStatus = new PaymentStatus();
+      paymentStatus.id = 1;
+      return this.repository.save({ ...request.body, ...{ payment_status: paymentStatus } });
+    }
+    return this.repository.save({ ...request.body });
+  }
+
+  public async update(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
+    return this.repository.save({ ...request.body });
   }
 
   public async getTotalOrdersByProductId(

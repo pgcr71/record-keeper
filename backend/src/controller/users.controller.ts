@@ -10,7 +10,7 @@ export class UserController implements IRepository<User> {
   public async all(request: Request, response: Response, next: NextFunction): Promise<any> {
     return this.repository
       .createQueryBuilder("user")
-      .select(["user.id", "user.first_name", "user.last_name", "user.phone_number"])
+      .select(["user.id", "user.first_name", "user.last_name", "user.phone_number", "user.updated_on"])
       .getMany();
   }
 
@@ -51,6 +51,7 @@ export class UserController implements IRepository<User> {
       request.params.end_date !== "undefined" &&
       new Date(new Date(request.params.end_date).setHours(23, 59, 59, 99)).toISOString();
     const allOrders = request.params.allOrders;
+    console.log("allOrders", allOrders)
     const repo = this.repository
       .createQueryBuilder("usr")
       .select([
@@ -72,12 +73,14 @@ export class UserController implements IRepository<User> {
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.id });
     let getOrders;
-    if (!allOrders || allOrders === "null" || allOrders === "undefined" || allOrders == "false") {
-      getOrders = repo
-        .andWhere("paymentStatus.id!=:notPaidId", { notPaidId: 3 })
-        .orderBy("order.ordered_on", "ASC")
-        .getOne();
-    }
+    // console.log("allOrders", allOrders)
+    // if (!allOrders || allOrders === "null" || allOrders === "undefined" || allOrders == "false") {
+    //   getOrders = repo
+    //     .andWhere("paymentStatus.id!=:notPaidId", { notPaidId: 3 })
+    //     .orderBy("order.ordered_on", "ASC")
+    //     .getOne();
+    //   return;
+    // }
 
     if (allOrders || allOrders == "true") {
       getOrders = repo
@@ -104,10 +107,6 @@ export class UserController implements IRepository<User> {
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
-    //  let interest_type =  new InterestTypes();
-    //   interest_type = request.body.interestTypeId;
-    //   const User = {...request.body, ...{InterestType: interest_type}}
-    //   console.log(User)
-    return this.repository.insert(request.body);
+    return this.repository.save(request.body);
   }
 }

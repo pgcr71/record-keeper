@@ -5,6 +5,7 @@ import { Repayment } from "../entities/repayment.entity";
 import { Order } from "../entities/order.entity";
 import { OrderRepayment } from "../entities/order_repayments.entity";
 import { PaymentStatus } from "../entities/payment_statuses.entity";
+import { Savings } from "../entities/savings.entity";
 
 export class RepaymentController implements IRepository<Repayment> {
   repository: Repository<Repayment> = getRepository(Repayment);
@@ -25,11 +26,13 @@ export class RepaymentController implements IRepository<Repayment> {
     return await getConnection().transaction(async (transactionalEntityManager) => {
       const repayments = new Repayment();
       const amount = request.body.totalAmount;
+      const savingsAmount = request.body.savings;
       repayments.user = amount.user;
       repayments.paid_on = amount.paid_on;
       repayments.price = amount.price;
       const repaymentTransaction = await transactionalEntityManager.save(repayments);
-      if (request.body && request.body.orderPaidFor) {
+      const savings = new Savings();
+      if (request.body && request.body.orderPaidFor && request.body.orderPaidFor.length) {
         for (let i = 0; i < request.body.orderPaidFor.length; i++) {
           {
             const order = request.body.orderPaidFor[i];
@@ -56,19 +59,31 @@ export class RepaymentController implements IRepository<Repayment> {
             const orderRepaymentTransaction = await transactionalEntityManager.save(orderRepayment);
           }
         }
+        if (savingsAmount) {
+          savings.repayment = repaymentTransaction;
+          savings.paid_on = amount.paid_on;
+          savings.user = amount.user;
+          savings.price = savingsAmount;
+          const savingsTransaction = await transactionalEntityManager.save(savings);
+        }
+      } else if (savingsAmount) {
+        savings.paid_on = amount.paid_on;
+        savings.price = savingsAmount;
+        savings.user = amount.user;
+        const savingsTransaction = await transactionalEntityManager.save(savings);
       }
     });
     //return this.repository.insert({});
   }
 
   public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
-    console.log(request.params);
     return this.repository
       .createQueryBuilder("repayment")
-      .select(["repayment", "orderRepayment", "orders", "product"])
+      .select(["repayment", "orderRepayment", "orders", "product", "savings"])
       .leftJoin("repayment.orderRepayment", "orderRepayment")
       .leftJoin("orderRepayment.order", "orders")
       .leftJoin("orders.product", "product")
+      .leftJoin('repayment.savings', "savings")
       .where("repayment.user_id =:userId", { userId: request.params.id })
       .getMany();
   }

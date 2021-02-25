@@ -19,6 +19,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
+import { MatCardModule } from '@angular/material/card';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -43,6 +45,8 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     MatMomentDateModule,
     MatCheckboxModule,
     MatPaginatorModule,
+    MatCardModule,
+    ReactiveFormsModule
   ],
   exports: [
     MatSidenavModule,
@@ -64,6 +68,7 @@ import { AutocompleteModule } from '../autocomplete/autocomplete.module';
     MatMomentDateModule,
     MatCheckboxModule,
     MatPaginatorModule,
+    MatCardModule
   ],
 })
-export class MaterialModule {}
+export class MaterialModule { }

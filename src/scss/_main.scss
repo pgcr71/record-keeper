@@ -1,5 +1,4 @@
 // sass/
-// |
 // |– abstracts/ (or utilities/ or resuables)
 // |   |– _variables.scss    // Sass Variables
 // |   |– _functions.scss    // Sass Functions
@@ -39,47 +38,46 @@
 // `– main.scss              // Main Sass file
 
 // .button {
-//     background: green;
-//   }
-//   .button-1 {
-//     @extend .button;
-//   }
-//   .button-2 {
-//     @extend .button;
-//   }
+//   background: green;
+// }
+// .button-1 {
+//   @extend .button;
+// }
+// .button-2 {
+//   @extend .button;
+// }
 
-//   will be compiled to
-
-//   .button, .button-1, .button-2 {
-//     background: green;
-//   }
+// will be compiled to .button,
+// .button-1,
+// .button-2 {
+//   background: green;
+// }
 
 // @mixin button {
-//     background-color: green;
-//   }
-//   .button-1 {
-//     @include button;
-//   }
-//   .button-2 {
-//     @include button;
-//   }
+//   background-color: green;
+// }
+// .button-1 {
+//   @include button;
+// }
+// .button-2 {
+//   @include button;
+// }
 
-//   will be compiled to
-//   .button-1 {
-//     background-color: green;
-//   }
-//   .button-2 {
-//     background-color: green;
-//   }
+// will be compiled to .button-1 {
+//   background-color: green;
+// }
+// .button-2 {
+//   background-color: green;
+// }
 
-// // @import './base/typography';
-// @import './base/reset';
-// @import './base/colors';
-// @import './base/margins';
-// @import './base/paddings';
-// @import './base/borders';
-// @import './base/widths';
-// @import './base/backgrounds';
+// @import './base/typography';
+@import './base/reset';
+@import './base/colors';
+@import './base/margins';
+@import './base/paddings';
+@import './base/borders';
+@import './base/widths';
+@import './base/backgrounds';
 
-// @import './layout/grid';
-// @import './layout/alignment';
+@import './layout/grid';
+@import './layout/alignment';

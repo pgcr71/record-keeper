@@ -26,9 +26,14 @@ export const OrderRoutes = [
     action: "save"
   },
   {
+    method: "post",
+    route: "/orders/update",
+    controller: OrderController,
+    action: "update"
+  },
+  {
     method: "delete",
     route: "/orders/:id",
-    auth: true,
     controller: OrderController,
     action: "remove"
   }

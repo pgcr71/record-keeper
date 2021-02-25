@@ -8,6 +8,8 @@ import { catchError } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class AppService {
   isElectron: boolean;
+  activeUser = new BehaviorSubject(null);
+  activeUser$ = this.activeUser.asObservable();
   constructor(private http: HttpClient, private readonly _electronService: ElectronService) {
     this.isElectron = this._electronService.isElectronApp;
   }

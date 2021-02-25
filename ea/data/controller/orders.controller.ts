@@ -149,6 +149,10 @@ export class OrderController implements IRepository<Order> {
     return this.repository.insert({ ...request.body, ...{ payment_status: paymentStatus } });
   }
 
+  public async update(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
+    return this.repository.save({ ...request.body });
+  }
+
   public async getTotalOrdersByProductId(
     request: Request,
     response: Response,

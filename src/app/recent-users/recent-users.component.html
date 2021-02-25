@@ -1,0 +1,12 @@
+<mat-selection-list [multiple]="false">
+  <mat-list-option [selected]='_selectedUser===user' (click)='redirectToUserOrdersPage(user)' *ngFor='let user of users'>
+    <div>
+      {{user.first_name}} {{user.last_name}}
+    </div>
+  </mat-list-option>
+</mat-selection-list>
+
+<div class='new-user'>
+  <button type='button' mat-raised-button color='primary'(click)='createNewUser()' >NEW USER</button>
+</div>
+

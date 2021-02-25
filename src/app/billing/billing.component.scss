@@ -9,7 +9,7 @@
   padding: 10px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 .mr-4 {
@@ -47,4 +47,24 @@ textarea {
 .interest-details-column,
 .interest-details-header-column {
   flex: 0 0 25%;
+}
+
+.detail-row {
+  display: none;
+}
+
+.expanded-row + .detail-row {
+  display: flex;
+}
+
+.editsection-column {
+  width: 100%;
+}
+
+.summary-card {
+  background-color: white;
+  padding: 15px;
+  height: 100px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 25px;
 }

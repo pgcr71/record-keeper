@@ -1,61 +1,66 @@
-<div [formGroup]="billingCreateForm" class="form-group">
-  <mat-form-field class="mr-4" appearance="outline">
-    <mat-label>User Name or Phone Number</mat-label>
-    <input matInput [matAutocomplete]="auto" formControlName="user" type="text" name="search" id="search" />
-    <mat-autocomplete [displayWith]="userDisplayFn" #auto>
-      <ng-container *ngIf="userSearch | async as us">
-        <mat-option (click)="onOptionClick(option)" class="mat-option" *ngFor="let option of us" [value]="option">
-          <div>
-            <div>{{ option.first_name }} {{ option.last_name }}</div>
-            <div>{{ option.phone_number }}</div>
-          </div>
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-  </mat-form-field>
+<ng-template #form>
+  <div [formGroup]="editMode?billingEditForm:billingCreateForm"  class="form-group">
+    <mat-form-field class="mr-4" appearance="outline">
+      <input matInput formControlName="price" [type]="'number'" />
+      <mat-label>Amount</mat-label>
+      <mat-error>Please enter amount greater that zero</mat-error>
+    </mat-form-field>
 
-  <mat-form-field class="mr-4" appearance="outline">
-    <input matInput formControlName="price" [type]="'number'" />
-    <mat-label>Amount</mat-label>
-    <mat-error>Please enter amount greater that zero</mat-error>
-  </mat-form-field>
+    <mat-form-field class="mr-4" appearance="outline">
+      <input matInput formControlName="paid_on" [max]="maxDate" [matDatepicker]="picker1" [type]="'text'" />
+      <mat-label>Payment Date</mat-label>
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
 
-  <mat-form-field class="mr-4" appearance="outline">
-    <input matInput formControlName="paid_on" [max]="maxDate" [matDatepicker]="picker1" [type]="'text'" />
-    <mat-label>Payment Date</mat-label>
-    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-    <mat-datepicker #picker1></mat-datepicker>
-  </mat-form-field>
+    <mat-form-field class="mr-4" appearance="outline">
+      <textarea matInput formControlName="comments"> </textarea>
+      <mat-label>Commments</mat-label>
+    </mat-form-field>
 
-  <mat-form-field class="mr-4" appearance="outline">
-    <textarea matInput formControlName="comments"> </textarea>
-    <mat-label>Commments</mat-label>
-  </mat-form-field>
+    <button *ngIf='!editMode' [disabled]="billingCreateForm.invalid" type="button" (click)="onSubmit()" mat-raised-button color="primary">
+      submit
+    </button>
+  </div>
+</ng-template>
 
-  <button [disabled]="billingCreateForm.invalid" type="button" (click)="onSubmit()" mat-raised-button color="primary">
-    submit
-  </button>
+<ng-container *ngTemplateOutlet="form"></ng-container>
+
+<div *ngIf="(billingDetails && billingDetails.length) || isExcess"  class='summary-card white-backgroud mb-4 mat-elevation-z8'>
+  <span>Total Principal:</span>  {{totalPrincipal}}
+  <span>Total Interest:</span> {{totalInterest}}
+  <span>Total Debt:</span> {{totalDebt}}
+  <span>Total Remaining Debt: </span>{{totalRemainingDebt}}
+  <span>Excess: {{isExcess}}</span>
 </div>
 
-<mat-table *ngIf="billingDetails && billingDetails.length" [dataSource]="dataSource" class="mat-elevation-z8">
+<mat-table class="mat-elevation-z8"
+*ngIf='repayments && repayments.length'  multiTemplateDataRows="true"
+[dataSource]='repaymentsDataSource'>
+  <ng-container matColumnDef='userInfo'>
+    <mat-header-cell *matHeaderCellDef>
+      User Info
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">{{element.price}}</mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="repaymentColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: repaymentColumns" ></mat-row>
+</mat-table>
+
+<mat-table *ngIf="billingDetails && billingDetails.length" multiTemplateDataRows="true" [dataSource]="dataSource"
+  class="mat-elevation-z8">
   <!-- Checkbox Column -->
   <ng-container matColumnDef="select">
     <mat-header-cell class="table-checkbox-header-column" *matHeaderCellDef>
-      <mat-checkbox
-        (change)="$event ? masterToggle() : null"
-        [checked]="selection.hasValue() && isAllSelected()"
-        [indeterminate]="selection.hasValue() && !isAllSelected()"
-        [aria-label]="checkboxLabel()"
-      >
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
       </mat-checkbox>
     </mat-header-cell>
     <mat-cell class="table-checkbox-column" *matCellDef="let row">
-      <mat-checkbox
-        (click)="$event.stopPropagation()"
-        (change)="$event ? selection.toggle(row) : null"
-        [checked]="selection.isSelected(row)"
-        [aria-label]="checkboxLabel(row)"
-      >
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+        [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
       </mat-checkbox>
     </mat-cell>
     <mat-footer-cell class="table-checkbox-column" *matFooterCellDef></mat-footer-cell>
@@ -87,7 +92,7 @@
     </mat-cell>
     <mat-footer-cell class="product-details-column" *matFooterCellDef>{{
       totalPrincipal | currency: 'inr':'₹':'1.0-2'
-    }}</mat-footer-cell>
+      }}</mat-footer-cell>
   </ng-container>
 
   <ng-container matColumnDef="interestDetails">
@@ -101,7 +106,7 @@
     </mat-cell>
     <mat-footer-cell class="interest-details-column" *matFooterCellDef>{{
       totalInterest | currency: 'inr':'₹':'1.0-2'
-    }}</mat-footer-cell>
+      }}</mat-footer-cell>
   </ng-container>
 
   <!-- <ng-container matColumnDef="interestDetails">
@@ -144,20 +149,48 @@
     <mat-footer-cell *matFooterCellDef>{{ totalRemainingDebt | currency: 'inr':'₹':'1.0-2' }}</mat-footer-cell>
   </ng-container>
 
-  <!-- <ng-container matColumnDef="paymentStatus" >
-    <mat-header-cell *matHeaderCellDef>Payment Status</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element['payment_status'].name }} </mat-cell>
-    <mat-footer-cell *matFooterCellDef>{{totalDebt | currency:'inr':'₹': '1.0-2' }}</mat-footer-cell>
-  </ng-container> -->
+  <ng-container matColumnDef="buttons">
+    <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <button *ngIf="expandedElement !== element" (click)="expandedElement = element; setFormData(element)"
+          color="primary" mat-icon-button>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button *ngIf="expandedElement !== element" (click)="onDelete(element)" color="warn" mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <div>
+        <button [disabled]="billingCreateForm.invalid" class="mr-4"
+          *ngIf="expandedElement && expandedElement === element" (click)="expandedElement = null; updateData(element)"
+          color="primary" mat-raised-button color="primary">
+          save
+        </button>
+        <button *ngIf="expandedElement && expandedElement === element"
+          (click)="expandedElement = null; resetForm(element)" color="primary" mat-icon-button>
+          <mat-icon color="warn">cancel</mat-icon>
+        </button>
+      </div>
+    </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="editsection">
+    <mat-cell [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'" class="editsection-column"
+      *matCellDef="let element">
+      <ng-container *ngTemplateOutlet="form"></ng-container>
+    </mat-cell>
+  </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns" [class.expanded-row]="expandedElement === row"></mat-row>
+  <mat-row *matRowDef="let row; columns: ['editsection']" class='detail-row'></mat-row>
 
   <mat-footer-row *matFooterRowDef="displayedColumns"></mat-footer-row>
   <!-- <mat-row class="mat-row" *matNoDataRow>
     <mat-cell class="mat-cell">No data to display</mat-cell>
   </mat-row > -->
 </mat-table>
-<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="billingDetails && !billingDetails.length"
-  >No Records Found</mat-toolbar
->
+<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="billingDetails && !billingDetails.length">No Records Found
+</mat-toolbar>

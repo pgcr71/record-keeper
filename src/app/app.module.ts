@@ -17,8 +17,17 @@ import { MaterialModule } from './shared/material/material.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AutocompleteModule } from './shared/autocomplete/autocomplete.module';
+import { RecentUsersComponent } from './recent-users/recent-users.component';
 @NgModule({
-  declarations: [AppComponent, NotFoundComponent, HeaderComponent, FooterComponent, ContentComponent, ToasterComponent],
+  declarations: [
+    AppComponent,
+    NotFoundComponent,
+    HeaderComponent,
+    FooterComponent,
+    ContentComponent,
+    ToasterComponent,
+    RecentUsersComponent
+  ],
 
   imports: [
     NgxElectronModule,
@@ -38,4 +47,4 @@ import { AutocompleteModule } from './shared/autocomplete/autocomplete.module';
   bootstrap: [AppComponent],
   entryComponents: [ToasterComponent],
 })
-export class AppModule {}
+export class AppModule { }
