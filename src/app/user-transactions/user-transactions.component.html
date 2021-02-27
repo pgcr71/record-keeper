@@ -1,73 +1,19 @@
-
-<mat-table [dataSource]="order"  multiTemplateDataRows='true' class="mat-table mat-elevation-z8">
-  <ng-container sticky matColumnDef="orders">
-    <mat-header-cell class='mat-header-cell' *matHeaderCellDef='let element'>Order / repayment</mat-header-cell>
-    <mat-cell  class='mat-cell' *matCellDef="let element">
-      <div>
-        <div>{{ element['product'] && element['product'].name }}</div>
-        <div *ngIf="element['product']">
-          {{ element['product'].unit_price }} X {{ element['quantity'] }} =
-          {{ element['product'].unit_price * element['quantity'] | currency: 'inr':'₹':'1.0-0' }}
-        </div>
-      </div>
-    </mat-cell>
-    <mat-footer-cell class='mat-footer-cell' *matFooterCellDef>Totals</mat-footer-cell>
-</ng-container>
-  <ng-container *ngFor='let repayment of repaymentsAndSavings' matColumnDef="{{repayment.id}}">
-      <mat-header-cell class='mat-header-cell' *matHeaderCellDef='let element'>
-        <div>
-          <div>{{repayment.paid_on | date: "dd-MM-yy"}}</div>
-        <div>{{repayment.price}}</div>
-      </div>
-      </mat-header-cell>
-      <mat-cell class='mat-cell' *matCellDef="let element">
-        <div>
-          {{(getMatchedRepayment(repayment.id, element))}}
-        </div>
-      </mat-cell>
-      <mat-footer-cell class='mat-footer-cell' *matFooterCellDef>
-        <div *ngIf='repayment.type ==="repayment"'> {{((repayment.savings && repayment.savings[0] && repayment.savings[0].price) || 0) | currency: 'inr':'₹':'1.0-0'}}</div>
-        <div *ngIf='repayment.type !=="repayment"'> {{(repayment.price || 0) | currency: 'inr':'₹':'1.0-0'}}</div>
-      </mat-footer-cell>
-  </ng-container>
-
-  <ng-container stickyEnd   matColumnDef="youGet">
-    <mat-header-cell class='mat-header-cell' *matHeaderCellDef='let element'>You Get</mat-header-cell>
-    <mat-cell class='mat-cell' *matCellDef="let element">
-      <div>
-        <div>
-          {{element.remaining_pricipal_debt | currency: 'inr':'₹':'1.0-0' }}
-        </div>
-        <div>
-          {{element.remaining_interest_debt | currency: 'inr':'₹':'1.0-0'}}
-        </div>
-      </div>
-    </mat-cell>
-    <mat-footer-cell class='mat-footer-cell' *matFooterCellDef>{{getWhatYouGet()}} </mat-footer-cell>
-  </ng-container>
-
-
-  <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: columns" [class.expanded-row]="expandedElement === row"></mat-row>
-  <mat-footer-row *matFooterRowDef='columns; sticky: true'></mat-footer-row>
-</mat-table>
-
-<div class='buttons'>
-  <button (click)='redirectToOrdersPage()' *ngIf='!editMode'type="button" mat-raised-button color="primary">
-    YOU GAVE
-</button>
-
-<button (click)='redirectToRepaymentsPage()' *ngIf='!editMode'type="button" mat-raised-button color="warn">
-  YOU GOT
-</button>
-</div>
-
-<mat-table [dataSource]="combinedOrders"  multiTemplateDataRows='true' class="mat-elevation-z8">
+<mat-table [dataSource]="combinedOrders" multiTemplateDataRows='true' class="mat-elevation-z8">
   <ng-container matColumnDef="date">
     <mat-header-cell *matHeaderCellDef='let element'>Date {{element}}</mat-header-cell>
     <mat-cell *matCellDef="let element">
       <div>
-        {{(element['ordered_on'] || element['paid_on']) | date:'dd-MM-yy hh:mm a'}}
+        <div>{{(element['ordered_on'] || element['paid_on']) | date:'dd-MM-yy hh:mm a'}}</div>
+        <div *ngIf="element['remaining_debt']" style='color:red'> {{element['remaining_debt']}}</div>
+        <div *ngIf="element['paid_interest'] && element['paid_principal']" style='color:red'>
+          {{element['current_principal'] + element['paid_interest'] }}
+        </div>
+        <div *ngIf="element['sum_of_previous']" style='color:red'>
+          {{element['sum_of_previous']}}
+        </div>
+        <div *ngIf="element['sum_of_previous_excess']" style='color:green'>
+          {{element['sum_of_previous_excess']}}
+        </div>
       </div>
     </mat-cell>
   </ng-container>
@@ -75,67 +21,45 @@
     <mat-header-cell *matHeaderCellDef> You Gave </mat-header-cell>
     <mat-cell *matCellDef="let element">
       <div>
-        <div>{{ element['product'] && element['product'].name }}</div>
-        <div *ngIf="element['product']">
-          {{ element['product'].unit_price }} X {{ element['quantity'] }} =
-          {{ element['product'].unit_price * element['quantity'] | currency: 'inr':'₹':'1.0-0' }}
-        </div>
+       <div>{{element.current_principal}}</div>
       </div>
     </mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="repayments">
+    <mat-header-cell *matHeaderCellDef>Interest </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>{{element["paid_interest"]}}</div>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+
   <ng-container matColumnDef="youGot">
     <mat-header-cell *matHeaderCellDef>You Got </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <div *ngIf='!(element["repayments"] && element["repayments"].length)'>{{ element['price'] | currency: 'inr':'₹':'1.0-0' }} </div>
+      <div >{{ element['price'] | currency:
+        'inr':'₹':'1.0-0' }} </div>
     </mat-cell>
 
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row (click)='onRowClick(row)' *matRowDef="let row; columns: displayedColumns" [class.expanded-row]="expandedElement === row"></mat-row>
-  <!-- <mat-row *matRowDef="let row; columns: ['editsection']" class="detail-row"></mat-row> -->
+  <mat-row (click)='onRowClick(row)' *matRowDef="let row; columns: displayedColumns"
+    [class.expanded-row]="expandedElement === row"></mat-row>
 </mat-table>
 <mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="order && !order.length">No Records Found</mat-toolbar>
-<mat-paginator
-  [length]="length"
-  [pageSize]="pageSize"
-  [pageSizeOptions]="pageSizeOptions"
-  (page)="onPageNumberClick($event)"
->
+<mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+  (page)="onPageNumberClick($event)">
 </mat-paginator>
 
-<!-- <div>
-  <div  *ngFor='let ordr of order' class='repayment'>
-    <div class='repaid-amount'>{{ordr.initial_cost}}</div>
-    <ng-container >
-      <div class='repaid-orders'>
-        <div  *ngFor='let rp of ordr.repayments' [class]='rp.id'>
-          <div >
-            <div>repaymentId: {{rp.id}}</div>
-            <div>{{rp.principal_amount}} + {{rp.interest_amount}}</div>
-          </div>
-        </div>
-      </div>
-      <div >
-          <div  *ngFor='let rp of ordr.repayments'>{{rp.payment.price}}</div>
-      </div>
-    </ng-container>
-  </div>
-</div> -->
+<div class='buttons'>
+  <button (click)='redirectToOrdersPage()' *ngIf='!editMode' type="button" mat-raised-button color="primary">
+    YOU GAVE
+  </button>
 
-<!-- <div>
-  <div  *ngFor='let repayment of repayments' class='repayment'>
-    <div class='repaid-amount'>{{repayment.id}}</div>
-    <div class='repaid-orders'>
-      <div [class]='rp.order.id' *ngFor='let rp of repayment.orderRepayment'>
-        <div>
-          <div>OrderID: {{rp.order.id}}</div>
-          <div>OrderTotal: {{rp.order.quantity *rp.order.product.unit_price }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-
+  <button (click)='redirectToRepaymentsPage()' *ngIf='!editMode' type="button" mat-raised-button color="warn">
+    YOU GOT
+  </button>
+</div>

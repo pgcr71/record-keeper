@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { get, orderBy } from 'lodash';
+import { cloneDeep, get, orderBy, set } from 'lodash';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AppService } from '../app.service';
@@ -19,17 +19,10 @@ export const ELEMENT_DATA: PeriodicElement[] = [];
 @Component({
   selector: 'app-user-transactions',
   templateUrl: './user-transactions.component.html',
-  styleUrls: ['./user-transactions.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+  styleUrls: ['./user-transactions.component.scss']
 })
 export class UserTransactionsComponent implements OnInit {
-  displayedColumns: string[] = ['date', 'youGave', 'youGot'];
+  displayedColumns: string[] = ['date', 'youGave', 'repayments', 'youGot'];
   name = '';
   quantity = 0;
   price = 0;
@@ -63,6 +56,8 @@ export class UserTransactionsComponent implements OnInit {
   repaymentsAndSavings: any[];
   activeUserSubscription: any;
   savingsWithOutRepayments: any;
+  repaymentsCopy: any[];
+  ordersCopy: any[];
 
   constructor(
     private is: FinanceService,
@@ -77,21 +72,64 @@ export class UserTransactionsComponent implements OnInit {
       forkJoin(
         [
           this.is.getAllUserOrders(this.userId, null, null),
-          this.is.getUserRepaymentDetails(this.userId, null, null),
-          this.is.getUserSavings(this.userId)
+          this.is.getUserRepaymentDetails(this.userId, null, null)
         ]
       )
         .subscribe((result) => {
-          this.order = orderBy(get(result, '[0].orders', []) || [], function (o) { return new Date(o.ordered_on || o.paid_on); }, 'desc');
-          this.repayments = (get(result, '[1]', []) || []).map(rp => ({ ...rp, ordered_on: rp.paid_on, type: 'repayment' }));
-          this.savings = (get(result, '[2]', []) || []);
-          this.savingsWithOutRepayments = (get(result, '[2]', []) || []).filter(sv => !sv.repayment);
-          this.repaymentsAndSavings = orderBy([...this.repayments, ...this.savingsWithOutRepayments], function (obj) { return obj.ordered_on }, 'desc');
-          this.combinedOrders = orderBy([...this.order, ...this.repayments], function (obj) { return obj.ordered_on }, 'desc');
-          this.repaymentIDs = this.repaymentsAndSavings.map(re => re.id);
-          this.columns = ["orders", ...this.repaymentIDs, "youGet"];
+          this.order = orderBy(get(result, '[0]', []) || [], function (o) { return new Date(o.ordered_on); }, 'asc');
+          this.repayments = orderBy(get(result, '[1]', []) || [], function (o) { return new Date(o.paid_on); }, 'asc');
+          this.combinedOrders = this.getDetails(this.order, this.repayments);
+          console.log(this.combinedOrders)
         });
     })
+  }
+
+  getDetails(orders: Array<any>, repayments: Array<any>) {
+    let details = [];
+    if (this.repayments && this.repayments.length) {
+      this.repayments.forEach((payment) => {
+        details = [payment, ...orderBy(cloneDeep(this.is.calculateRemaining(payment, orders)), (o) => o.ordered_on, 'desc'), ...details];
+      });
+    }
+
+    let excessSum = 0
+    this.repayments.forEach((payment) => {
+      if (payment["excess_amount"]) {
+        excessSum = excessSum + payment["excess_amount"];
+        payment["sum_of_previous_excess"] = excessSum;
+      }
+    });
+    let sum = 0;
+    const newOrders = orders.filter((ordr) => {
+      set(ordr, 'paid_principal', 0);
+      set(ordr, 'paid_interest', 0);
+      set(ordr, "current_principal", get(ordr, "remaining_principal", ordr.original_principal));
+      const orderInterestType = get(ordr, "product.interest_type.name", '');
+      const monthlyInterestRate = get(ordr, "product.rate_of_interest", 2);
+      if (ordr["payment_status"] === 'PARTIALLY_PAID') {
+        const interestAccured = orderInterestType === 'compound' ?
+          this.is.calculateCompoundInterest(ordr["remaining_principal"], monthlyInterestRate, 365, ordr.ordered_on) :
+          this.is.calculateSimpleInterest(ordr["remaining_principal"], monthlyInterestRate, ordr.ordered_on)
+        set(ordr, 'interestAccured', Number(interestAccured.toFixed(2)));
+        ordr["paid_interest"] = interestAccured;
+        sum = sum + ordr["paid_interest"] + ordr["current_principal"];
+        ordr["sum_of_previous"] = sum;
+        return true;
+      }
+      if (ordr["payment_status"] === "NOT_PAID") {
+        const interestAccured = orderInterestType === 'compound' ?
+          this.is.calculateCompoundInterest(ordr["current_principal"], monthlyInterestRate, 365, ordr.ordered_on) :
+          this.is.calculateSimpleInterest(ordr["current_principal"], monthlyInterestRate, ordr.ordered_on)
+        set(ordr, 'interestAccured', Number(interestAccured.toFixed(2)));
+        ordr["paid_interest"] = interestAccured;
+        sum = sum + ordr["paid_interest"] + ordr["current_principal"];
+        ordr["sum_of_previous"] = sum;
+        return true;
+      }
+      return false;
+    });
+
+    return orderBy([...orderBy(newOrders, (o) => o.paid_on || o.ordered_on, "desc"), ...details])
   }
 
   getWhatYouGet() {

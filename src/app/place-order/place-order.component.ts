@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { FinanceService } from '../user-transactions/finance.service';
 import { RequireMatch } from '../shared/validators/require-match.validator';
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-orders',
@@ -25,7 +26,8 @@ export class PlaceOrderComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar,
     private readonly fs: FinanceService,
-    private readonly activatedRoute: ActivatedRoute
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly appService: AppService
   ) { }
 
   ngOnInit(): void {
@@ -34,10 +36,13 @@ export class PlaceOrderComponent implements OnInit {
       quantity: [null, [Validators.required]],
       ordered_on: [new Date(), [Validators.required]],
       comments: [''],
+      user: ['', Validators.required]
     });
 
     this.activatedRoute.queryParamMap.pipe(
       tap((params) => this.order = params.get('orderObj')),
+      switchMap(() => this.appService.activeUser),
+      tap((userInfo) => this.userInfo = userInfo),
       switchMap(() => this.fs.getAllProducts())
     ).subscribe((products) => {
       this.products = products;
@@ -46,6 +51,7 @@ export class PlaceOrderComponent implements OnInit {
         this.orderCreateForm.setControl('id', new FormControl(parsedOrder.id));
         this.orderCreateForm.reset(parsedOrder);
       }
+      this.orderCreateForm.get('user').setValue(this.userInfo)
       this.productSearch = this.orderCreateForm.get('product').valueChanges.pipe(
         startWith(''),
         map((value) => (typeof value === 'string' ? value : value.name)),

@@ -107,6 +107,10 @@ export class UserController implements IRepository<User> {
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
+    //  let interest_type =  new InterestTypes();
+    //   interest_type = request.body.interestTypeId;
+    //   const User = {...request.body, ...{InterestType: interest_type}}
+    //   console.log(User)
     return this.repository.save(request.body);
   }
 }

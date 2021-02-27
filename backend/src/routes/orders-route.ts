@@ -3,7 +3,7 @@ import { OrderController } from "../controller/orders.controller";
 export const OrderRoutes = [
   {
     method: "get",
-    route: "/orders",
+    route: "/orders/:userId",
     controller: OrderController,
     action: "all"
   },

@@ -6,16 +6,17 @@ import { Order } from "../entities/order.entity";
 
 export class OrderController implements IRepository<Order> {
   repository: Repository<Order> = getRepository(Order);
-  public async all(request: Request, response: Response, next: NextFunction): Promise<[Order[], number]> {
+  public async all(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
     return this.repository
       .createQueryBuilder("order")
       .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
       .leftJoin("order.user", "usr")
       .leftJoin("order.product", "prdt")
       .leftJoin("prdt.interest_type", "it")
-      .take(request.query.take || 5)
-      .skip(request.query.skip || 0)
-      .getManyAndCount();
+      .where("usr.id=:userId", { userId: request.params.userId })
+      // .take(request.query.take || 5)
+      // .skip(request.query.skip || 0)
+      .getMany();
   }
 
   public async getOrdersByUserId(request: Request, response: Response, next: NextFunction): Promise<[Order[], number]> {
