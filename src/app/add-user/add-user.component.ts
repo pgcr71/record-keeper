@@ -15,7 +15,7 @@ export class AddUserComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly userSevice: UserService,
     private dialogRef: MatDialogRef<AddUserComponent>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.addUserForm = this.fb.group({
@@ -28,7 +28,7 @@ export class AddUserComponent implements OnInit {
   addUser() {
     if (this.addUserForm.valid) {
       this.userSevice.addUser(this.addUserForm.value).subscribe((data) => {
-        this.dialogRef.close({ ...this.addUserForm.value, ...(data && data['generatedMaps'][0]) });
+        this.dialogRef.close({ ...this.addUserForm.value, ...data });
       });
     }
   }

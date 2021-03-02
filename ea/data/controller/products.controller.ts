@@ -25,10 +25,6 @@ export class ProductController implements IRepository<Product> {
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
-    //  let interest_type =  new InterestTypes();
-    //   interest_type = request.body.interestTypeId;
-    //   const product = {...request.body, ...{InterestType: interest_type}}
-    //   console.log(product)
     return this.repository.save(request.body);
   }
 

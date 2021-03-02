@@ -48,7 +48,7 @@ export class InventoryComponent implements OnInit {
     private ts: ToasterService,
     private readonly fb: FormBuilder,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.inventoryCreateForm = this.fb.group({

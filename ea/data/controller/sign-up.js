@@ -12,7 +12,9 @@ signupRouter.post("/", function (req, res) {
   let firstname = req.body.firstname;
   let lastname = req.body.lastname;
   if (!phonenumber || !username || !password) {
-    res.status(401).send({ signup: false, message: "Please enter all required fields" });
+    res
+      .status(401)
+      .send({ signup: false, message: "Please enter all required fields" });
     res.end();
     return;
   }
@@ -31,7 +33,7 @@ signupRouter.post("/", function (req, res) {
         "first_name",
         "last_name",
         "registration_status_id",
-        "role_id",
+        "role_id"
       )
       .values(id, username, password, phonenumber, firstname, lastname, 1, 1)
       .execute();

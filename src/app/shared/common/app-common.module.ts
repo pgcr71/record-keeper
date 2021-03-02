@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Route } from '@angular/router';
-import { BillingComponent } from 'src/app/billing/billing.component';
+import { RepaymentComponent } from 'src/app/repayments/repayment.component';
 import { UserTransactionsComponent } from 'src/app/user-transactions/user-transactions.component';
 import { AddUserComponent } from 'src/app/add-user/add-user.component';
 import { InventoryComponent } from 'src/app/inventory/inventory.component';
@@ -25,7 +25,7 @@ const routes: Array<Route> = [
   { path: 'signup', component: SignupComponent },
   { path: 'users', component: UserTransactionsComponent },
   { path: 'products', component: InventoryComponent },
-  { path: 'repayment', component: BillingComponent },
+  { path: 'repayment', component: RepaymentComponent },
   { path: 'orders', component: PlaceOrderComponent },
 ];
 @NgModule({
@@ -39,7 +39,7 @@ const routes: Array<Route> = [
     TableComponent,
     DropdownComponent,
     UserTransactionsComponent,
-    BillingComponent,
+    RepaymentComponent,
     PlaceOrderComponent,
     ReturnsComponent
   ],
@@ -65,7 +65,7 @@ const routes: Array<Route> = [
     TableComponent,
     DropdownComponent,
     UserTransactionsComponent,
-    BillingComponent,
+    RepaymentComponent,
     PlaceOrderComponent,
     ReturnsComponent
   ],

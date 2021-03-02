@@ -54,7 +54,4 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   "updated_on": string;
-
-  "product"?: Product;
-  "order"?: Order;
 }

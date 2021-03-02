@@ -7,9 +7,9 @@ export class OrderListener {
   repository = this.pr.repository;
 
   public async listen(): Promise<void> {
-    ipcMain.on("allOrders", async (event: IpcMainEvent) => {
+    ipcMain.on("allOrders", async (event: IpcMainEvent, user: any) => {
       try {
-        event.returnValue = await this.pr.all({} as never, {} as never, {} as never);
+        event.returnValue = await this.pr.all({ params: { userId: user.id } } as never, {} as never, {} as never);
       } catch (err) {
         event.returnValue = err;
       }

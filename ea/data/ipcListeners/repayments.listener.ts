@@ -31,7 +31,7 @@ export class RepaymentsListener {
       }
     });
 
-    ipcMain.on("saveRepayments", async (event: IpcMainEvent, repayment: Repayment) => {
+    ipcMain.on("saveRepayment", async (event: IpcMainEvent, repayment: Repayment) => {
       try {
         event.returnValue = await this.pr.save({ body: repayment } as never, {} as never, {} as never);
       } catch (err) {

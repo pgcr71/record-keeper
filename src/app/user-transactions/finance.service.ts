@@ -69,11 +69,8 @@ export class FinanceService {
 
   getAllUserOrders(userId: string, start_date: Date, end_date: Date, allOrders?: boolean) {
     if (this.isElectron) {
-      return this.appService.electronEmit('getUserOrdersAndRepayments', {
-        id: userId,
-        start_date: start_date && start_date.toISOString(),
-        end_date: end_date && end_date.toISOString(),
-        allOrders: allOrders,
+      return this.appService.electronEmit('allOrders', {
+        id: userId
       });
     }
     return this.http.get(
@@ -95,6 +92,12 @@ export class FinanceService {
     return this.http.get(`${URL}/products/remainingStock/${productId}`) as Observable<Array<unknown>>;
   }
 
+  saveRepayment(repayment) {
+    if (this.isElectron) {
+      return this.appService.electronEmit('saveRepayment', repayment);
+    }
+    return this.http.post(URL + '/repayments', repayment);
+  }
   calculateRemaining(repayment, orders) {
     const repaidAmount = repayment && repayment.price;
     if (!repaidAmount) {
@@ -157,13 +160,14 @@ export class FinanceService {
       sumOfFiltered = sumOfFiltered + Number(total_order_value);
       return include;
     });
-    if (diff > 0) {
 
+    const lastOrderTotalValue = get(lastOrder, "paid_principal", 0) + get(lastOrder, "paid_interest", 0)
+    diff = diff - lastOrderTotalValue;
+    if (diff > 0) {
       set(repayment, 'excess_amount', diff);
     } else {
       set(repayment, 'remaining_debt', get(lastOrder, "remaining_principal", 0));
     }
-
 
     return retu;
   }

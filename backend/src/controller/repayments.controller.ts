@@ -1,11 +1,7 @@
-import { getConnection, getRepository, InsertResult, Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import { IRepository } from "./repository.interface";
 import { NextFunction, Request, Response } from "express";
 import { Repayment } from "../entities/repayment.entity";
-import { Order } from "../entities/order.entity";
-import { OrderRepayment } from "../entities/order_repayments.entity";
-import { PaymentStatus } from "../entities/payment_statuses.entity";
-import { Savings } from "../entities/savings.entity";
 
 export class RepaymentController implements IRepository<Repayment> {
   repository: Repository<Repayment> = getRepository(Repayment);
@@ -23,67 +19,12 @@ export class RepaymentController implements IRepository<Repayment> {
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<any> {
-    return await getConnection().transaction(async (transactionalEntityManager) => {
-      const repayments = new Repayment();
-      const amount = request.body.totalAmount;
-      const savingsAmount = request.body.savings;
-      repayments.user = amount.user;
-      repayments.paid_on = amount.paid_on;
-      repayments.price = amount.price;
-      const repaymentTransaction = await transactionalEntityManager.save(repayments);
-      const savings = new Savings();
-      if (request.body && request.body.orderPaidFor && request.body.orderPaidFor.length) {
-        for (let i = 0; i < request.body.orderPaidFor.length; i++) {
-          {
-            const order = request.body.orderPaidFor[i];
-            const ordersPaidFor = new Order();
-            const orderRepayment = new OrderRepayment();
-            const paymentStatus = new PaymentStatus();
-
-            if (Number(order.remainingPrincipalTobePaid) > 0 || Number(order.remainingInterestTobePaid) > 0) {
-              paymentStatus.id = 2;
-              ordersPaidFor.payment_status = paymentStatus;
-            } else {
-              paymentStatus.id = 3;
-              ordersPaidFor.payment_status = paymentStatus;
-            }
-            ordersPaidFor.id = order.id;
-            ordersPaidFor.remaining_pricipal_debt = Number(order.remainingPrincipalTobePaid);
-            ordersPaidFor.remaining_interest_debt = Number(order.remainingInterestTobePaid);
-            ordersPaidFor.last_payment_date = amount.paid_on;
-            const orderTransaction = await transactionalEntityManager.save(ordersPaidFor);
-            orderRepayment.order = ordersPaidFor;
-            orderRepayment.payment = repaymentTransaction;
-            orderRepayment.principal_amount = Number(order.principalToBeDebited);
-            orderRepayment.interest_amount = Number(order.interestToBeDebited);
-            const orderRepaymentTransaction = await transactionalEntityManager.save(orderRepayment);
-          }
-        }
-        if (savingsAmount) {
-          savings.repayment = repaymentTransaction;
-          savings.paid_on = amount.paid_on;
-          savings.user = amount.user;
-          savings.price = savingsAmount;
-          const savingsTransaction = await transactionalEntityManager.save(savings);
-        }
-      } else if (savingsAmount) {
-        savings.paid_on = amount.paid_on;
-        savings.price = savingsAmount;
-        savings.user = amount.user;
-        const savingsTransaction = await transactionalEntityManager.save(savings);
-      }
-    });
-    //return this.repository.insert({});
+    return await this.repository.save(request.body)
   }
 
   public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
     return this.repository
       .createQueryBuilder("repayment")
-      .select(["repayment", "orderRepayment", "orders", "product", "savings"])
-      .leftJoin("repayment.orderRepayment", "orderRepayment")
-      .leftJoin("orderRepayment.order", "orders")
-      .leftJoin("orders.product", "product")
-      .leftJoin('repayment.savings', "savings")
       .where("repayment.user_id =:userId", { userId: request.params.id })
       .getMany();
   }

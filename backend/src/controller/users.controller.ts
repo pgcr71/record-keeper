@@ -38,79 +38,27 @@ export class UserController implements IRepository<User> {
     request: Request,
     response: Response,
     next: NextFunction,
-  ): Promise<User | undefined> {
-    const orderController = new OrderController();
-    const date =
-      request.params.start_date &&
-      request.params.start_date !== "null" &&
-      request.params.start_date !== "undefined" &&
-      new Date(new Date(request.params.start_date).setHours(0, 0, 1)).toISOString();
-    const endDate =
-      request.params.end_date &&
-      request.params.end_date !== "null" &&
-      request.params.end_date !== "undefined" &&
-      new Date(new Date(request.params.end_date).setHours(23, 59, 59, 99)).toISOString();
-    const allOrders = request.params.allOrders;
-    console.log("allOrders", allOrders)
-    const repo = this.repository
+  ): Promise<any | undefined> {
+    return this.repository
       .createQueryBuilder("usr")
       .select([
         "usr.first_name",
         "usr.last_name",
         "usr.phone_number",
         "order",
+        "rp",
         "prdt",
-        "it",
-        "repayments",
-        "paymentStatus",
-        "orderRepayment",
+        "it"
       ])
       .leftJoin("usr.orders", "order")
+      .leftJoin("usr.repayments", "rp")
       .leftJoin("order.product", "prdt")
-      .leftJoin("order.repayments", "repayments")
-      .leftJoin("repayments.payment", "orderRepayment")
-      .leftJoin("order.payment_status", "paymentStatus")
       .leftJoin("prdt.interest_type", "it")
-      .where("usr.id=:userId", { userId: request.params.id });
-    let getOrders;
-    // console.log("allOrders", allOrders)
-    // if (!allOrders || allOrders === "null" || allOrders === "undefined" || allOrders == "false") {
-    //   getOrders = repo
-    //     .andWhere("paymentStatus.id!=:notPaidId", { notPaidId: 3 })
-    //     .orderBy("order.ordered_on", "ASC")
-    //     .getOne();
-    //   return;
-    // }
-
-    if (allOrders || allOrders == "true") {
-      getOrders = repo
-        .orderBy("order.ordered_on", "ASC")
-        // .andWhere("order.ordered_on >= :start_date", { start_date: date })
-        // .andWhere("order.ordered_on <= :end_date", { end_date: endDate })
-        .getOne();
-    }
-
-    return (
-      getOrders &&
-      getOrders.then((results) => {
-        if (!results) {
-          return results;
-        }
-        results.orders = results.orders.map((result) =>
-          result.product.interest_type.name === "compound"
-            ? orderController.calculateCompoundInterest(result, endDate as string)
-            : orderController.calculateSimpleInterest(result, endDate as string),
-        );
-        return results;
-      })
-    );
+      .where("usr.id=:userId", { userId: request.params.id })
+      .getMany()
   }
 
   public async save(request: Request, response: Response, next: NextFunction): Promise<InsertResult> {
-    //  let interest_type =  new InterestTypes();
-    //   interest_type = request.body.interestTypeId;
-    //   const User = {...request.body, ...{InterestType: interest_type}}
-    //   console.log(User)
     return this.repository.save(request.body);
   }
 }

@@ -21,6 +21,7 @@ export class PlaceOrderComponent implements OnInit {
   selectedProduct: any;
   maxDate = new Date();
   order: any;
+  activatedRouteSub: any;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -39,19 +40,18 @@ export class PlaceOrderComponent implements OnInit {
       user: ['', Validators.required]
     });
 
-    this.activatedRoute.queryParamMap.pipe(
+    this.activatedRouteSub = this.activatedRoute.queryParamMap.pipe(
       tap((params) => this.order = params.get('orderObj')),
       switchMap(() => this.appService.activeUser),
       tap((userInfo) => this.userInfo = userInfo),
       switchMap(() => this.fs.getAllProducts())
     ).subscribe((products) => {
       this.products = products;
+      const parsedOrder = JSON.parse(this.order);
       if (this.order) {
-        const parsedOrder = JSON.parse(this.order);
         this.orderCreateForm.setControl('id', new FormControl(parsedOrder.id));
-        this.orderCreateForm.reset(parsedOrder);
       }
-      this.orderCreateForm.get('user').setValue(this.userInfo)
+      this.orderCreateForm.reset({ ...parsedOrder, user: this.userInfo });
       this.productSearch = this.orderCreateForm.get('product').valueChanges.pipe(
         startWith(''),
         map((value) => (typeof value === 'string' ? value : value.name)),
@@ -90,7 +90,8 @@ export class PlaceOrderComponent implements OnInit {
     if (this.orderCreateForm.valid && this.orderCreateForm.touched) {
       this.orderCreateForm.value.ordered_on = new Date(this.orderCreateForm.value.ordered_on).toISOString();
       this.fs.saveOrders(this.orderCreateForm.value).subscribe(
-        () => {
+        (order) => {
+          console.log(order)
           this.snackBar.open('Data Saved Succesfully', 'Close', {
             duration: 2000,
           });
@@ -103,5 +104,11 @@ export class PlaceOrderComponent implements OnInit {
         }
       );
     }
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.activatedRouteSub && this.activatedRouteSub.unsubscribe();
   }
 }

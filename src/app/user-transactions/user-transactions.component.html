@@ -3,17 +3,7 @@
     <mat-header-cell *matHeaderCellDef='let element'>Date {{element}}</mat-header-cell>
     <mat-cell *matCellDef="let element">
       <div>
-        <div>{{(element['ordered_on'] || element['paid_on']) | date:'dd-MM-yy hh:mm a'}}</div>
-        <div *ngIf="element['remaining_debt']" style='color:red'> {{element['remaining_debt']}}</div>
-        <div *ngIf="element['paid_interest'] && element['paid_principal']" style='color:red'>
-          {{element['current_principal'] + element['paid_interest'] }}
-        </div>
-        <div *ngIf="element['sum_of_previous']" style='color:red'>
-          {{element['sum_of_previous']}}
-        </div>
-        <div *ngIf="element['sum_of_previous_excess']" style='color:green'>
-          {{element['sum_of_previous_excess']}}
-        </div>
+        <div>{{(element['ordered_on'] || element['paid_on']) | date:'dd-MM-yy'}}</div>
       </div>
     </mat-cell>
   </ng-container>
@@ -21,38 +11,53 @@
     <mat-header-cell *matHeaderCellDef> You Gave </mat-header-cell>
     <mat-cell *matCellDef="let element">
       <div>
-       <div>{{element.current_principal}}</div>
+        <div>{{element.current_principal | currency: 'inr':'₹':'1.0-0'}}</div>
       </div>
     </mat-cell>
   </ng-container>
-
-  <ng-container matColumnDef="repayments">
-    <mat-header-cell *matHeaderCellDef>Interest </mat-header-cell>
-    <mat-cell *matCellDef="let element">
-      <div>
-        <div>{{element["paid_interest"]}}</div>
-      </div>
-    </mat-cell>
-  </ng-container>
-
 
   <ng-container matColumnDef="youGot">
     <mat-header-cell *matHeaderCellDef>You Got </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <div >{{ element['price'] | currency:
-        'inr':'₹':'1.0-0' }} </div>
+      <div>{{ element['price'] | currency: 'inr':'₹':'1.0-0' }} </div>
     </mat-cell>
+  </ng-container>
 
+  <ng-container matColumnDef="repayments">
+    <mat-header-cell *matHeaderCellDef>
+      <div>
+        <div>Principal Paid</div>
+        <div>Interest Paid</div>
+      </div>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div>
+        <div>{{element["paid_principal"] | currency: 'inr':'₹':'1.0-0'}}</div>
+        <div>{{element["paid_interest"] | currency: 'inr':'₹':'1.0-0'}}</div>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="remainingAmount">
+    <mat-header-cell *matHeaderCellDef>Remaining Amount </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <div *ngIf="element['remaining_debt']" style='color:red'> {{element['remaining_debt'] | currency: 'inr':'₹':'1.0-0'}}</div>
+      <!-- <div *ngIf="element['paid_interest'] && element['paid_principal']" style='color:red'>
+        {{element['paid_principal'] + element['paid_interest'] }}
+      </div> -->
+      <div *ngIf="element['sum_of_previous']" style='color:red'>
+        {{element['sum_of_previous'] | currency: 'inr':'₹':'1.0-0' }}
+      </div>
+      <div *ngIf="element['sum_of_previous_excess']" style='color:green'>
+        {{element['sum_of_previous_excess'] | currency: 'inr':'₹':'1.0-0'}}
+      </div>
+    </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row (click)='onRowClick(row)' *matRowDef="let row; columns: displayedColumns"
     [class.expanded-row]="expandedElement === row"></mat-row>
 </mat-table>
-<mat-toolbar class="no-data-color mat-elevation-z8" *ngIf="order && !order.length">No Records Found</mat-toolbar>
-<mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-  (page)="onPageNumberClick($event)">
-</mat-paginator>
 
 <div class='buttons'>
   <button (click)='redirectToOrdersPage()' *ngIf='!editMode' type="button" mat-raised-button color="primary">

@@ -3,7 +3,8 @@
 
 html,
 body {
-  height: 100%;
+  width: calc(100vw - (100vw - 100%));
+  height: calc(100vh - (100vh - 100%));
 }
 body {
   margin: 0;

@@ -1,0 +1,28 @@
+<ng-template #form>
+  <div [formGroup]="billingCreateForm"  class="form-group">
+    <mat-form-field class="mr-4" appearance="outline">
+      <input matInput formControlName="price" [type]="'number'" />
+      <mat-label>Amount</mat-label>
+      <mat-error>Please enter amount greater that zero</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="mr-4" appearance="outline">
+      <input matInput formControlName="paid_on" [max]="maxDate" [matDatepicker]="picker1" [type]="'text'" />
+      <mat-label>Payment Date</mat-label>
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="mr-4" appearance="outline">
+      <textarea matInput formControlName="comments"> </textarea>
+      <mat-label>Commments</mat-label>
+    </mat-form-field>
+
+    <button [disabled]="billingCreateForm.invalid" type="button" (click)="onSubmit()" mat-raised-button color="primary">
+      submit
+    </button>
+  </div>
+</ng-template>
+
+<ng-container *ngTemplateOutlet="form"></ng-container>
+

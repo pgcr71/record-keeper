@@ -1,6 +1,6 @@
 <app-header *ngIf="isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
 <app-header *ngIf="!isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
-<div class='d-flex body'>
+<div class='d-flex app-container'>
   <app-recent-users (selectedUser)='onUserSelection($event)' class='recent-users-section'></app-recent-users>
   <app-content class='recent-users-details'></app-content>
 </div>

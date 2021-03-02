@@ -1,8 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
-import { Order } from "./order.entity";
-import { OrderRepayment } from "./order_repayments.entity";
-import { Savings } from "./savings.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -14,17 +11,11 @@ export class Repayment extends BaseEntity {
   })
   "user": User;
 
-  @OneToMany((type) => OrderRepayment, (or) => or.payment)
-  "orderRepayment": OrderRepayment[];
-
   @Column({ type: "decimal", nullable: false, default: 0, precision: 20, scale: 2 })
   "price": number;
 
   @Column({ type: "varchar", length: 255, nullable: true })
   "comments": string;
-
-  @OneToMany(() => Savings, save => save.repayment)
-  savings: Savings;
 
   @Column({ type: "datetime", nullable: true })
   "paid_on": Date;
