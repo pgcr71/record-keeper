@@ -18,6 +18,8 @@ import { MaterialModule } from '../material/material.module';
 import { TableComponent } from '../table/table.component';
 import { TooltipModule } from '../tooltip/tooltip.module';
 import { AutocompleteModule } from '../autocomplete/autocomplete.module';
+import { PipesModule } from '../pipes/pipes.module';
+import { RecentUsersComponent } from 'src/app/recent-users/recent-users.component';
 
 const routes: Array<Route> = [
   { path: '', pathMatch: 'full', redirectTo: 'users' },
@@ -41,7 +43,8 @@ const routes: Array<Route> = [
     UserTransactionsComponent,
     RepaymentComponent,
     PlaceOrderComponent,
-    ReturnsComponent
+    ReturnsComponent,
+    RecentUsersComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +57,7 @@ const routes: Array<Route> = [
     AutocompleteModule,
     FormsModule,
     RouterModule.forChild(routes),
+    PipesModule
   ],
   exports: [
     AddUserComponent,
@@ -67,7 +71,9 @@ const routes: Array<Route> = [
     UserTransactionsComponent,
     RepaymentComponent,
     PlaceOrderComponent,
-    ReturnsComponent
+    ReturnsComponent,
+    PipesModule,
+    RecentUsersComponent
   ],
 })
 export class AppCommonModule { }

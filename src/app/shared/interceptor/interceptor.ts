@@ -14,7 +14,7 @@ import { LoginService } from 'src/app/login/login.service';
 
 @Injectable({ providedIn: 'root' })
 export class Interceptor implements HttpInterceptor {
-  constructor(private router: Router, private loginService: LoginService) {}
+  constructor(private router: Router, private loginService: LoginService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let token = localStorage.getItem('token');
@@ -29,7 +29,6 @@ export class Interceptor implements HttpInterceptor {
     params.userId = localStorage.getItem('userId');
     params.userRoleId = localStorage.getItem('rolesId');
 
-    console.log(params.userId);
     req = req.clone({ setHeaders: headers, body: { ...req.body, ...params } });
 
     return next.handle(req).pipe(

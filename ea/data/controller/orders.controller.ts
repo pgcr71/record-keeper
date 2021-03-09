@@ -9,9 +9,10 @@ export class OrderController implements IRepository<Order> {
   public async all(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
     return this.repository
       .createQueryBuilder("order")
-      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
+      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it", "its"])
       .leftJoin("order.user", "usr")
       .leftJoin("order.product", "prdt")
+      .leftJoin("order.interest_type", "its")
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.userId })
       .getMany();

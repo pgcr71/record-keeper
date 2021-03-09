@@ -32,8 +32,18 @@
   .side-nav {
     display: none;
   }
+  .recent-users-section {
+    display: none;
+  }
+  app-header {
+    display: none;
+  }
 
   mat-sidenav-content {
     margin-left: 0 !important;
+  }
+
+  app-footer {
+    display: none;
   }
 }

@@ -11,7 +11,7 @@ import { BreakpointService } from '../shared/breakpoint.service';
 export class HeaderComponent implements OnInit {
   isDesktop: boolean;
   @Output() rkIconClick = new EventEmitter();
-  constructor(private readonly brs: BreakpointService, private readonly electronService: ElectronService) {}
+  constructor(private readonly brs: BreakpointService, private readonly electronService: ElectronService) { }
 
   ngOnInit() {
     this.brs.isDesktop$.subscribe((isDesktop: boolean) => {
@@ -25,7 +25,6 @@ export class HeaderComponent implements OnInit {
 
   closeApp() {
     let window = this.electronService && this.electronService.remote && this.electronService.remote.getCurrentWindow();
-    console.log(this.electronService, this.electronService.remote.getCurrentWindow());
     window && window.close();
   }
 }

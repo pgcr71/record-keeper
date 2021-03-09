@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, UpdateDateColumn } from "typeorm";
 import { BaseEntity } from "./base.entity";
+import { InterestTypes } from "./interest_types.entity";
 import { Product } from "./product.entity";
 import { User } from "./user.entity";
 
@@ -21,6 +22,16 @@ export class Order extends BaseEntity {
 
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;
+
+  @Column({ type: "decimal", nullable: true, default: 0, precision: 20, scale: 2 })
+  "monthly_interest": number;
+
+  @ManyToOne(() => InterestTypes)
+  @JoinColumn({
+    name: "interest_type_id",
+    referencedColumnName: "id",
+  })
+  "interest_type": InterestTypes;
 
   @Column({ type: "datetime", nullable: true })
   "ordered_on": Date;

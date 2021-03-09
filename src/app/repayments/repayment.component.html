@@ -18,6 +18,20 @@
       <mat-label>Commments</mat-label>
     </mat-form-field>
 
+    <mat-form-field class="mr-4" appearance="outline">
+      <input matInput formControlName="monthly_interest" [type]="'number'" />
+      <mat-label>Interest Rate</mat-label>
+    </mat-form-field>
+
+    <mat-form-field class="mr-4" appearance="outline">
+      <mat-label>Interest Type</mat-label>
+      <mat-select [compareWith]="compareWith" formControlName="interest_type">
+        <mat-option *ngFor="let interestType of interestTypes" [value]="interestType">
+          {{ interestType.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <button [disabled]="billingCreateForm.invalid" type="button" (click)="onSubmit()" mat-raised-button color="primary">
       submit
     </button>

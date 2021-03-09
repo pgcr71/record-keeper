@@ -25,6 +25,8 @@ export class RepaymentController implements IRepository<Repayment> {
   public async getUserRepaymentDetails(request: Request, response: Response, next: NextFunction): Promise<any> {
     return this.repository
       .createQueryBuilder("repayment")
+      .select(['repayment', 'it'])
+      .leftJoin('repayment.interest_type', 'it')
       .where("repayment.user_id =:userId", { userId: request.params.id })
       .getMany();
   }

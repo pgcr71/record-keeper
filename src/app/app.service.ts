@@ -10,6 +10,10 @@ export class AppService {
   isElectron: boolean;
   activeUser = new BehaviorSubject(null);
   activeUser$ = this.activeUser.asObservable();
+  allUsers = new BehaviorSubject([]);
+  allUsers$ = this.allUsers.asObservable();
+  activeTransaction = new BehaviorSubject(null);
+  activeTransaction$ = this.activeTransaction.asObservable();
   constructor(private http: HttpClient, private readonly _electronService: ElectronService) {
     this.isElectron = this._electronService.isElectronApp;
   }

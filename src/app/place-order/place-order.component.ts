@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { FinanceService } from '../user-transactions/finance.service';
 import { RequireMatch } from '../shared/validators/require-match.validator';
 import { AppService } from '../app.service';
+import { InventoryService } from '../inventory/inventory.service';
+import { cloneDeep, get } from 'lodash';
 
 @Component({
   selector: 'app-orders',
@@ -22,13 +24,16 @@ export class PlaceOrderComponent implements OnInit {
   maxDate = new Date();
   order: any;
   activatedRouteSub: any;
+  interestTypes: any;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar,
     private readonly fs: FinanceService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    private readonly is: InventoryService,
+    private readonly router: Router
   ) { }
 
   ngOnInit(): void {
@@ -37,21 +42,36 @@ export class PlaceOrderComponent implements OnInit {
       quantity: [null, [Validators.required]],
       ordered_on: [new Date(), [Validators.required]],
       comments: [''],
-      user: ['', Validators.required]
+      user: ['', Validators.required],
+      monthly_interest: ['', Validators.required],
+      interest_type: [null, Validators.required],
+      compounding_period: []
     });
 
-    this.activatedRouteSub = this.activatedRoute.queryParamMap.pipe(
-      tap((params) => this.order = params.get('orderObj')),
+    this.activatedRouteSub = this.appService.activeTransaction$.pipe(
+      tap((order) => this.order = order),
       switchMap(() => this.appService.activeUser),
       tap((userInfo) => this.userInfo = userInfo),
+      switchMap(() => this.is.getInterestTypes()),
+      tap((interestTypes) => this.interestTypes = interestTypes),
       switchMap(() => this.fs.getAllProducts())
     ).subscribe((products) => {
       this.products = products;
-      const parsedOrder = JSON.parse(this.order);
       if (this.order) {
-        this.orderCreateForm.setControl('id', new FormControl(parsedOrder.id));
+        this.orderCreateForm.setControl('id', new FormControl(this.order.id));
+        this.orderCreateForm.reset({
+          ...this.order,
+          user: this.userInfo
+        });
+      } else {
+        this.orderCreateForm.reset({
+          user: this.userInfo,
+          monthly_interest: 0,
+          interest_type: this.interestTypes[0],
+          ordered_on: new Date()
+        });
       }
-      this.orderCreateForm.reset({ ...parsedOrder, user: this.userInfo });
+
       this.productSearch = this.orderCreateForm.get('product').valueChanges.pipe(
         startWith(''),
         map((value) => (typeof value === 'string' ? value : value.name)),
@@ -63,6 +83,14 @@ export class PlaceOrderComponent implements OnInit {
   private _productFilter(name: string) {
     const filterValue = name.toLowerCase();
     return this.products.filter((option) => option.name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  compareWith(o1, o2) {
+    if (!o1 || !o2) {
+      return;
+    }
+    if (o1.id == o2.id) return true;
+    else return false;
   }
 
   onDelete(element) {
@@ -82,6 +110,8 @@ export class PlaceOrderComponent implements OnInit {
 
   onOptionSelect(product) {
     this.selectedProduct = product;
+    this.orderCreateForm.get('monthly_interest').setValue(get(product, 'rate_of_interest', 0));
+    this.orderCreateForm.get('interest_type').setValue(get(product, 'interest_type', {}));
   }
 
 
@@ -89,14 +119,29 @@ export class PlaceOrderComponent implements OnInit {
     event.preventDefault();
     if (this.orderCreateForm.valid && this.orderCreateForm.touched) {
       this.orderCreateForm.value.ordered_on = new Date(this.orderCreateForm.value.ordered_on).toISOString();
-      this.fs.saveOrders(this.orderCreateForm.value).subscribe(
+      const dataToServer = cloneDeep(this.orderCreateForm.value);
+      this.fs.saveOrders(dataToServer).subscribe(
         (order) => {
-          console.log(order)
+          if (this.userInfo) {
+            const index = this.order ? (this.userInfo.transactions as Array<any>).findIndex((transaction) => transaction.id === this.order.id) : -1;
+            if (index >= 0) {
+              this.userInfo.transactions[index] = dataToServer;
+              this.userInfo.transactions = this.fs.getDetails(this.userInfo.transactions);
+              this.userInfo.totals = this.fs.getTotals(this.userInfo.transactions);
+            } else {
+              this.userInfo.transactions.push(order);
+              this.userInfo.transactions = this.fs.getDetails(this.userInfo.transactions);
+              this.userInfo.totals = this.fs.getTotals(this.userInfo.transactions);
+            }
+
+          }
+          this.router.navigateByUrl('/users');
           this.snackBar.open('Data Saved Succesfully', 'Close', {
             duration: 2000,
           });
         },
         (error) => {
+          console.log(error)
           this.snackBar.open(error.error.sqlMessage, 'Close', {
             duration: 2000,
             panelClass: ['waring-snackbar'],
@@ -110,5 +155,6 @@ export class PlaceOrderComponent implements OnInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.activatedRouteSub && this.activatedRouteSub.unsubscribe();
+    this.orderCreateForm && this.orderCreateForm.reset();
   }
 }

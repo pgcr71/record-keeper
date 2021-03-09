@@ -4,7 +4,7 @@ import { URL } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { AppService } from '../app.service';
-import { cloneDeep, get, set } from 'lodash';
+import { cloneDeep, get, orderBy, set } from 'lodash';
 import { Order } from 'backend/src';
 import { InterestComponent } from 'out/my-project2-win32-x64/resources/app/src/app/interest/interest.component';
 
@@ -98,78 +98,144 @@ export class FinanceService {
     }
     return this.http.post(URL + '/repayments', repayment);
   }
-  calculateRemaining(repayment, orders) {
-    const repaidAmount = repayment && repayment.price;
-    if (!repaidAmount) {
-      return;
+
+  getDetails(combinedOrders: any) {
+    const length = combinedOrders.length;
+    if (!length) {
+      return [];
     }
 
-    let diff = 0;
-    let sumOfFiltered = 0;
-    let lastOrder = {};
-    const retu = orders.filter((order) => {
-      let include = false;
-      let breakups;
-      order["payment_status"] = order["payment_status"] || 'NOT_PAID';
-      const orderInterestType = get(order, "product.interest_type.name", '');
-      const monthlyInterestRate = get(order, "product.rate_of_interest", 2);
-      set(order, "original_principal", get(order, "product.unit_price", 0) * get(order, "quantity", 0));
-      set(order, "current_principal", get(order, "remaining_principal", order.original_principal))
-      const remainingPrincipalTobePaid = order["payment_status"] === "NOT_PAID"
-        ? order["original_principal"] :
-        order["remaining_principal"];
-      const interestAccured = orderInterestType === 'compound' ?
-        this.calculateCompoundInterest(remainingPrincipalTobePaid, monthlyInterestRate, 365, order.ordered_on, repayment.paid_on) :
-        this.calculateSimpleInterest(remainingPrincipalTobePaid, monthlyInterestRate, order.ordered_on, repayment.paid_on)
-      set(order, 'interestAccured', Number(interestAccured.toFixed(2)));
-      const total_order_value = Number((remainingPrincipalTobePaid + interestAccured).toFixed(2));
-      diff = Number(repaidAmount) - sumOfFiltered;
-      if (diff >= 0 && total_order_value > 0) {
-        include = true;
-        if (orderInterestType === 'compound') {
-          breakups = this.PrincipalAndInterestComponentBreakupCompoundInterest(
-            Math.abs(diff) <= total_order_value ?
-              Math.abs(diff) :
-              total_order_value,
-            order.rate_of_interest,
-            365,
-            order.ordered_on,
-            repayment.paid_on,
-          );
-        } else {
-          breakups = this.PrincipalAndInterestComponentBreakupSimpleInterest(
-            Math.abs(diff) <= total_order_value ?
-              Math.abs(diff) :
-              total_order_value,
-            order.rate_of_interest,
-            order.ordered_on,
-            repayment.paid_on,
-          );
+    for (let i = 0; i < combinedOrders.length; i++) {
+      const current = combinedOrders[i];
+      const details = this.getOrderDetails(current, undefined, current.paid_on || current.ordered_on);
+      this.setDetails(current, details.originalPrincipal, details.interestAccuredToToday, details.originalPrincipal);
+      let sum = 0;
+      let diff = 0;
+      for (let j = 0; j < i; j++) {
+        const innerDetails = this.getOrderDetails(combinedOrders[j], undefined, details.endDate);
+        const newdetails = this.getOrderDetails(current, undefined, current.paid_on || current.ordered_on);
+        if (innerDetails.isRepayment !== details.isRepayment && innerDetails.amount > 0 && details.amount > 0) {
+          const total_order_value = Number((innerDetails.interestAccured + innerDetails.amount).toFixed(2));
+          diff = Number(newdetails.amount) - sum;
+          let breakups;
+          if (diff >= 0 && total_order_value > 0) {
+            if (innerDetails.interestType === 'compound') {
+              breakups = this.PrincipalAndInterestComponentBreakupCompoundInterest(
+                Math.abs(diff) <= total_order_value ?
+                  Math.abs(diff) :
+                  total_order_value,
+                innerDetails.monthlyInterest,
+                365,
+                innerDetails.startDate,
+                innerDetails.endDate,
+              );
+            } else {
+              breakups = this.PrincipalAndInterestComponentBreakupSimpleInterest(
+                Math.abs(diff) <= total_order_value ?
+                  Math.abs(diff) :
+                  total_order_value,
+                innerDetails.monthlyInterest,
+                innerDetails.startDate,
+                innerDetails.endDate,
+              );
+            }
+
+            const remainingPrincipal = Number((innerDetails.amount - breakups["principalComponent"]).toFixed(2));
+            const remainingOuterPrincipal = Number((newdetails.amount - breakups["principalComponent"] - breakups["interestComponent"]).toFixed(2))
+            set(combinedOrders[j], 'remaining_principal', remainingPrincipal);
+            set(current, 'remaining_principal', remainingOuterPrincipal);
+
+            this.setDetails(
+              combinedOrders[j],
+              innerDetails.originalPrincipal,
+              this.getOrderDetails(combinedOrders[j]).interestAccuredToToday,
+              remainingPrincipal,
+              breakups["principalComponent"],
+              breakups["interestComponent"],
+              remainingPrincipal === 0 ? "FULLY_PAID" : "PARTIALLY_PAID",
+              {
+                obj: cloneDeep(current),
+                principalComponent: breakups["principalComponent"],
+                interestComponent: breakups["interestComponent"]
+              }
+            );
+
+            this.setDetails(
+              current,
+              newdetails.originalPrincipal,
+              this.getOrderDetails(current).interestAccuredToToday,
+              remainingOuterPrincipal,
+              breakups["principalComponent"] + breakups["interestComponent"],
+              0,
+              remainingOuterPrincipal === 0 ? "FULLY_PAID" : "PARTIALLY_PAID"
+            );
+          }
+          sum = sum + Number(total_order_value);
         }
-        set(order, 'paid_principal', breakups["principalComponent"])
-        set(order, 'paid_interest', breakups["interestComponent"])
-        set(order, 'remaining_principal', Number((remainingPrincipalTobePaid - breakups["principalComponent"]).toFixed(2)));
-        if (order["remaining_principal"] === 0) {
-          order["payment_status"] = "FULLY_PAID"
-        } else {
-          order["payment_status"] = "PARTIALLY_PAID"
-        }
-        lastOrder = order;
       }
-
-      sumOfFiltered = sumOfFiltered + Number(total_order_value);
-      return include;
-    });
-
-    const lastOrderTotalValue = get(lastOrder, "paid_principal", 0) + get(lastOrder, "paid_interest", 0)
-    diff = diff - lastOrderTotalValue;
-    if (diff > 0) {
-      set(repayment, 'excess_amount', diff);
-    } else {
-      set(repayment, 'remaining_debt', get(lastOrder, "remaining_principal", 0));
     }
+    return combinedOrders;
+  }
 
-    return retu;
+  setDetails(
+    order,
+    originalPrincipal,
+    interestAccuredToToday,
+    remainingPrincipal,
+    paidPrincipal?,
+    paidInterest?,
+    paymentStatus?,
+    other?
+  ) {
+    set(order, 'original_principal', originalPrincipal);
+    set(order, 'remaining_principal', remainingPrincipal);
+    set(order, 'remaining_interest', interestAccuredToToday);
+    set(order, 'paid_interest', [...get(order, "paid_interest", []) || [], paidInterest || 0]);
+    set(order, 'paid_principal', [...get(order, "paid_principal", []) || [], paidPrincipal || 0]);
+    set(order, 'payment_status', paymentStatus || "NOT_PAID");
+  }
+
+  getOrderDetails(current = {}, startDate?, endDate?) {
+    const monthlyInterest = Number(get(current, "monthly_interest", 0) || get(current, "product.rate_of_interest", 0));
+    const interestType = get(current, "interest_type.name", 0) || get(current, "product.interest_type.name", '');
+    const originalPrincipal = get(current, "price", 0) || (get(current, "product.unit_price", 0) * get(current, "quantity", 0));
+    const amount = Object.prototype.hasOwnProperty.call(current, "remaining_principal") ? Number(get(current, "remaining_principal", 0)) : Number(originalPrincipal);
+    const isRepayment = get(current, "type", '') === "repayment";
+    const sd = startDate || get(current, "paid_on", null) || get(current, "ordered_on", null);
+    const ed = endDate || new Date().toISOString();
+    const interestAccured = interestType === "simple" ?
+      this.calculateSimpleInterest(amount, monthlyInterest, sd, ed)
+      : this.calculateCompoundInterest(amount, monthlyInterest, 365, sd, ed);
+    const interestAccuredToToday = interestType === "simple" ?
+      this.calculateSimpleInterest(amount, monthlyInterest, sd)
+      : this.calculateCompoundInterest(amount, monthlyInterest, 365, sd);
+    return { interestAccured, monthlyInterest, interestType, amount, isRepayment, startDate: sd, endDate: ed, originalPrincipal, interestAccuredToToday }
+  }
+
+  getTotals(combinedOrders) {
+    const ordersTotal = combinedOrders.reduce((sum, next) => {
+      if (next.type !== 'repayment') {
+        return sum + Number(get(next, "original_principal", 0))
+      }
+      return sum;
+    }, 0);
+    const repaymentsTotal = combinedOrders.reduce((sum, next) => sum + Number(get(next, "price", 0)), 0)
+    const ordersTotalInterest = combinedOrders.reduce((sum, next) => {
+      if (next.type !== 'repayment') {
+        return sum
+          + Number(get(next, "remaining_interest", 0))
+          + Number((get(next, "paid_interest", []) || []).reduce((sum, interest) => sum + interest, 0));
+      } else { return sum }
+    }, 0);
+    const repaymentsTotalInterest = combinedOrders.reduce((sum, next) => {
+      if (next.type === 'repayment') {
+        return sum
+          + Number(get(next, "remaining_interest", 0))
+          + Number((get(next, "paid_interest", []) || []).reduce((sum, interest) => sum + interest, 0));
+      } return sum;
+    }, 0);
+    const remainingAmount = Number(ordersTotal) + Number(ordersTotalInterest) - Number(repaymentsTotal) - Number(repaymentsTotalInterest);
+    return { ordersTotal, ordersTotalInterest, repaymentsTotal, repaymentsTotalInterest, remainingAmount }
   }
 
   PrincipalAndInterestComponentBreakupSimpleInterest(

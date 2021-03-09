@@ -1,12 +1,15 @@
-<mat-selection-list class='users-list' [multiple]="false">
-  <mat-list-option [selected]='_selectedUser===user' (click)='redirectToUserOrdersPage(user)' *ngFor='let user of users'>
+<div class='totals' [class]="getTotals()>0? 'green': 'red'">
+  {{getTotals() | currency: 'inr':'₹':'1.0-2'}}
+</div>
+<div class='users-list selection'>
+  <div  class='mat-list-option' [class.selected]='_selectedUser===user' (click)='redirectToUserOrdersPage(user)'
+  *ngFor='let user of users'>
     <div>
-      {{user.first_name}} {{user.last_name}}
+      <div>{{user.first_name}} {{user.last_name}}</div>
+      <div class='' [ngClass]='user && user.totals && user.totals.remainingAmount > 0?"green":"red"'>
+        {{ user && user.totals && user.totals.remainingAmount | currency:'inr':'₹':'1.0-2'}}
+      </div>
     </div>
-  </mat-list-option>
-</mat-selection-list>
-
-<div class='new-user'>
-  <button type='button' mat-raised-button color='primary'(click)='createNewUser()' >NEW USER</button>
+  </div>
 </div>
 

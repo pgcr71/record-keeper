@@ -18,6 +18,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AutocompleteModule } from './shared/autocomplete/autocomplete.module';
 import { RecentUsersComponent } from './recent-users/recent-users.component';
+import { AppCommonModule } from './shared/common/app-common.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,13 +27,13 @@ import { RecentUsersComponent } from './recent-users/recent-users.component';
     FooterComponent,
     ContentComponent,
     ToasterComponent,
-    RecentUsersComponent
   ],
 
   imports: [
     NgxElectronModule,
     BrowserModule,
     CommonModule,
+    AppCommonModule,
     AppRouterModule,
     MaterialModule,
     HttpClientModule,

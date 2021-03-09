@@ -37,6 +37,7 @@
     "@angular/router": "~11.0.4",
     "@mysql/xdevapi": "8.0.19",
     "body-parser": "^1.19.0",
+    "bootstrap-4-grid": "^3.4.0",
     "electron": "^11.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",

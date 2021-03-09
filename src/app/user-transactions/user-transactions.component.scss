@@ -3,12 +3,13 @@
 :host {
   display: block;
   width: 100%;
-  overflow-y: scroll;
+
   margin: 0px 20px 0px 20px;
 }
 
 .mat-table {
-  max-height: 75vh;
+  overflow-y: scroll;
+  max-height: calc(100vh - 130px - 25vh);
 }
 
 .mat-cell,
@@ -84,4 +85,33 @@
   position: fixed;
   bottom: 0;
   right: 0;
+}
+
+.summary-card {
+  height: 130px;
+  .price-section {
+    flex: 0 0 60%;
+  }
+}
+
+.youWillGet {
+  flex: 0 0 50%;
+  border-right: 1px solid black;
+}
+
+.youWillGive {
+  flex: 0 0 50%;
+}
+
+.mat-footer-cell,
+.mat-header-cell,
+.mat-header-row,
+.mat-footer-row {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.amount {
+  font-size: 18px;
+  font-weight: bold;
 }

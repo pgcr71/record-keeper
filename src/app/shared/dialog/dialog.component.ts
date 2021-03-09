@@ -23,9 +23,9 @@ export class DialogComponent implements OnInit {
   title: string = 'title goes here';
 
   @ViewChild('vc', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-  constructor(private cd: ChangeDetectorRef, private _cfr: ComponentFactoryResolver, private _do: DialogOutput) {}
+  constructor(private cd: ChangeDetectorRef, private _cfr: ComponentFactoryResolver, private _do: DialogOutput) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.loadChildComponent(this.childComponent);
@@ -37,12 +37,11 @@ export class DialogComponent implements OnInit {
     this.container.createComponent(factory);
   }
 
-  onClose() {}
+  onClose() { }
 
   onOk(form, appform) {
-    console.log([form, appform]);
-    console.log([this.childComponent]);
+
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 }

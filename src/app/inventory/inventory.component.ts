@@ -61,7 +61,6 @@ export class InventoryComponent implements OnInit {
       comments: [''],
     });
     this.is.get().subscribe((result) => {
-      console.log(result);
       this.inventory = result || [];
     });
     this.is.getInterestTypes().subscribe((result) => {

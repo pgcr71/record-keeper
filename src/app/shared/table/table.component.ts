@@ -25,12 +25,11 @@ export class TableComponent implements OnInit, OnChanges {
   displayTableOptions = false;
   dropdown = false;
   checkBoxes = [];
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onSingleCheckBoxToggle(bool, index) {
-    console.log(bool);
     if (bool) {
       this.checkBoxes[index] = true;
     } else {
@@ -38,7 +37,7 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
-  onDelete() {}
+  onDelete() { }
 
   onSelectAll(value) {
     if (value) {
