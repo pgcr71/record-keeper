@@ -17,7 +17,6 @@ import { InputtextComponent } from '../inputtext/inputtext.component';
 import { MaterialModule } from '../material/material.module';
 import { TableComponent } from '../table/table.component';
 import { TooltipModule } from '../tooltip/tooltip.module';
-import { AutocompleteModule } from '../autocomplete/autocomplete.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { RecentUsersComponent } from 'src/app/recent-users/recent-users.component';
 
@@ -54,7 +53,6 @@ const routes: Array<Route> = [
     ReactiveFormsModule,
     MaterialModule,
     TooltipModule,
-    AutocompleteModule,
     FormsModule,
     RouterModule.forChild(routes),
     PipesModule

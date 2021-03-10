@@ -15,9 +15,6 @@ import { NgxElectronModule } from 'ngx-electron';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material/material.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { AutocompleteModule } from './shared/autocomplete/autocomplete.module';
-import { RecentUsersComponent } from './recent-users/recent-users.component';
 import { AppCommonModule } from './shared/common/app-common.module';
 @NgModule({
   declarations: [
