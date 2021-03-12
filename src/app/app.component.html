@@ -1,8 +1,15 @@
-<app-header *ngIf="isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
-<app-header *ngIf="!isDesktop" (rkIconClick)="displaySideNav = !displaySideNav"></app-header>
-<div class='d-flex app-container'>
-  <app-recent-users (selectedUser)='onUserSelection($event)' class='recent-users-section'></app-recent-users>
-  <app-content class='recent-users-details'></app-content>
-</div>
+<div class='row no-gutters'>
+  <div class='col-1'>
+    <div [routerLink]='"/customers"'>
+      Customers
+    </div>
+    <div [routerLink]='"/inventory"'>
+      Inventory
+    </div>
+  </div>
+  <div class='col-11'>
+    <router-outlet>
 
-<app-footer></app-footer>
+    </router-outlet>
+  </div>
+</div>

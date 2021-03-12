@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { ElectronService } from 'ngx-electron';
 import { map } from 'rxjs/operators';
 import { AppService } from 'src/app/app.service';
-import { URL } from '../../environments/environment';
+import { URL } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

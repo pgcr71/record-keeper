@@ -1,12 +1,2 @@
 @import './scss/main';
 @import './scss/material-theme.scss';
-
-html,
-body {
-  width: calc(100vw - (100vw - 100%));
-  height: calc(100vh - (100vh - 100%));
-}
-body {
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-}

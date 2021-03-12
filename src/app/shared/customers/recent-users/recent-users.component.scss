@@ -1,0 +1,59 @@
+// .selection {
+//   display: flex;
+//   flex-direction: column;
+
+//   .selected {
+//     background-color: grey;
+//   }
+//   .mat-list-option {
+//     padding: 10px;
+//     border-bottom: 1px solid grey;
+//   }
+
+//   .green {
+//     color: green;
+//   }
+
+//   .red {
+//     color: red;
+//   }
+// }
+
+// .totals {
+//   height: 79px;
+//   display: flex;
+//   font-weight: bold;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 20px;
+// }
+
+.new-user {
+  position: fixed;
+  bottom: 0;
+  left: 40px;
+}
+
+.summary {
+  height: 150px;
+}
+
+.remaining-amount {
+  height: 50%;
+}
+
+.you-will-get {
+  flex: 0 0 50%;
+}
+
+.you-will-give {
+  flex: 0 0 50%;
+}
+
+.breakups {
+  height: 50%;
+}
+
+.selected {
+  background-color: grey;
+}

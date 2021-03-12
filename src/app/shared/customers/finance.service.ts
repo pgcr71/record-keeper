@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { URL } from '../../environments/environment';
+import { URL } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
-import { AppService } from '../app.service';
-import { cloneDeep, get, orderBy, set } from 'lodash';
-import { Order } from 'backend/src';
-import { InterestComponent } from 'out/my-project2-win32-x64/resources/app/src/app/interest/interest.component';
+import { AppService } from '../../app.service';
+import { cloneDeep, get, set } from 'lodash';
 
 @Injectable({
   providedIn: 'root',

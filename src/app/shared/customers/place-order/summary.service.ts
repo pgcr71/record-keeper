@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { URL } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { AppService } from '../app.service';
 import { ElectronService } from 'ngx-electron';
+import { AppService } from 'src/app/app.service';
 
 @Injectable({
   providedIn: 'root',

@@ -4,11 +4,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
-import { FinanceService } from '../user-transactions/finance.service';
-import { RequireMatch } from '../shared/validators/require-match.validator';
-import { AppService } from '../app.service';
-import { InventoryService } from '../inventory/inventory.service';
+import { FinanceService } from '../finance.service';
 import { cloneDeep, get } from 'lodash';
+import { AppService } from 'src/app/app.service';
+import { InventoryService } from 'src/app/inventory/inventory.service';
+import { RequireMatch } from '../../validators/require-match.validator';
 
 @Component({
   selector: 'app-orders',

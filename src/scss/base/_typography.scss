@@ -4,5 +4,22 @@
 }
 $primary-font: 'Montserrat', 'roboto', Arial, Helvetica, sans-serif;
 
-.primary-heading {
+.bold {
+  font-weight: bold;
+}
+
+.semi-bold {
+  font-weight: 600;
+}
+
+.primary-font {
+  font-size: 20px;
+}
+
+.secondary-font {
+  font-size: 16px;
+}
+
+.ternary-font {
+  font-size: 13px;
 }

@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import { get, orderBy, set } from 'lodash';
 import { forkJoin, of } from 'rxjs';
 import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { FinanceService } from 'src/app/user-transactions/finance.service';
-import { AddUserComponent } from '../add-user/add-user.component';
-import { AppService } from '../app.service';
+import { AppService } from 'src/app/app.service';
+import { FinanceService } from 'src/app/shared/customers/finance.service';
+
 
 @Component({
   selector: 'app-recent-users',
@@ -19,6 +19,12 @@ export class RecentUsersComponent implements OnInit {
   @Output() selectedUser = new EventEmitter()
   userId: any;
   usersCopy: any = [];
+  total = {
+    remainingAmount: 0,
+    youWillGet: 0,
+    youWillGive: 0
+  };
+  showLoader = false;
 
   constructor(
     private readonly financeService: FinanceService,
@@ -28,16 +34,16 @@ export class RecentUsersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.showLoader = true;
     this.getUsers();
     this.appService.activeUser$.subscribe((user) => {
       if (user) {
         const matchedIndex = this.users.findIndex((usr) => user.id === usr.id);
         if (matchedIndex === -1) {
           set(user, "transactions", []);
-          set(user, "totals", {})
+          set(user, "totals", {});
           this.users.unshift(user);
           this.appService.allUsers.next(this.users);
-
         }
         this._selectedUser = user;
       }
@@ -46,7 +52,11 @@ export class RecentUsersComponent implements OnInit {
 
   getUsers() {
     this.financeService.getAllUsers()
-      .pipe(switchMap((users) => this.getUserTransactionDetails(users)))
+      .pipe(
+        switchMap((users) =>
+          this.getUserTransactionDetails(users)
+        )
+      )
       .subscribe((user) => {
         this.usersCopy.push(user);
       }, err => err, () => {
@@ -54,7 +64,9 @@ export class RecentUsersComponent implements OnInit {
         this.users = orderBy(this.users, usr => usr.updated_on, 'desc');
         this.appService.allUsers.next(this.users);
         this._selectedUser = this.users[0];
+        this.appService.activeUser.next(this.users[0])
         this.selectedUser.emit(this._selectedUser);
+        this.showLoader = false;
       })
   }
 
@@ -91,11 +103,22 @@ export class RecentUsersComponent implements OnInit {
 
   redirectToUserOrdersPage(userInfo) {
     this._selectedUser = userInfo;
-    this.selectedUser.emit(userInfo);
-    this.router.navigateByUrl('/users');
+    this.appService.activeUser.next(userInfo);
+    this.router.navigateByUrl('/customers');
   }
 
   getTotals() {
-    return this.users.reduce((sum, nextUser) => sum + get(nextUser, "totals.remainingAmount", 0), 0)
+    const totals = {
+      remainingAmount: 0,
+      youWillGet: 0,
+      youWillGive: 0
+    }
+    this.users.forEach((next) => {
+      totals.remainingAmount += next.totals.remainingAmount;
+      totals.youWillGet += next.totals.ordersTotal + next.totals.ordersTotalInterest;
+      totals.youWillGive += next.totals.repaymentsTotal + next.totals.repaymentsTotalInterest;
+    });
+    this.total = totals;
+    return totals;
   }
 }

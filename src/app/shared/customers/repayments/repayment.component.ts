@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { FinanceService } from '../user-transactions/finance.service';
+import { FinanceService } from '../finance.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SummaryService } from '../place-order/summary.service';
-import { AppService } from '../app.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InventoryService } from '../inventory/inventory.service';
 import { cloneDeep } from 'lodash';
+import { AppService } from 'src/app/app.service';
+import { InventoryService } from 'src/app/inventory/inventory.service';
 
 @Component({
   selector: 'app-repayment',

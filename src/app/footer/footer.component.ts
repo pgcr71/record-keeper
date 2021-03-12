@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AddUserComponent } from '../add-user/add-user.component';
+import { AddUserComponent } from '../shared/customers/add-user/add-user.component';
 import { AppService } from '../app.service';
 
 @Component({

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FinanceService } from './finance.service';
+import { FinanceService } from '../finance.service';
 import { FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { clone, cloneDeep, forEach, get, orderBy, set } from 'lodash';
+import { get } from 'lodash';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
-import { AppService } from '../app.service';
+import { AppService } from 'src/app/app.service';
+
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -82,9 +81,9 @@ export class UserTransactionsComponent implements OnInit {
   onRowClick(row) {
     this.as.activeTransaction.next(row);
     if (row.type == 'repayment') {
-      this.router.navigate(['repayment']);
+      this.router.navigate(['/customers/repayment']);
     } else {
-      this.router.navigate(['orders']);
+      this.router.navigate(['/customers/orders']);
     }
   }
 
