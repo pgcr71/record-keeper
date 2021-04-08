@@ -4,10 +4,10 @@
     <mat-label>Select Product/Category</mat-label>
     <mat-autocomplete (optionSelected)="onOptionSelect($event.option.value)" #productAuto="matAutocomplete"
       [displayWith]="productDisplayFn">
-      <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
-        <div class="product-name">{{ option.name }} ({{ option.interest_type.name }})</div>
-        <div class="product-date">{{ option.created_on | date: 'dd/MM/yy hh:mm' }}</div>
-      </mat-option>
+        <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
+          <div class="product-name">{{ option.product_name && option.product_name.name }} ({{option.interest_type && option.interest_type.name }})</div>
+          <div class="product-date">{{ option.created_on | date: 'dd/MM/yy hh:mm' }}</div>
+        </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 

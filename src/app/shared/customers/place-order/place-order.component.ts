@@ -68,21 +68,29 @@ export class PlaceOrderComponent implements OnInit {
           user: this.userInfo,
           monthly_interest: 0,
           interest_type: this.interestTypes[0],
-          ordered_on: new Date()
+          ordered_on: new Date(),
+          product: ''
         });
       }
-
       this.productSearch = this.orderCreateForm.get('product').valueChanges.pipe(
         startWith(''),
+        tap((value) => console.log(value)),
         map((value) => (typeof value === 'string' ? value : value.product_name.name)),
         map((name) => (name ? this._productFilter(name) : this.products.slice()))
       );
+
     });
   }
 
   private _productFilter(name: string) {
+    if (!name) {
+      return [];
+    }
     const filterValue = name.toLowerCase();
-    return this.products.filter((option) => option.product_name.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.products.filter((option) =>
+      get(option, "product_name.name", '')
+        .toLowerCase()
+        .indexOf(filterValue) === 0);
   }
 
   compareWith(o1, o2) {
@@ -101,7 +109,10 @@ export class PlaceOrderComponent implements OnInit {
   }
 
   productDisplayFn(product): string {
-    if (product && !product.product_name.name) {
+    if (!product) {
+      return;
+    }
+    if (product && !get(product, "product_name.name", '')) {
       return '';
     }
     return product && product.product_name.name ? product.product_name.name : '';

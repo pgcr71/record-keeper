@@ -211,6 +211,9 @@ export class FinanceService {
   }
 
   getTotals(combinedOrders) {
+    if (!combinedOrders.length) {
+      return { ordersTotal: 0, ordersTotalInterest: 0, repaymentsTotal: 0, repaymentsTotalInterest: 0, remainingAmount: 0 }
+    }
     const ordersTotal = combinedOrders.reduce((sum, next) => {
       if (next.type !== 'repayment') {
         return sum + Number(get(next, "original_principal", 0))

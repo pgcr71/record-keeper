@@ -7,6 +7,7 @@ import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AppService } from 'src/app/app.service';
 import { FinanceService } from 'src/app/shared/customers/finance.service';
 import { LoaderService } from '../../loader/loader.service';
+import { AddUserComponent } from '../add-user/add-user.component';
 
 
 @Component({
@@ -42,12 +43,16 @@ export class RecentUsersComponent implements OnInit {
       if (user) {
         const matchedIndex = this.users.findIndex((usr) => user.id === usr.id);
         if (matchedIndex === -1) {
-          set(user, "transactions", []);
-          set(user, "totals", {});
+          const obj = {
+            ...user,
+            transactions: this.financeService.getDetails([])
+          };
+          this._selectedUser = ({ ...obj, totals: this.financeService.getTotals(obj.transactions) });
           this.users.unshift(user);
           this.appService.allUsers.next(this.users);
+        } else {
+          this._selectedUser = user;
         }
-        this._selectedUser = user;
       }
     });
   }
@@ -116,11 +121,23 @@ export class RecentUsersComponent implements OnInit {
       youWillGive: 0
     }
     this.users.forEach((next) => {
-      totals.remainingAmount += next.totals.remainingAmount;
-      totals.youWillGet += next.totals.ordersTotal + next.totals.ordersTotalInterest;
-      totals.youWillGive += next.totals.repaymentsTotal + next.totals.repaymentsTotalInterest;
+      totals.remainingAmount += get(next, "totals.remainingAmount", 0);
+      totals.youWillGet += get(next, "totals.ordersTotal", 0) + get(next, "totals.ordersTotalInterest", 0);
+      totals.youWillGive += get(next, "totals.repaymentsTotal", 0), + get(next, "totals.repaymentsTotalInterest", 0);
     });
     this.total = totals;
     return totals;
   }
+
+  addNewUser() {
+    const dialog = this.matDialog.open(AddUserComponent);
+
+
+    dialog.afterClosed().subscribe((userInfo) => {
+      if (userInfo) {
+        this.appService.activeUser.next(userInfo);
+      }
+    })
+  }
+
 }

@@ -70,3 +70,13 @@
       [class.expanded-row]="expandedElement === row"></mat-row>
     <mat-footer-row  class='mat-footer-row' *matFooterRowDef='displayedColumns; sticky: true'></mat-footer-row>
   </mat-table>
+
+  <div class='buttons mr-5 mb-5'>
+    <button (click)='redirectToOrdersPage()' type="button" class='mr-2' mat-raised-button color="primary">
+      YOU GAVE
+    </button>
+
+    <button (click)='redirectToRepaymentsPage()' type="button" mat-raised-button color="warn">
+      YOU GOT
+    </button>
+  </div>

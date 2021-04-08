@@ -1,7 +1,6 @@
 .new-user {
   position: sticky;
   bottom: 25px;
-  left: 70%;
   width: 50px;
   background-color: lightgray;
   border-radius: 50%;
@@ -36,8 +35,10 @@
   max-height: 100vh;
   overflow-x: hidden;
   overflow-y: scroll;
+  display: block;
+  height: 100vh;
 }
 
-:host {
-  display: block;
+.container {
+  height: 100%;
 }

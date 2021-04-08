@@ -3,7 +3,7 @@ import { InterestTypes } from "../entities/interest_types.entity";
 import { Product } from "../entities/product.entity";
 import { ProductNames } from "../entities/product_names.entity";
 
-export class seeddata1615613451625 implements MigrationInterface {
+export class seeddata1617851549144 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const productName = getRepository(ProductNames).create({

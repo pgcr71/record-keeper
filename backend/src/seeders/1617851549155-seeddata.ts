@@ -1,7 +1,7 @@
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
 import { PaymentStatus } from "../entities/payment_statuses.entity";
 
-export class seeddata1609906812955 implements MigrationInterface {
+export class seeddata1617851549155 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     const paymentStatus1 = getRepository(PaymentStatus).create({

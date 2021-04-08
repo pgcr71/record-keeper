@@ -87,6 +87,17 @@ export class UserTransactionsComponent implements OnInit {
     }
   }
 
+  redirectToOrdersPage() {
+    this.as.activeTransaction.next(null);
+    this.router.navigateByUrl('/customers/orders');
+  }
+
+
+  redirectToRepaymentsPage() {
+    this.as.activeTransaction.next(null);
+    this.router.navigateByUrl('/customers/repayment')
+  }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.

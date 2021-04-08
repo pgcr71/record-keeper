@@ -4,7 +4,7 @@ import { InterestTypes } from "../entities/interest_types.entity";
 import { RegistrationStatus } from "../entities/registration_status.entity";
 import { UserRoles } from "../entities/roles.entity";
 
-export class seeddata1609906781687 implements MigrationInterface {
+export class seeddata1617851549139 implements MigrationInterface {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<void> {
