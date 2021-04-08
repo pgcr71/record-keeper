@@ -12,11 +12,23 @@ $primary-font: 'Montserrat', 'roboto', Arial, Helvetica, sans-serif;
   font-weight: 600;
 }
 
+.fw-lighter {
+  font-weight: lighter;
+}
+
 .primary-font {
   font-size: 20px;
 }
 
+.fz-1 {
+  font-size: 20px;
+}
+
 .secondary-font {
+  font-size: 16px;
+}
+
+.fz-2 {
   font-size: 16px;
 }
 

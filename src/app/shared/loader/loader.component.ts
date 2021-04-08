@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { LoaderService } from './loader.service';
 
 @Component({
   selector: 'app-loader',
@@ -9,4 +10,9 @@ export class LoaderComponent {
 
   @Input() show: boolean;
 
+  constructor(
+    public readonly loaderService: LoaderService
+  ) {
+
+  }
 }

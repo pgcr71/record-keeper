@@ -1,12 +1,4 @@
-:root {
-  --primary-color: #614385;
-  --secondary-color: #516395;
-  --primary-border-color: #dddddd;
-  --primary-background-color: white;
-}
-
-$primary-color: #614385;
-$secondary-color: #516395;
+@import '../abstracts/variables';
 
 .red {
   color: red;
@@ -14,4 +6,16 @@ $secondary-color: #516395;
 
 .green {
   color: green;
+}
+
+.primary {
+  color: var(--primary-color);
+}
+
+.white {
+  color: white;
+}
+
+.lightgreen {
+  color: lightgreen;
 }

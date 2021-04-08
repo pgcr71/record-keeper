@@ -1,10 +1,11 @@
-<div class='row no-gutters'>
-  <div class='col-1'>
-    <div [routerLink]='"/customers"'>
-      Customers
+<app-loader></app-loader>
+<div class='d-flex justify-content-start'>
+  <div class='rk-list side mat-elevation-z8'>
+    <div class='rk-list-item primary primary-font' [routerLink]='"/customers"'>
+      <img src="assets/icons/customer-list.icon.svg" alt="Customers">
     </div>
-    <div [routerLink]='"/inventory"'>
-      Inventory
+    <div class='rk-list-item primary primary-font' [routerLink]='"/products"'>
+      <img src="assets/icons/inventory.icon.svg" alt="">
     </div>
   </div>
   <div class='col-11'>

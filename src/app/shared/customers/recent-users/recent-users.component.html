@@ -1,26 +1,28 @@
-<app-loader [show]='showLoader'></app-loader>
-
-<div *ngIf='!showLoader' class='summary primary-border'>
-  <div hidden>{{getTotals()}}</div>
-  <div class="d-flex breakups primary-border">
-    <div class='d-flex justify-content-center you-will-give primary-border align-items-center'>{{total.youWillGive}}</div>
-    <div class='d-flex justify-content-center you-will-get primary-border align-items-center'>{{total.youWillGet}}</div>
+<div class='b-1 m-4 mat-elevation-z8'>
+  <div class='summary bb-1'>
+    <div hidden>{{getTotals()}}</div>
+    <div class="d-flex bb-1 breakups">
+      <div class='d-flex fz-1 br-1 justify-content-center you-will-give align-items-center red'>{{total.youWillGive |
+        currency:'inr':'₹':'1.0-2'}}</div>
+      <div class='d-flex fz-1 justify-content-center you-will-get align-items-center green'>{{total.youWillGet |
+        currency:'inr':'₹':'1.0-2'}}</div>
+    </div>
+    <div  [class]='total.remainingAmount>0? "green":"red"' class='d-flex fz-1 justify-content-center remaining-amount align-items-center'>
+      {{total.remainingAmount | currency:'inr':'₹':'1.0-2'}}
+    </div>
   </div>
-  <div class='d-flex justify-content-center remaining-amount align-items-center'>
-    {{total.remainingAmount}}
-  </div>
-</div>
 
-<div *ngIf='!showLoader'>
-  <button class='new-user' mat-raised-button color='primary'>New User</button>
-  <div class='primary-border p-4' [class.selected]='_selectedUser===user' (click)='redirectToUserOrdersPage(user)'
-  *ngFor='let user of users'>
-    <div>
-      <div class='secondary-font semi-bold pb-2'>{{user.first_name}} {{user.last_name}}</div>
-      <div [ngClass]='user && user.totals && user.totals.remainingAmount > 0?"green":"red"'>
-        {{ user && user.totals && user.totals.remainingAmount | currency:'inr':'₹':'1.0-2'}}
+  <div>
+    <div class='p-4 bb-1' [class]='_selectedUser===user?"primary-background white mat-elevation-z8":"white-background"'
+      (click)='redirectToUserOrdersPage(user)' *ngFor='let user of users'>
+      <div>
+        <div class='primary-font fw-lighter pb-2'>{{user.first_name}} {{user.last_name}}</div>
+        <div class='secondary-font' [ngClass]='user && user.totals && user.totals.remainingAmount > 0?_selectedUser===user?"lightgreen":"green":"red"'>
+          {{ user && user.totals && user.totals.remainingAmount | currency:'inr':'₹':'1.0-2'}}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
+  <img class='new-user new-user-absolute' src="assets/icons/person-add.icon.svg" alt="New User">
+</div>

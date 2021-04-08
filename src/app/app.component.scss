@@ -12,6 +12,16 @@
   }
 }
 
+.rk-list {
+  min-width: 90px;
+  padding: 20px;
+}
+
+.rk-list-item > img {
+  width: 100%;
+  padding-bottom: 15px;
+}
+
 @media print {
   .recent-users-section {
     display: none;

@@ -145,7 +145,7 @@ export class RepaymentComponent implements OnInit {
           this.snackBar.open('Data Saved Succesfully', 'Close', {
             duration: 2000,
           });
-          this.router.navigateByUrl('/users');
+          this.router.navigateByUrl('/customers');
         },
         (error) => {
           this.snackBar.open(error.error.sqlMessage, 'Close', {

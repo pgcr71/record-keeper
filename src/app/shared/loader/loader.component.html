@@ -1,1 +1,7 @@
-<mat-spinner *ngIf='show'></mat-spinner>
+<div  *ngIf='loaderService.showLoader$ | async' class='position-fixed fixed-top fixed-bottom spinner-container'>
+  <div class="rk-loader" role="status">
+    <span >Loading...</span>
+  </div>
+
+</div>
+

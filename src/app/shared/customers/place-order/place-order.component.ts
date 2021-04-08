@@ -74,7 +74,7 @@ export class PlaceOrderComponent implements OnInit {
 
       this.productSearch = this.orderCreateForm.get('product').valueChanges.pipe(
         startWith(''),
-        map((value) => (typeof value === 'string' ? value : value.name)),
+        map((value) => (typeof value === 'string' ? value : value.product_name.name)),
         map((name) => (name ? this._productFilter(name) : this.products.slice()))
       );
     });
@@ -82,7 +82,7 @@ export class PlaceOrderComponent implements OnInit {
 
   private _productFilter(name: string) {
     const filterValue = name.toLowerCase();
-    return this.products.filter((option) => option.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.products.filter((option) => option.product_name.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   compareWith(o1, o2) {
@@ -101,10 +101,10 @@ export class PlaceOrderComponent implements OnInit {
   }
 
   productDisplayFn(product): string {
-    if (product && !product.name) {
+    if (product && !product.product_name.name) {
       return '';
     }
-    return product && product.name ? product.name : '';
+    return product && product.product_name.name ? product.product_name.name : '';
   }
 
 
@@ -135,7 +135,7 @@ export class PlaceOrderComponent implements OnInit {
             }
 
           }
-          this.router.navigateByUrl('/users');
+          this.router.navigateByUrl('/customers');
           this.snackBar.open('Data Saved Succesfully', 'Close', {
             duration: 2000,
           });

@@ -29,3 +29,16 @@ li {
 :focus {
   outline: 0rem;
 }
+
+body {
+  & *::-webkit-scrollbar {
+    width: 5px;
+  }
+}
+
+body {
+  * ::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    outline: 1px solid var(--primary-color);
+  }
+}

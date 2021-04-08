@@ -6,6 +6,7 @@ import { forkJoin, of } from 'rxjs';
 import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AppService } from 'src/app/app.service';
 import { FinanceService } from 'src/app/shared/customers/finance.service';
+import { LoaderService } from '../../loader/loader.service';
 
 
 @Component({
@@ -30,11 +31,12 @@ export class RecentUsersComponent implements OnInit {
     private readonly financeService: FinanceService,
     private readonly router: Router,
     private readonly matDialog: MatDialog,
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    private readonly loaderService: LoaderService
   ) { }
 
   ngOnInit(): void {
-    this.showLoader = true;
+    this.loaderService.show();
     this.getUsers();
     this.appService.activeUser$.subscribe((user) => {
       if (user) {
@@ -66,7 +68,7 @@ export class RecentUsersComponent implements OnInit {
         this._selectedUser = this.users[0];
         this.appService.activeUser.next(this.users[0])
         this.selectedUser.emit(this._selectedUser);
-        this.showLoader = false;
+        this.loaderService.hide()
       })
   }
 
