@@ -1,8 +1,11 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
-import { InterestDefaults, InterestTypes, RegistrationStatus, UserRoles } from "..";
+import { InterestDefaults } from "../entities/interest_defaults.entity";
+import { InterestTypes } from "../entities/interest_types.entity";
+import { RegistrationStatus } from "../entities/registration_status.entity";
+import { UserRoles } from "../entities/roles.entity";
 
-export class seed1610457795779 implements MigrationInterface {
+export class seeddata1618152120243 implements MigrationInterface {
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async up(queryRunner: QueryRunner): Promise<void> {
     const registrationStatuses1 = getRepository(RegistrationStatus).create({
@@ -67,5 +70,7 @@ export class seed1610457795779 implements MigrationInterface {
     await getRepository(InterestDefaults).save(interestDefaults);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+  }
+
 }

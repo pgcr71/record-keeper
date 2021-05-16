@@ -12,6 +12,7 @@ export class ProductController implements IRepository<Product> {
     return this.repository
       .createQueryBuilder("product")
       .leftJoinAndSelect("product.interest_type", "interest_type")
+      .leftJoinAndSelect("product.product_name", "product_info")
       .getMany();
   }
 

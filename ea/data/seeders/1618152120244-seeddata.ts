@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
-import { PaymentStatus } from "..";
+import { PaymentStatus } from "../entities/payment_statuses.entity";
 
-export class seed1610457775313 implements MigrationInterface {
+export class seeddata1618152120244 implements MigrationInterface {
+
   public async up(queryRunner: QueryRunner): Promise<void> {
     const paymentStatus1 = getRepository(PaymentStatus).create({
       name: "NOT_PAID",
@@ -22,5 +22,7 @@ export class seed1610457775313 implements MigrationInterface {
     await getRepository(PaymentStatus).save(paymentStatus3);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+  }
+
 }

@@ -2,11 +2,16 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Upd
 import { BaseEntity } from "./base.entity";
 import { InterestTypes } from "./interest_types.entity";
 import { Order } from "./order.entity";
+import { ProductNames } from "./product_names.entity";
 
 @Entity()
 export class Product extends BaseEntity {
-  @Column({ type: "varchar", length: 36, nullable: false })
-  "name": string;
+  @ManyToOne(() => ProductNames)
+  @JoinColumn({
+    name: "product_name_id",
+    referencedColumnName: "id",
+  })
+  "product_name": ProductNames;
 
   @Column({ type: "bigint", nullable: false, default: 0 })
   "quantity": number;

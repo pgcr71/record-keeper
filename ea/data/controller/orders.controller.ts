@@ -9,10 +9,11 @@ export class OrderController implements IRepository<Order> {
   public async all(request: Request, response: Response, next: NextFunction): Promise<Order[]> {
     return this.repository
       .createQueryBuilder("order")
-      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it", "its"])
+      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it", "its", "pn"])
       .leftJoin("order.user", "usr")
       .leftJoin("order.product", "prdt")
       .leftJoin("order.interest_type", "its")
+      .leftJoin("prdt.product_name", "pn")
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.userId })
       .getMany();
@@ -21,9 +22,10 @@ export class OrderController implements IRepository<Order> {
   public async getOrdersByUserId(request: Request, response: Response, next: NextFunction): Promise<[Order[], number]> {
     return this.repository
       .createQueryBuilder("order")
-      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it"])
+      .select(["usr.first_name", "usr.last_name", "usr.phone_number", "order", "prdt", "it", "pn"])
       .leftJoin("order.user", "usr")
       .leftJoin("order.product", "prdt")
+      .leftJoin("prdt.product_name", "pn")
       .leftJoin("prdt.interest_type", "it")
       .where("usr.id=:userId", { userId: request.params.userId })
       .orderBy("order.ordered_on", "ASC")

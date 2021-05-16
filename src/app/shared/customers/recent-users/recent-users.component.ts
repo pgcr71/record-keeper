@@ -131,11 +131,13 @@ export class RecentUsersComponent implements OnInit {
 
   addNewUser() {
     const dialog = this.matDialog.open(AddUserComponent);
-
-
     dialog.afterClosed().subscribe((userInfo) => {
       if (userInfo) {
-        this.appService.activeUser.next(userInfo);
+        const obj = {
+          ...userInfo,
+          transactions: this.financeService.getDetails([])
+        };
+        this.appService.activeUser.next(({ ...obj, totals: this.financeService.getTotals(obj.transactions) }));
       }
     })
   }
