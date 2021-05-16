@@ -6,10 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
-    "nodemon": "nodemon",
+    "nodemon": "npm run migrations:run && npm run seed:run && nodemon",
     "migrations:gen": "ts-node ./node_modules/typeorm/cli.js migration:generate -n recordkeeper",
     "migrations:seed": "ts-node ./node_modules/typeorm/cli.js migration:create -n seeddata -d=src/seeders",
     "migrations:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ormconfig.json",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
+    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync",
     "migrations:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
   },
   "author": "pgcr71",
@@ -21,10 +25,11 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "typeorm": "0.2.29",
-    "reflect-metadata": "^0.1.10",
-    "mysql": "^2.14.1",
+    "body-parser": "^1.18.1",
     "express": "^4.15.4",
-    "body-parser": "^1.18.1"
+    "mysql": "^2.14.1",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.2.29",
+    "typeorm-seeding": "^1.6.1"
   }
 }

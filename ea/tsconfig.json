@@ -18,5 +18,5 @@
     }
   },
   "include": ["data/**/*", "electronindex.ts"],
-  "exclude": ["node_modules", "data/migrations", "data/seeders"]
+  "exclude": ["node_modules"]
 }

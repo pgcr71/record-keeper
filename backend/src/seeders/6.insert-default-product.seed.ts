@@ -1,11 +1,13 @@
-import { getRepository, MigrationInterface, QueryRunner } from "typeorm";
+import { Factory, Seeder } from "typeorm-seeding";
+import { Connection, getRepository } from 'typeorm'
+import { RegistrationStatus } from '../entities/registration_status.entity'
 import { InterestTypes } from "../entities/interest_types.entity";
-import { Product } from "../entities/product.entity";
+import { PaymentStatus } from "../entities/payment_statuses.entity";
 import { ProductNames } from "../entities/product_names.entity";
+import { Product } from "../entities/product.entity";
 
-export class seeddata1618152120245 implements MigrationInterface {
-
-  public async up(queryRunner: QueryRunner): Promise<void> {
+export default class CreateDefaultProduct implements Seeder {
+  public async run(factory: Factory, connection: Connection): Promise<any> {
     const productName = getRepository(ProductNames).create({
       name: "cash",
       description: "direct money transfer through cash or cheque or electronic modes",
@@ -14,17 +16,12 @@ export class seeddata1618152120245 implements MigrationInterface {
     await getRepository(ProductNames).save(productName);
 
     const interestType1 = await getRepository(InterestTypes).findOne(1);
-    const product = getRepository(Product).create({
+
+    await getRepository(Product).save({
       product_name: productName,
       unit_price: 1,
       interest_type: interestType1,
       rate_of_interest: 2
     });
-
-    await getRepository(Product).save(product);
   }
-
-  public async down(queryRunner: QueryRunner): Promise<void> {
-  }
-
 }

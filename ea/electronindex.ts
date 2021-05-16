@@ -6,6 +6,7 @@ import { InterestTypesListener } from "./data/ipcListeners/interestTypes.listene
 import { OrderListener } from "./data/ipcListeners/orders.listener";
 import { UserListener } from "./data/ipcListeners/users.listener";
 import { RepaymentsListener } from "./data/ipcListeners/repayments.listener";
+import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionOptions";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const isDev = require("electron-is-dev");
@@ -26,7 +27,11 @@ async function createWindow(): Promise<void> {
     database: `${__dirname}/data/database.sqlite`,
     migrations: [`${__dirname}/data/migrations/*.js`],
     entities: [`${__dirname}/data/entities/*.js`],
-  }).then(
+    seeds: [`${__dirname}/data/seeders/**/*.js`],
+    factories: [
+      `${__dirname}/data/factories/**/*.js`
+    ],
+  } as SqliteConnectionOptions).then(
     () => {
       new ProductListener().listen();
       new InterestTypesListener().listen();

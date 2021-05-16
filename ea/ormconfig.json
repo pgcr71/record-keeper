@@ -1,10 +1,22 @@
 {
   "type": "sqlite",
-  "database": "build/data/database.sqlite",
+  "database": "data/database.sqlite",
   "logging": false,
-  "entities": ["data/entities/**/*.entity.ts"],
-  "migrations": ["data/migrations/**/*.ts", "data/seeders/**/*.ts"],
-  "subscribers": ["build/data/subscribers/**/*.subscriber.js"],
+  "entities": [
+    "data/entities/**/*.entity.ts"
+  ],
+  "migrations": [
+    "data/migrations/**/*.ts"
+  ],
+  "subscribers": [
+    "data/subscribers/**/*.subscriber.ts"
+  ],
+  "seeds": [
+    "data/seeders/**/*{.ts,.js}"
+  ],
+  "factories": [
+    "data/factories/**/*{.ts,.js}"
+  ],
   "cli": {
     "entitiesDir": "data/entities",
     "migrationsDir": "data/migrations",

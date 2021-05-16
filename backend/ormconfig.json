@@ -1,26 +1,31 @@
 {
-   "type": "mysql",
-   "host": "localhost",
-   "port": 3306,
-   "username": "root",
-   "password": "G@ni7112",
-   "database": "recordkeeper",
-   "synchronize": false,
-   "logging": true,
-    "logger": "advanced-console",
-   "entities": [
-      "src/entities/*.ts"
-   ],
-   "migrations": [
-      "src/migrations/**/*.ts",
-      "src/seeders/**/*.ts"
-   ],
-   "subscribers": [
-      "src/subscribers/**/*.ts"
-   ],
-   "cli": {
-      "entitiesDir": "src/entities",
-      "migrationsDir": "src/migrations",
-      "subscribersDir": "src/subscribers"
-   }
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3306,
+  "username": "root",
+  "password": "G@ni7112",
+  "database": "recordkeeper",
+  "synchronize": false,
+  "logging": true,
+  "logger": "advanced-console",
+  "entities": [
+    "src/entities/*.ts"
+  ],
+  "seeds": [
+    "src/seeders/**/*{.ts,.js}"
+  ],
+  "factories": [
+    "src/factories/**/*{.ts,.js}"
+  ],
+  "migrations": [
+    "src/migrations/**/*.ts"
+  ],
+  "subscribers": [
+    "src/subscribers/**/*.ts"
+  ],
+  "cli": {
+    "entitiesDir": "src/entities",
+    "migrationsDir": "src/migrations",
+    "subscribersDir": "src/subscribers"
+  }
 }
