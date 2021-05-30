@@ -10,6 +10,7 @@ import { SqliteConnectionOptions } from "typeorm/driver/sqlite/SqliteConnectionO
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const isDev = require("electron-is-dev");
+const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
@@ -20,18 +21,23 @@ if (require("electron-squirrel-startup")) {
 let mainWindow: BrowserWindow | null;
 
 async function createWindow(): Promise<void> {
-  createConnection({
-    type: "sqlite",
-    logging: true,
-    logger: "simple-console",
-    database: `${__dirname}/data/database.sqlite`,
-    migrations: [`${__dirname}/data/migrations/*.js`],
-    entities: [`${__dirname}/data/entities/*.js`],
-    seeds: [`${__dirname}/data/seeders/**/*.js`],
-    factories: [
-      `${__dirname}/data/factories/**/*.js`
-    ],
-  } as SqliteConnectionOptions).then(
+  let connectionOptions: undefined | SqliteConnectionOptions = undefined;
+  console.log(__dirname)
+  if (!isDev) {
+    connectionOptions = {
+      type: "sqlite",
+      logging: true,
+      logger: "simple-console",
+      database: `${__dirname}/data/database.sqlite`,
+      migrations: [`${__dirname}/data/migrations/*.js`],
+      entities: [`${__dirname}/data/entities/*.js`],
+      seeds: [`${__dirname}/data/seeders/*.js`],
+      factories: [
+        `${__dirname}/data/factories/*.js`
+      ],
+    } as SqliteConnectionOptions
+  }
+  createConnection(connectionOptions as SqliteConnectionOptions).then(
     () => {
       new ProductListener().listen();
       new InterestTypesListener().listen();
