@@ -1,25 +1,26 @@
-<div class='summary-card m-4 d-flex flex-column mat-elevation-z8 p-4'>
-  <div class='d-flex justify-content-between align-items-center p-4 bb-1'>
-    <div class='d-flex justify-content-start'>
-      <div class='fz-1'>Net Balance</div>
-    </div>
-    <div class="d-flex justify-content-center">
-      <div>
-        <div class='d-flex justify-content-center amount mb-2' [class]='totals.remainingAmount < 0?"red":"green"'>
-          {{totals.remainingAmount | currency:'inr':'₹':'1.0-2'}}
-        </div>
-        <div class='d-flex justify-content-center fz-2'>
-          <div *ngIf='totals.remainingAmount < 0'>You'll Give</div>
-          <div *ngIf='totals.remainingAmount > 0'>You'll Get</div>
+<div *ngIf='userId'>
+  <div *ngIf='combinedOrders && combinedOrders.length' class='summary-card m-4 d-flex flex-column mat-elevation-z8 p-4'>
+    <div class='d-flex justify-content-between align-items-center p-4 bb-1'>
+      <div class='d-flex justify-content-start'>
+        <div class='fz-1'>Net Balance</div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div>
+          <div class='d-flex justify-content-center amount mb-2' [class]='totals.remainingAmount < 0?"red":"green"'>
+            {{totals.remainingAmount | currency:'inr':'₹':'1.0-2'}}
+          </div>
+          <div class='d-flex justify-content-center fz-2'>
+            <div *ngIf='totals.remainingAmount < 0'>You'll Give</div>
+            <div *ngIf='totals.remainingAmount > 0'>You'll Get</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class='d-flex justify-content-center report-section'></div>
   </div>
 
-  <div class='d-flex justify-content-center report-section'></div>
-</div>
-
-  <mat-table [dataSource]="combinedOrders" multiTemplateDataRows='true' class="m-4 mat-elevation-z8">
+  <mat-table *ngIf='combinedOrders && combinedOrders.length' [dataSource]="combinedOrders" multiTemplateDataRows='true' class="m-4 mat-elevation-z8">
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef='let element'>DATE {{element}}</mat-header-cell>
       <mat-cell *matCellDef="let element">
@@ -40,7 +41,8 @@
           <div>{{element.original_principal | currency:"inr":'₹':"1.0-2"}}</div>
         </div>
       </mat-cell>
-      <mat-footer-cell class='mat-footer-cell' mat-footer-cell *matFooterCellDef> {{totals.ordersTotal | currency:"inr":'₹':"1.0-2"}} </mat-footer-cell>
+      <mat-footer-cell class='mat-footer-cell' mat-footer-cell *matFooterCellDef> {{totals.ordersTotal |
+        currency:"inr":'₹':"1.0-2"}} </mat-footer-cell>
     </ng-container>
 
     <ng-container matColumnDef="youGot">
@@ -48,7 +50,8 @@
       <mat-cell *matCellDef="let element">
         <div>{{ element['price'] | currency: 'inr':'₹':'1.0-0' }} </div>
       </mat-cell>
-      <mat-footer-cell class='mat-footer-cell' mat-footer-cell *matFooterCellDef> {{totals.repaymentsTotal | currency:"inr":'₹':"1.0-2"}} </mat-footer-cell>
+      <mat-footer-cell class='mat-footer-cell' mat-footer-cell *matFooterCellDef> {{totals.repaymentsTotal |
+        currency:"inr":'₹':"1.0-2"}} </mat-footer-cell>
     </ng-container>
 
     <ng-container matColumnDef="repayments">
@@ -59,17 +62,23 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <div>
-          <div>{{((element["paid_interest"] | sum) + element['remaining_interest']) | currency:"inr":'₹':"1.0-2" }}</div>
+          <div>{{((element["paid_interest"] | sum) + element['remaining_interest']) | currency:"inr":'₹':"1.0-2" }}
+          </div>
         </div>
       </mat-cell>
-      <mat-footer-cell  class='mat-footer-cell' mat-footer-cell *matFooterCellDef> {{(totals.ordersTotalInterest - totals.repaymentsTotalInterest) | currency:"inr":'₹':"1.0-2"}} </mat-footer-cell>
+      <mat-footer-cell class='mat-footer-cell' mat-footer-cell *matFooterCellDef> {{(totals.ordersTotalInterest -
+        totals.repaymentsTotalInterest) | currency:"inr":'₹':"1.0-2"}} </mat-footer-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row (click)='onRowClick(row)' *matRowDef="let row; columns: displayedColumns"
       [class.expanded-row]="expandedElement === row"></mat-row>
-    <mat-footer-row  class='mat-footer-row' *matFooterRowDef='displayedColumns; sticky: true'></mat-footer-row>
+    <mat-footer-row class='mat-footer-row' *matFooterRowDef='displayedColumns; sticky: true'></mat-footer-row>
   </mat-table>
+
+  <div *ngIf='!combinedOrders.length' class='m-4 d-flex primary-font mat-elevation-z8 justify-content-center align-items-center no-records'>
+    Looks like there are no transaction. Please add some transactions.
+  </div>
 
   <div class='buttons mr-5 mb-5'>
     <button (click)='redirectToOrdersPage()' type="button" class='mr-2' mat-raised-button color="primary">
@@ -80,3 +89,8 @@
       YOU GOT
     </button>
   </div>
+</div>
+
+<div *ngIf='!userId'>
+
+</div>

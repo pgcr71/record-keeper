@@ -38,6 +38,14 @@
 }
 
 .dropdown-toggle {
+  &>input {
+    width: 100%;
+    height: 36px;
+    font-size: 20px;
+    &::placeholder {
+      font-size: 20px;
+    }
+  }
   display: flex;
   padding: 1.25rem;
   justify-content: space-between;

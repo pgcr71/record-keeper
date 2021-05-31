@@ -3,5 +3,14 @@
         "nodetouch",
         "prdt"
     ],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:rk}/ea/database.sqlite",
+            "name": "rkdevsqlite"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
 }

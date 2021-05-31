@@ -20,6 +20,8 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
   @Input() typeAhead = false;
   @Input() multiWithTypeAhead = false;
   @Input() options: any = [];
+  @Input() hideOptions = false;
+  @Output() filterResults = new EventEmitter<[]>();
   @Input() name: string;
   @Input() id: string = 'dropdown' + this.tempId;
   @Input() label: string;
@@ -40,12 +42,14 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
   tempid = this.autoID.newID();
   rotateIcon = false;
   displayList = false;
-  copyOfOptions = JSON.parse(JSON.stringify(this.options || []));
+  copyOfOptions = [];
   displayInputInsteadOfButton = false;
 
-  constructor(@Inject(AUTOID) private autoID: AutoID) {}
+  constructor(@Inject(AUTOID) private autoID: AutoID) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.copyOfOptions = JSON.parse(JSON.stringify(this.options || []));
+  }
 
   ngOnChanges(simpleChanges) {
     if (simpleChanges && simpleChanges.hasOwnProperty('id')) {
@@ -62,14 +66,21 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
 
   onTypeStart(value) {
     this.displayList = true;
-
+    console.log(value)
+    if (!value) {
+      this.options = [...this.copyOfOptions];
+      this.filterResults.emit(this.options);
+      this.searchTerm.emit(value);
+      return;
+    }
     this.searchTerm.emit(value);
     this.options = this.copyOfOptions.filter((option) => {
       if (this.key) {
-        return option[this.key].includes(value);
+        return option[this.key].toLowerCase().includes(value && value.toLowerCase());
       }
-      return option.includes(value);
+      return option.toLowerCase().includes(value && value.toLowerCase());
     });
+    this.filterResults.emit(this.options)
   }
 
   writeValue(value: any) {
@@ -80,7 +91,8 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
     this.toggle();
   }
 
-  onOptionClick(value, index) {
+  onOptionClick(event, value, index) {
+    event.stopPropagation();
     this.value = value;
     this.onChange(value);
     this.toggle();
@@ -92,8 +104,8 @@ export class DropdownComponent implements OnInit, ControlValueAccessor {
     this.displayInputInsteadOfButton = !this.displayInputInsteadOfButton;
   }
 
-  onChange = (_) => {};
-  onTouched = () => {};
+  onChange = (_) => { };
+  onTouched = () => { };
   registerOnChange(fn) {
     this.onChange = fn;
   }

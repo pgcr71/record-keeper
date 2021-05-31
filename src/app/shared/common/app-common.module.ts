@@ -8,13 +8,13 @@ import { ReturnsComponent } from 'src/app/returns/returns.component';
 import { SignupComponent } from 'src/app/signup/signup.component';
 import { ButtonsModule } from '../buttons/buttons.module';
 import { DialogModule } from '../dialog/dialog.module';
-import { DropdownComponent } from '../dropdown/dropdown.component';
 import { InputtextComponent } from '../inputtext/inputtext.component';
 import { MaterialModule } from '../material/material.module';
 import { TableComponent } from '../table/table.component';
 import { TooltipModule } from '../tooltip/tooltip.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { LoaderModule } from '../loader/loader.module';
+import { DropdownModule } from '../dropdown/dropdown.module';
 
 const routes: Array<Route> = [
   { path: '', pathMatch: 'full', redirectTo: 'customers' },
@@ -34,12 +34,10 @@ const routes: Array<Route> = [
     SignupComponent,
     InputtextComponent,
     TableComponent,
-    DropdownComponent,
-    ReturnsComponent,
+    ReturnsComponent
   ],
   imports: [
     CommonModule,
-    FormsModule,
     DialogModule,
     ButtonsModule,
     ReactiveFormsModule,
@@ -48,7 +46,8 @@ const routes: Array<Route> = [
     FormsModule,
     RouterModule.forChild(routes),
     PipesModule,
-    LoaderModule
+    LoaderModule,
+    DropdownModule
   ],
   exports: [
     InventoryComponent,
@@ -57,7 +56,6 @@ const routes: Array<Route> = [
     SignupComponent,
     InputtextComponent,
     TableComponent,
-    DropdownComponent,
     ReturnsComponent,
     PipesModule,
     LoaderModule

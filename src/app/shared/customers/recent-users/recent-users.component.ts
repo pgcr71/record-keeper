@@ -27,6 +27,7 @@ export class RecentUsersComponent implements OnInit {
     youWillGive: 0
   };
   showLoader = false;
+  isEmpty = false;
 
   constructor(
     private readonly financeService: FinanceService,
@@ -48,8 +49,10 @@ export class RecentUsersComponent implements OnInit {
             transactions: this.financeService.getDetails([])
           };
           this._selectedUser = ({ ...obj, totals: this.financeService.getTotals(obj.transactions) });
-          this.users.unshift(user);
+          this.users.unshift(user)
+          this.users = [...this.users];
           this.appService.allUsers.next(this.users);
+          this.usersCopy = [...this.users];
         } else {
           this._selectedUser = user;
         }
@@ -57,6 +60,18 @@ export class RecentUsersComponent implements OnInit {
     });
   }
 
+  onSearchTerm(value) {
+
+  }
+
+  onFilter(values) {
+    this.isEmpty = false;
+    if (!values.length) {
+      this.isEmpty = true;
+      return;
+    }
+    this.users = values;
+  }
   getUsers() {
     this.financeService.getAllUsers()
       .pipe(
@@ -68,7 +83,7 @@ export class RecentUsersComponent implements OnInit {
       .subscribe((user) => {
         this.usersCopy.push(user);
       }, err => err, () => {
-        this.users = this.usersCopy;
+        this.users = [...this.usersCopy];
         this.users = orderBy(this.users, usr => usr.updated_on, 'desc');
         this.appService.allUsers.next(this.users);
         this._selectedUser = this.users[0];
