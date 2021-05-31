@@ -157,6 +157,11 @@ export class RepaymentComponent implements OnInit {
     }
   }
 
+  onCancel(event: Event): void {
+    event.preventDefault();
+    void this.router.navigateByUrl('/customers');
+  }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.

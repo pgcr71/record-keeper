@@ -1,5 +1,5 @@
 <ng-template #form>
-  <div [formGroup]="billingCreateForm"  class="form-group">
+  <div [formGroup]="billingCreateForm"  class="form-group m-4 mat-elevation-z8">
     <mat-form-field class="mr-4" appearance="outline">
       <input matInput formControlName="price" [type]="'number'" />
       <mat-label>Amount</mat-label>
@@ -31,10 +31,14 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-
+    <div>
+      <button type="button"  class='mr-3' (click)="onCancel($event)" mat-raised-button color="secondary">
+        cancel
+      </button>
     <button [disabled]="billingCreateForm.invalid" type="button" (click)="onSubmit()" mat-raised-button color="primary">
       submit
     </button>
+  </div>
   </div>
 </ng-template>
 

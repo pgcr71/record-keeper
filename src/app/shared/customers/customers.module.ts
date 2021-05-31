@@ -15,23 +15,25 @@ import { PipesModule } from '../pipes/pipes.module';
 const routes: Array<Route> = [
   {
     path: '',
-    component: CustomersLandingComponent,
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        component: UserTransactionsComponent
-      },
-      {
-        path: 'repayment',
-        component: RepaymentComponent
-      },
-      {
-        path: 'orders',
-        component: PlaceOrderComponent
-      },
-    ]
-  }
+    pathMatch: 'full',
+    redirectTo: 'userTransactions'
+  },
+  {
+    path: 'userTransactions',
+    outlet: 'transaction',
+    component: UserTransactionsComponent
+  },
+  {
+    path: 'repayment',
+    outlet: 'orderrepay',
+    component: RepaymentComponent
+  },
+  {
+    path: 'orders',
+    outlet: 'orderrepay',
+    component: PlaceOrderComponent
+  },
+
 ]
 
 @NgModule({

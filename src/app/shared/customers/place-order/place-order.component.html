@@ -1,13 +1,14 @@
-<div class="form-group" [formGroup]="orderCreateForm">
+<div class="form-group m-4 mat-elevation-z8" [formGroup]="orderCreateForm">
   <mat-form-field class="mr-4" appearance="outline">
     <input matInput formControlName="product" [matAutocomplete]="productAuto" [type]="'text'" />
     <mat-label>Select Product/Category</mat-label>
     <mat-autocomplete (optionSelected)="onOptionSelect($event.option.value)" #productAuto="matAutocomplete"
       [displayWith]="productDisplayFn">
-        <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
-          <div class="product-name">{{ option.product_name && option.product_name.name }} ({{option.interest_type && option.interest_type.name }})</div>
-          <div class="product-date">{{ option.created_on | date: 'dd/MM/yy hh:mm' }}</div>
-        </mat-option>
+      <mat-option *ngFor="let option of productSearch | async as ps" [value]="option">
+        <div class="product-name">{{ option.product_name && option.product_name.name }} ({{option.interest_type &&
+          option.interest_type.name }})</div>
+        <div class="product-date">{{ option.created_on | date: 'dd/MM/yy hh:mm' }}</div>
+      </mat-option>
     </mat-autocomplete>
   </mat-form-field>
 
@@ -42,7 +43,13 @@
     </mat-select>
   </mat-form-field>
 
-  <button [disabled]="orderCreateForm.invalid || orderCreateForm.pristine" type="button" (click)="onSubmit($event)" mat-raised-button color="primary">
-    submit
-  </button>
+  <div>
+    <button type="button"  class='mr-3' (click)="onCancel($event)" mat-raised-button color="secondary">
+      cancel
+    </button>
+    <button [disabled]="orderCreateForm.invalid || orderCreateForm.pristine" type="button" (click)="onSubmit($event)"
+      mat-raised-button color="primary">
+      submit
+    </button>
+  </div>
 </div>
