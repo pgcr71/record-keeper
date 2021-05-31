@@ -18,7 +18,7 @@
     "gulp": "gulp",
     "build-typeorm-start-electron": "cd ea && npm run start",
     "install-electron-packages:": "cd ea && npm install",
-    "electron-make": "ng build --prod --base-href ./ && cd ea && npm run migrations:gen && tsc && npm run migrations:run && npm run make",
+    "electron-make": "ng build --prod --base-href ./ && cd ea && npm run make",
     "electron-start": "npm-run-all --parallel build-typeorm-start-electron build-for-electron"
   },
   "private": true,
