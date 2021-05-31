@@ -14,7 +14,7 @@
   </div>
   <div>
     <app-dropdown class='pt-4 w-100' hideOptions='true' (filterResults)="onFilter($event)" [options]='usersCopy'
-      (searchTerm)='onSearchTerm(value)' typeAhead='true' key='first_name'></app-dropdown>
+     typeAhead='true' key='first_name'></app-dropdown>
   </div>
   <div class='overflow-y-scroll customer-names-section'>
     <ng-container *ngIf="!isEmpty">

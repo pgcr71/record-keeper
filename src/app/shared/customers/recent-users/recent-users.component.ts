@@ -60,10 +60,6 @@ export class RecentUsersComponent implements OnInit {
     });
   }
 
-  onSearchTerm(value) {
-
-  }
-
   onFilter(values) {
     this.isEmpty = false;
     if (!values.length) {
