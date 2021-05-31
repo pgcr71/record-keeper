@@ -1,15 +1,15 @@
 <app-loader></app-loader>
 <app-header></app-header>
-<div class='d-flex flex-column-reverse flex-md-row'>
-  <div class='rk-list side mat-elevation-z8'>
-    <div class='rk-list-item primary primary-font' [routerLink]='"/customers"'>
+<div class='d-flex'>
+  <div class='p-4 rk-list side mat-elevation-z8'>
+    <div class='rk-list-item pb-3 primary primary-font' [routerLink]='"/customers"'>
       <img src="assets/icons/customer-list.icon.svg" alt="Customers">
     </div>
-    <div class='rk-list-item primary primary-font' [routerLink]='"/products"'>
+    <div class='rk-list-item pb-3  primary primary-font' [routerLink]='"/products"'>
       <img src="assets/icons/inventory.icon.svg" alt="">
     </div>
   </div>
-  <div class='col-11'>
+  <div class='flex-grow-1 flex-shrink-1'>
     <router-outlet>
 
     </router-outlet>

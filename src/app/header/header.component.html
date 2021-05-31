@@ -1,17 +1,12 @@
-<mat-toolbar color="primary">
-  <button
-    (click)="onIconClick()"
-    *ngIf="!isDesktop"
-    mat-icon-button
-    class="rk-icon"
-    aria-label="rk icon-button with menu icon"
-  >
+<div class='header primary-font white primary-background d-flex justify-content-between align-items-center' >
+  <span class='pl-3 ' routerLink="/">Record Keeper</span>
+  <button (click)="onIconClick()" *ngIf="!isDesktop" mat-icon-button class="rk-icon"
+    aria-label="rk icon-button with menu icon">
     <mat-icon>menu</mat-icon>
   </button>
-  <span routerLink="/">Record Keeper</span>
-  <span class="rk-spacer"></span>
-  <button mat-icon-button class="rk-icon" aria-label="icon-button with settings icon">
-    <mat-icon>settings</mat-icon>
-    <mat-icon (click)="closeApp()">close</mat-icon>
-  </button>
-</mat-toolbar>
+  <div>
+    <button mat-icon-button class="rk-icon" aria-label="icon-button with settings icon">
+      <mat-icon (click)="closeApp()">close</mat-icon>
+    </button>
+  </div>
+</div>

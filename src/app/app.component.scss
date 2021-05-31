@@ -1,24 +1,8 @@
-.recent-users-section {
-  display: block;
-  height: 100vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  &::-webkit-scrollbar-thumb {
-    width: 4px;
-    border: 2px solid #fff;
-    border-radius: 4px;
-    background-color: #babac0;
-  }
-}
-
 .rk-list {
   min-width: 90px;
-  padding: 20px;
 }
 
 .rk-list-item > img {
-  padding-bottom: 15px;
   @media screen and (min-width: 200px) {
     width: 100%;
   }

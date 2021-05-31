@@ -15,25 +15,27 @@ import { PipesModule } from '../pipes/pipes.module';
 const routes: Array<Route> = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'userTransactions'
-  },
-  {
-    path: 'userTransactions',
-    outlet: 'transaction',
-    component: UserTransactionsComponent
-  },
-  {
-    path: 'repayment',
-    outlet: 'orderrepay',
-    component: RepaymentComponent
-  },
-  {
-    path: 'orders',
-    outlet: 'orderrepay',
-    component: PlaceOrderComponent
-  },
-
+    component: CustomersLandingComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'userTransactions'
+      },
+      {
+        path: 'userTransactions',
+        component: UserTransactionsComponent
+      },
+      {
+        path: 'repayment',
+        component: RepaymentComponent
+      },
+      {
+        path: 'orders',
+        component: PlaceOrderComponent
+      },
+    ]
+  }
 ]
 
 @NgModule({
@@ -54,6 +56,7 @@ const routes: Array<Route> = [
     LoaderModule,
     PipesModule
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  bootstrap: [CustomersLandingComponent]
 })
 export class UsersModule { }

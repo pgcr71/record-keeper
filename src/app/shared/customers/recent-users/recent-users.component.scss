@@ -33,14 +33,11 @@
   & ::-webkit-scrollbar-thumb {
     display: none;
   }
+  border: 1px solid var(--primary-border-color);
   position: relative;
-  max-height: 100vh;
+  min-height: calc(100vh - var(--header-height));;
   overflow-x: hidden;
   overflow-y: scroll;
   display: block;
-  height: calc(100vh - 64px);
 }
 
-.container {
-  height: 100%;
-}
