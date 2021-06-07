@@ -1,20 +1,19 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { get, orderBy, set } from 'lodash';
+import { cloneDeep, get, orderBy, set } from 'lodash';
 import { forkJoin, of } from 'rxjs';
 import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { AppService } from 'src/app/app.service';
 import { FinanceService } from 'src/app/shared/customers/finance.service';
 import { LoaderService } from '../../loader/loader.service';
 import { AddUserComponent } from '../add-user/add-user.component';
-
-
 @Component({
   selector: 'app-recent-users',
   templateUrl: './recent-users.component.html',
   styleUrls: ['./recent-users.component.scss']
 })
+
 export class RecentUsersComponent implements OnInit {
   users = [];
   _selectedUser: any;
@@ -27,7 +26,7 @@ export class RecentUsersComponent implements OnInit {
     youWillGive: 0
   };
   showLoader = false;
-  isEmpty = false;
+  noOfUsers = 0;
 
   constructor(
     private readonly financeService: FinanceService,
@@ -43,31 +42,35 @@ export class RecentUsersComponent implements OnInit {
     this.appService.activeUser$.subscribe((user) => {
       if (user) {
         const matchedIndex = this.users.findIndex((usr) => user.id === usr.id);
+        //when new user is added
         if (matchedIndex === -1) {
           const obj = {
             ...user,
             transactions: this.financeService.getDetails([])
           };
           this._selectedUser = ({ ...obj, totals: this.financeService.getTotals(obj.transactions) });
-          this.users.unshift(user)
-          this.users = [...this.users];
+          this.users.unshift(user);
           this.appService.allUsers.next(this.users);
-          this.usersCopy = [...this.users];
         } else {
+          this.users[matchedIndex] = user;
           this._selectedUser = user;
         }
+        this.noOfUsers = this.users.length;
       }
     });
   }
 
-  onFilter(values) {
-    this.isEmpty = false;
-    if (!values.length) {
-      this.isEmpty = true;
+  onFilter(searchTerm) {
+    if (!searchTerm) {
+      this.users = this.usersCopy;
       return;
     }
-    this.users = values;
+    this.users = this.usersCopy.filter((user) =>
+      (user["first_name"] as string).includes(searchTerm)
+    );
+
   }
+
   getUsers() {
     this.financeService.getAllUsers()
       .pipe(
@@ -110,6 +113,7 @@ export class RecentUsersComponent implements OnInit {
               }, 'asc');
               const obj = {
                 ...user,
+                combinedOrders: cloneDeep(combinedOrders),
                 transactions: this.financeService.getDetails(combinedOrders),
               }
               return ({ ...obj, totals: this.financeService.getTotals(obj.transactions) });

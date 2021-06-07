@@ -3,17 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { URL } from '../environments/environment.prod';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { cloneDeep } from 'lodash';
 
 @Injectable({ providedIn: 'root' })
 export class AppService {
   isElectron: boolean;
   activeUser = new BehaviorSubject(null);
-  activeUser$ = this.activeUser.asObservable();
+  activeUser$ = this.activeUser.asObservable().pipe(map((value) => cloneDeep(value)));
   allUsers = new BehaviorSubject([]);
-  allUsers$ = this.allUsers.asObservable();
+  allUsers$ = this.allUsers.asObservable().pipe(map((value) => cloneDeep(value)));
   activeTransaction = new BehaviorSubject(null);
-  activeTransaction$ = this.activeTransaction.asObservable();
+  activeTransaction$ = this.activeTransaction.asObservable().pipe(map((value) => cloneDeep(value)));
   constructor(private http: HttpClient, private readonly _electronService: ElectronService) {
     this.isElectron = this._electronService.isElectronApp;
   }

@@ -98,6 +98,7 @@ export class FinanceService {
   }
 
   getDetails(combinedOrders: any) {
+    console.log(combinedOrders)
     const length = combinedOrders.length;
     if (!length) {
       return [];

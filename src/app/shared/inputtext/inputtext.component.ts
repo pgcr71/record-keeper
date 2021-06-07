@@ -1,9 +1,13 @@
-import { Component, OnInit, OnChanges, Inject, Input, SimpleChange, forwardRef } from '@angular/core';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Component, OnInit, OnChanges, Inject, Input, forwardRef, EventEmitter } from '@angular/core';
 import { AUTOID, AutoID } from 'src/app/auto-id.provide';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Output } from '@angular/core';
 
 @Component({
-  selector: 'app-inputtext',
+  selector: 'rk-inputtext',
   templateUrl: './inputtext.component.html',
   styleUrls: ['./inputtext.component.scss'],
   providers: [
@@ -15,7 +19,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
 })
 export class InputtextComponent implements OnInit, ControlValueAccessor, OnChanges {
-  constructor(@Inject(AUTOID) private autoID: AutoID) {}
+  constructor(@Inject(AUTOID) private autoID: AutoID) { }
   tempid = this.autoID.newID();
   @Input()
   id;
@@ -23,11 +27,13 @@ export class InputtextComponent implements OnInit, ControlValueAccessor, OnChang
   name;
   @Input()
   label;
+  @Output()
+  rkChange = new EventEmitter<string>();
 
   value;
 
-  onChange = (_) => {};
-  onTouched = () => {};
+  onChange = (_: unknown) => { };
+  onTouched = () => { };
 
   ngOnChanges(SimpleChange) {
     if (SimpleChange.id) this.id = this.id + '_' + this.tempid;
@@ -44,17 +50,19 @@ export class InputtextComponent implements OnInit, ControlValueAccessor, OnChang
   }
 
   change(item): void {
-    this.onChange(item);
     this.value = item;
+    this.onChange(item);
+    this.rkChange.emit(item);
   }
 
-  writeValue(value: any) {
+  writeValue(value: unknown) {
     this.value = value;
   }
 
   registerOnChange(fn) {
     this.onChange = fn;
   }
+
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }

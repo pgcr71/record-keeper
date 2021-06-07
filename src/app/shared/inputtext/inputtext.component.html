@@ -1,10 +1,10 @@
-<label *ngIf="label" class="display-block m-b-ternary" [attr.for]="id">{{ label }}</label>
+<label *ngIf="label" class="d-block mb-3" [attr.for]="id">{{ label }}</label>
 <input
   #in
   [attr.id]="id"
   (input)="change(in.value)"
   [(ngModel)]="value"
-  class="w-100 p-secondary b-primary"
+  class="w-100 p-4 b-1"
   type="text"
   [attr.name]="name"
 />

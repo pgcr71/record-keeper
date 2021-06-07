@@ -1,3 +1,11 @@
+@import './base/reset';
+@import './base/colors';
+@import './base/borders';
+@import './base/margins';
+@import './base/paddings';
+@import './base/backgrounds';
+@import './base/typography';
+@import './vendors/bootstrap-4';
 // sass/
 // |– abstracts/ (or utilities/ or resuables)
 // |   |– _variables.scss    // Sass Variables
@@ -71,11 +79,3 @@
 // }
 
 // @import './base/typography';
-@import './base/reset';
-@import './base/colors';
-@import './base/margins';
-@import './base/paddings';
-@import './base/borders';
-@import './base/backgrounds';
-@import './base/typography';
-@import './vendors/bootstrap-4';

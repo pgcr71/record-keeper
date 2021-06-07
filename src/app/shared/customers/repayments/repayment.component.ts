@@ -8,7 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SummaryService } from '../place-order/summary.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, orderBy } from 'lodash';
 import { AppService } from 'src/app/app.service';
 import { InventoryService } from 'src/app/inventory/inventory.service';
 
@@ -121,26 +121,28 @@ export class RepaymentComponent implements OnInit {
   }
 
   onSubmit() {
-
     if (this.billingCreateForm.valid) {
       const paidOn = new Date(this.billingCreateForm.get('paid_on').value).toISOString();
-      const billingDetails = cloneDeep(this.billingCreateForm.value);
+      const billingDetails = cloneDeep(this.billingCreateForm.value)
       const data = { ...billingDetails, paid_on: paidOn, type: "repayment" };
       this.is.saveRepayment(data).subscribe(
         (res) => {
           if (this.userInfo) {
-            const index = this.repayments ? (this.userInfo.transactions as Array<any>)
+            let transactionsDuplicate = (this.userInfo.combinedOrders || []) as Array<any>;
+            const index = this.repayments ? transactionsDuplicate
               .findIndex((transaction) => transaction.id === this.repayments.id) : -1;
             if (index >= 0) {
-              this.userInfo.transactions[index] = data;
-              this.userInfo.transactions = this.is.getDetails(this.userInfo.transactions);
-              this.userInfo.totals = this.is.getTotals(this.userInfo.transactions);
+              transactionsDuplicate[index] = data;
             } else {
-              this.userInfo.transactions.push(res);
-              this.userInfo.transactions = this.is.getDetails(this.userInfo.transactions);
-              this.userInfo.totals = this.is.getTotals(this.userInfo.transactions);
-            }
+              transactionsDuplicate.push(res);
 
+            }
+            transactionsDuplicate = orderBy(transactionsDuplicate, function (o) {
+              return new Date(o.ordered_on || o.paid_on);
+            }, 'asc');
+            this.userInfo.transactions = this.is.getDetails(transactionsDuplicate);
+            this.userInfo.totals = this.is.getTotals(this.userInfo.transactions);
+            this.as.activeUser.next(this.userInfo);
           }
           this.snackBar.open('Data Saved Succesfully', 'Close', {
             duration: 2000,

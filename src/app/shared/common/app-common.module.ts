@@ -8,13 +8,13 @@ import { ReturnsComponent } from 'src/app/returns/returns.component';
 import { SignupComponent } from 'src/app/signup/signup.component';
 import { ButtonsModule } from '../buttons/buttons.module';
 import { DialogModule } from '../dialog/dialog.module';
-import { InputtextComponent } from '../inputtext/inputtext.component';
 import { MaterialModule } from '../material/material.module';
 import { TableComponent } from '../table/table.component';
 import { TooltipModule } from '../tooltip/tooltip.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { LoaderModule } from '../loader/loader.module';
 import { DropdownModule } from '../dropdown/dropdown.module';
+import { InputtextModule } from '../inputtext/inputtext.module';
 
 const routes: Array<Route> = [
   { path: '', pathMatch: 'full', redirectTo: 'customers' },
@@ -32,7 +32,6 @@ const routes: Array<Route> = [
     TableComponent,
     LoginComponent,
     SignupComponent,
-    InputtextComponent,
     TableComponent,
     ReturnsComponent
   ],
@@ -47,14 +46,15 @@ const routes: Array<Route> = [
     RouterModule.forChild(routes),
     PipesModule,
     LoaderModule,
-    DropdownModule
+    DropdownModule,
+    InputtextModule
+
   ],
   exports: [
     InventoryComponent,
     TableComponent,
     LoginComponent,
     SignupComponent,
-    InputtextComponent,
     TableComponent,
     ReturnsComponent,
     PipesModule,

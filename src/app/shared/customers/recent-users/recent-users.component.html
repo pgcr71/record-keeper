@@ -1,4 +1,4 @@
-<div *ngIf='users && users.length' class='m-4 mat-elevation-z8'>
+<div *ngIf='noOfUsers' class='m-4 mat-elevation-z8'>
   <div class='summary bb-1'>
     <div hidden>{{getTotals()}}</div>
     <div class="d-flex bb-1 breakups">
@@ -13,11 +13,10 @@
     </div>
   </div>
   <div>
-    <app-dropdown class='pt-4 w-100' hideOptions='true' (filterResults)="onFilter($event)" [options]='usersCopy'
-     typeAhead='true' key='first_name'></app-dropdown>
+    <rk-inputtext (rkChange)='onFilter($event)'></rk-inputtext>
   </div>
   <div class='overflow-y-scroll customer-names-section'>
-    <ng-container *ngIf="!isEmpty">
+    <ng-container *ngIf="this.users.length">
       <div class='p-4 bb-1'
         [class]='_selectedUser.id===user.id?"primary-background white mat-elevation-z8":"white-background"'
         (click)='redirectToUserOrdersPage(user)' *ngFor='let user of users'>
@@ -30,13 +29,13 @@
         </div>
       </div>
     </ng-container>
-    <div [class]='isEmpty?"d-block":"d-none"' class='primary-font fw-lighter p-4 bb-1'>
+    <div [class]='!this.users.length?"d-block": "d-none"' class='primary-font fw-lighter p-4 bb-1'>
       No Customer
     </div>
   </div>
 
 </div>
-<div *ngIf='users && !users.length'
+<div *ngIf='!noOfUsers'
   class='m-4 p-3 no-records mat-elevation-z8 overflow-y-scroll d-flex justify-content-center align-items-center'>
   <div>It Seems you don't have any Customers.Please add the Customers</div>
 </div>

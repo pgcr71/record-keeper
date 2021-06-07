@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { FinanceService } from '../finance.service';
-import { cloneDeep, get } from 'lodash';
+import { cloneDeep, get, orderBy } from 'lodash';
 import { AppService } from 'src/app/app.service';
 import { InventoryService } from 'src/app/inventory/inventory.service';
 import { RequireMatch } from '../../validators/require-match.validator';
@@ -74,7 +74,6 @@ export class PlaceOrderComponent implements OnInit {
       }
       this.productSearch = this.orderCreateForm.get('product').valueChanges.pipe(
         startWith(''),
-        tap((value) => console.log(value)),
         map((value) => (typeof value === 'string' ? value : value.product_name.name)),
         map((name) => (name ? this._productFilter(name) : this.products.slice()))
       );
@@ -134,17 +133,19 @@ export class PlaceOrderComponent implements OnInit {
       this.fs.saveOrders(dataToServer).subscribe(
         (order) => {
           if (this.userInfo) {
-            const index = this.order ? (this.userInfo.transactions as Array<any>).findIndex((transaction) => transaction.id === this.order.id) : -1;
+            let transactionsDuplicate = (this.userInfo.combinedOrders || []) as Array<any>
+            const index = this.order ? (transactionsDuplicate.findIndex((transaction) => transaction.id === this.order.id)) : -1;
             if (index >= 0) {
-              this.userInfo.transactions[index] = dataToServer;
-              this.userInfo.transactions = this.fs.getDetails(this.userInfo.transactions);
-              this.userInfo.totals = this.fs.getTotals(this.userInfo.transactions);
+              transactionsDuplicate[index] = dataToServer;
             } else {
-              this.userInfo.transactions.push(order);
-              this.userInfo.transactions = this.fs.getDetails(this.userInfo.transactions);
-              this.userInfo.totals = this.fs.getTotals(this.userInfo.transactions);
+              transactionsDuplicate.push(order);
             }
-
+            transactionsDuplicate = orderBy(transactionsDuplicate, function (o) {
+              return new Date(o.ordered_on || o.paid_on);
+            }, 'asc')
+            this.userInfo.transactions = this.fs.getDetails(transactionsDuplicate);
+            this.userInfo.totals = this.fs.getTotals(this.userInfo.transactions);
+            this.appService.activeUser.next(this.userInfo);
           }
           this.router.navigateByUrl('/customers');
           this.snackBar.open('Data Saved Succesfully', 'Close', {

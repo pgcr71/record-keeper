@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../loader/loader.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { DropdownModule } from '../dropdown/dropdown.module';
+import { InputtextModule } from '../inputtext/inputtext.module';
 
 const routes: Array<Route> = [
   {
@@ -56,7 +57,8 @@ const routes: Array<Route> = [
     RouterModule.forChild(routes),
     LoaderModule,
     PipesModule,
-    DropdownModule
+    DropdownModule,
+    InputtextModule
   ],
   exports: [RouterModule],
   bootstrap: [CustomersLandingComponent]
